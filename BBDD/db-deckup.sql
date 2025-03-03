@@ -12,6 +12,7 @@ CREATE TABLE `deckup`.`usuarios` (
   `pfp` VARCHAR(100) NOT NULL DEFAULT "user.png",
   `currency` INT NOT NULL,
   `nextPayment` DATETIME NOT NULL,
+  `estado` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`));
   
   CREATE TABLE `deckup`.`cartas` (
@@ -27,7 +28,7 @@ CREATE TABLE `deckup`.`usuarios` (
 CREATE TABLE `deckup`.`rarezas` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
-  `porcentaje` INT NOT NULL,
+  `porcentaje` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id`));
   
   CREATE TABLE `deckup`.`paquetes` (
@@ -45,6 +46,35 @@ CREATE TABLE `deckup`.`rarezas` (
   `tipo` VARCHAR(1) NOT NULL,
   `dmg` INT NOT NULL,
   PRIMARY KEY (`id`));
+  
+  CREATE TABLE `deckup`.`roles` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NOT NULL,
+  `id_user` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_users_roles_idx` (`id_user` ASC) VISIBLE,
+  CONSTRAINT `fk_users_roles`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
+    CREATE TABLE `deckup`.`codigos` (
+  `id` INT NOT NULL,
+  `codigo` VARCHAR(45) NOT NULL,
+  `currency` INT NULL DEFAULT 0,
+  `card` INT NULL,
+  `card_cant` INT NULL DEFAULT 0,
+  `uses_left` INT NULL DEFAULT -1,
+  `expiration_date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_card-code_idx` (`card` ASC) VISIBLE,
+  CONSTRAINT `fk_card-code`
+    FOREIGN KEY (`card`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
   
 /* Relaciones */
 
@@ -99,6 +129,22 @@ CREATE TABLE `deckup`.`jugadores-cartas` (
   CONSTRAINT `fk_hab_nan1`
     FOREIGN KEY (`id_habilidad`)
     REFERENCES `deckup`.`habilidades` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
+    CREATE TABLE `deckup`.`usuarios-codigos` (
+  `id_usuario` BIGINT NOT NULL,
+  `id_codigo` INT NOT NULL,
+  PRIMARY KEY (`id_usuario`, `id_codigo`),
+  INDEX `fk_codes_idx` (`id_codigo` ASC) VISIBLE,
+  CONSTRAINT `fk_useer-codes`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_codes`
+    FOREIGN KEY (`id_codigo`)
+    REFERENCES `deckup`.`codigos` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 

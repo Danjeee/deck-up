@@ -1,0 +1,42 @@
+package com.javi.deckup.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.javi.deckup.repository.dao.UsuarioRepository;
+import com.javi.deckup.repository.entity.Rol;
+import com.javi.deckup.repository.entity.Usuario;
+
+@Service
+public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
+	
+	@Autowired
+	UsuarioRepository ur;
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+		Usuario usuario = ur.findByEmail(email);
+		if (usuario != null) {
+			List<GrantedAuthority> listaPermisos = new ArrayList<GrantedAuthority>();
+			List<Rol> listaRoles = new ArrayList<Rol>(usuario.getRoles());
+			for (Rol rol : listaRoles) {
+				listaPermisos.add(new SimpleGrantedAuthority(rol.getNombre()));
+			}
+			System.out.println(usuario);
+			return new User(usuario.getUsername(), usuario.getPassword(), listaPermisos);
+		} else {
+			throw new UsernameNotFoundException(email);
+		}
+	}
+	
+}
