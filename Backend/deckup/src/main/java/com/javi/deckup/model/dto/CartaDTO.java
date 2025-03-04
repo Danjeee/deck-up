@@ -2,8 +2,6 @@ package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Codigo;
 import com.javi.deckup.repository.entity.Habilidad;
@@ -33,26 +31,32 @@ public class CartaDTO implements Serializable {
 	
 	private Integer precio;
 	
+	private boolean exclusive;
+	
 	private Long copias;
 	
 	private RarezaDTO rarezaDTO;
 	
-	private List<HabilidadDTO> habilidadesDTO;
+	private HabilidadDTO habilidadDTO;
 	
 	private PaqueteDTO paqueteDTO;
 	
 	// No añado la lista de codigos y usuarios porque es una carga de datos innecesaria
 	
 	public static CartaDTO convertToDTO(Carta input) { // Convert a DTO sin hacer el proceso de conseguir las copias
+		if (input == null) {
+			return null;
+		}
 		return CartaDTO.builder()
 						.id(input.getId())
 						.nombre(input.getNombre())
 						.descripcion(input.getDescripcion())
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
+						.exclusive(input.isExclusive())
 						.copias(null)
 						.rarezaDTO(RarezaDTO.convertToDTO(input.getRareza()))
-						.habilidadesDTO(input.getHabilidades().stream().map(h -> HabilidadDTO.convertToDTO(h)).collect(Collectors.toList()))
+						.habilidadDTO(HabilidadDTO.convertToDTO(input.getHabilidad()))
 						.paqueteDTO(PaqueteDTO.convertToDTO(input.getPaquete()))
 						.build();
 						
@@ -65,9 +69,10 @@ public class CartaDTO implements Serializable {
 						.descripcion(input.getDescripcion())
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
+						.exclusive(input.isExclusive())
 						.copias(getCopies ? calculateCopias(input.getUsuarios()) : null)
 						.rarezaDTO(RarezaDTO.convertToDTO(input.getRareza()))
-						.habilidadesDTO(input.getHabilidades().stream().map(h -> HabilidadDTO.convertToDTO(h)).collect(Collectors.toList()))
+						.habilidadDTO(HabilidadDTO.convertToDTO(input.getHabilidad()))
 						.paqueteDTO(PaqueteDTO.convertToDTO(input.getPaquete()))
 						.build();
 						
@@ -76,15 +81,16 @@ public class CartaDTO implements Serializable {
 	// A la hora de convertir a entidad (para guardar) tendremos que seleccionar si la guardamos cargando las respectivas listas en el servicio
 	// Habrá que buscar todas estas listas si queremos EDITAR una carta (cosa que seguramente no se pueda)
 	// A la hora de guardar una nueva simplemente seteamos codigos y usuarios a null
-	public static Carta convertToEntity(CartaDTO input, List<Carta> cartasrareza, List<Habilidad> cartashabilidad, List<PlayerCards> usuarios, List<Codigo> cartascodigo) {
+	public static Carta convertToEntity(CartaDTO input, Habilidad habilidad, List<Carta> cartasrareza, List<PlayerCards> usuarios, List<Codigo> cartascodigo) {
 		return Carta.builder()
 						.id(input.getId())
 						.nombre(input.getNombre())
 						.descripcion(input.getDescripcion())
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
+						.exclusive(input.isExclusive())
 						.rareza(RarezaDTO.convertToEntity(input.getRarezaDTO(), cartasrareza))
-						.habilidades(input.getHabilidadesDTO().stream().map(h -> HabilidadDTO.convertToEntity(h, cartasrareza)).collect(Collectors.toList()))
+						.habilidad(habilidad)
 						.paquete(Paquete.builder().id(input.getPaqueteDTO().getId()).build())
 						.usuarios(usuarios)
 						.codigos(cartascodigo)

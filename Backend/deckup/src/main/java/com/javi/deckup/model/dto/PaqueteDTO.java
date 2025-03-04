@@ -28,14 +28,31 @@ private Integer id;
 	
 	private List<CartaDTO> cartas;
 	
-	public static PaqueteDTO convertToDTO(Paquete input) {
+	public static PaqueteDTO convertToDTO(Paquete input) { // No incluir las cartas
+		if (input == null) {
+			return null;
+		}
 		return PaqueteDTO.builder()
 						  .id(input.getId())
 						  .nombre(input.getNombre())
 						  .descripcion(input.getDescripcion())
 						  .imagen(input.getImagen())
 						  .precio(input.getPrecio())
-						  .cartas(input.getCartas().stream().map(c -> CartaDTO.convertToDTO(c)).collect(Collectors.toList()))
+						  .cartas(null)
+						  .build();
+	}
+	
+	public static PaqueteDTO convertToDTO(Paquete input, boolean mostrarCartas) {
+		if (input == null) {
+			return null;
+		}
+		return PaqueteDTO.builder()
+						  .id(input.getId())
+						  .nombre(input.getNombre())
+						  .descripcion(input.getDescripcion())
+						  .imagen(input.getImagen())
+						  .precio(input.getPrecio())
+						  .cartas(mostrarCartas ? input.getCartas().stream().map(c -> CartaDTO.convertToDTO(c)).collect(Collectors.toList()) : null)
 						  .build();
 	}
 	

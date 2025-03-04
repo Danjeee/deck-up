@@ -46,6 +46,6 @@ public class Codigo {
 	private Timestamp expiration_date;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name="usuarios-codigos", joinColumns = @JoinColumn(name="id_codigo"), inverseJoinColumns = @JoinColumn(name = "id_usuario"))
+	@JoinTable(name="usuarios_codigos", joinColumns = @JoinColumn(name="id_codigo"), inverseJoinColumns = @JoinColumn(name = "id_usuario"))
 	private List<Usuario> usuarios;
 }

@@ -37,11 +37,12 @@ public class Usuario {
 	
 	private String password;
 	
+	@Column(name = "pfp")
 	private String pfp;
 	
 	private Integer currency;
 	
-	@Column(name = "nextPayment")
+	@Column(name = "next_payment")
 	private Timestamp nextPayment;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuario")

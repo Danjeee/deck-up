@@ -2,6 +2,7 @@ package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.javi.deckup.repository.entity.Rol;
 import com.javi.deckup.repository.entity.Usuario;
 
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -22,6 +24,8 @@ public class RolDTO implements Serializable {
 
 	private String nombre;
 	
+	@ToString.Exclude
+	@JsonIgnore
 	private UsuarioDTO usuarioDTO;
 	
 	public static Rol convertToEntity(RolDTO input, UsuarioDTO usuarioDTO) {

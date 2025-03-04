@@ -2,6 +2,7 @@ package com.javi.deckup.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.UsuarioRepository;
 import com.javi.deckup.repository.entity.Rol;
 import com.javi.deckup.repository.entity.Usuario;
@@ -37,6 +39,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		} else {
 			throw new UsernameNotFoundException(email);
 		}
+	}
+
+	@Override
+	public List<UsuarioDTO> findAll() {
+		return ur.findAll().stream().map(u -> UsuarioDTO.convertToDTO(u)).collect(Collectors.toList());
 	}
 	
 }

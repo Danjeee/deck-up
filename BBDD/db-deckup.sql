@@ -11,7 +11,7 @@ CREATE TABLE `deckup`.`usuarios` (
   `password` VARCHAR(255) NOT NULL,
   `pfp` VARCHAR(100) NOT NULL DEFAULT "user.png",
   `currency` INT NOT NULL,
-  `nextPayment` DATETIME NOT NULL,
+  `next_payment` DATETIME NOT NULL,
   `estado` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`));
   
@@ -21,8 +21,8 @@ CREATE TABLE `deckup`.`usuarios` (
   `descripcion` VARCHAR(255) NOT NULL,
   `imagen` VARCHAR(100) NOT NULL,
   `precio` INT NOT NULL,
-  `vida` INT NOT NULL,
-  `dmg` INT NOT NULL,
+  `habilidad` INT NOT NULL DEFAULT 1,
+  `exclusive` TINYINT DEFAULT 0,
   PRIMARY KEY (`id`));
 
 CREATE TABLE `deckup`.`rarezas` (
@@ -60,13 +60,13 @@ CREATE TABLE `deckup`.`rarezas` (
     ON UPDATE CASCADE);
     
     CREATE TABLE `deckup`.`codigos` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `codigo` VARCHAR(45) NOT NULL,
   `currency` INT NULL DEFAULT 0,
   `card` INT NULL,
   `card_cant` INT NULL DEFAULT 0,
   `uses_left` INT NULL DEFAULT -1,
-  `expiration_date` DATETIME NOT NULL,
+  `expiration_date` DATETIME NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_card-code_idx` (`card` ASC) VISIBLE,
   CONSTRAINT `fk_card-code`
@@ -80,7 +80,7 @@ CREATE TABLE `deckup`.`rarezas` (
 
 ALTER TABLE `deckup`.`cartas` 
 ADD COLUMN `rareza` INT NOT NULL AFTER `precio`,
-ADD COLUMN `paquete` INT NOT NULL AFTER `rareza`,
+ADD COLUMN `paquete` INT NULL AFTER `rareza`,
 ADD INDEX `fk_cartas-paq_idx` (`paquete` ASC) VISIBLE,
 ADD INDEX `fk_cartas-rar_idx` (`rareza` ASC) VISIBLE;
 ;
@@ -98,8 +98,8 @@ ADD CONSTRAINT `fk_cartas-rar`
 
 /* Relaciones N a N (Tablas + fk) */
 
-CREATE TABLE `deckup`.`jugadores-cartas` (
-  `id` BIGINT NOT NULL,
+CREATE TABLE `deckup`.`jugadores_cartas` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `id_jugador` BIGINT NOT NULL,
   `id_carta` INT NOT NULL,
   `cant` INT NOT NULL,
@@ -116,24 +116,8 @@ CREATE TABLE `deckup`.`jugadores-cartas` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
     
-    CREATE TABLE `deckup`.`cartas_habilidades` (
-  `id_carta` INT NOT NULL,
-  `id_habilidad` INT NOT NULL,
-  PRIMARY KEY (`id_carta`, `id_habilidad`),
-  INDEX `fk_hab_nan1_idx` (`id_habilidad` ASC) VISIBLE,
-  CONSTRAINT `fk_carta_nan2`
-    FOREIGN KEY (`id_carta`)
-    REFERENCES `deckup`.`cartas` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_hab_nan1`
-    FOREIGN KEY (`id_habilidad`)
-    REFERENCES `deckup`.`habilidades` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE);
-    
-    CREATE TABLE `deckup`.`usuarios-codigos` (
-  `id_usuario` BIGINT NOT NULL,
+    CREATE TABLE `deckup`.`usuarios_codigos` (
+  `id_usuario` BIGINT NOT NULL AUTO_INCREMENT,
   `id_codigo` INT NOT NULL,
   PRIMARY KEY (`id_usuario`, `id_codigo`),
   INDEX `fk_codes_idx` (`id_codigo` ASC) VISIBLE,
@@ -207,3 +191,63 @@ CREATE TABLE `deckup`.`tienda` (
     REFERENCES `deckup`.`paquetes` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+    
+/*INSERCION DE DATOS*/
+/*Usuarios y roles*/
+INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado)VALUES 
+('admin', 'a@a.com', '123456', 'admin.png', 999999999 ,now(), 1),  # 1
+('javisores', 'j@j.com','123456', 'javi.jpg', 500 , now(), 1); # 2
+
+INSERT INTO roles(nombre, id_user)VALUES 
+('ROLE_ADMIN', 1),
+('ROLE_USER', 2);
+
+/*Habilidades, rarezas, paquetes y cartas*/
+
+INSERT INTO paquetes(nombre, descripcion, imagen, precio) VALUES
+('Basico', 'Paquete normal', 'paquete1.png', 500); # 1
+
+INSERT INTO rarezas(nombre, porcentaje) VALUES
+('Comun', 40), # 1
+('Rara', 20), # 2
+('Epica', 10), # 3
+('Legendaria', 3), # 4
+('Mitica', 0.5), # 5
+('???', 0.01); # 6
+
+INSERT INTO habilidades(nombre, descripcion, tipo, dmg) VALUES
+/*
+Aclaración de los tipos:
+	- A = Ataque (Unicamente golpea)
+    - Q = Quema
+    - C = Congela
+    - K = Congela 2 turnos
+    - H = Cura
+    - P = Pasiva
+    - F = Ataque fuerte (te deja un turno sin atacar)
+*/
+('Admin', 'Oponente.setVida() = 0', 'A', 999999), # 1
+('Golpe', 'Golpea al rival', 'A', 1), # 2
+('Puntapie', 'Golpea al rival, este pierde un turno', 'C', 1), # 3
+('Ignicion', 'Quema al rival', 'Q', 0), # 4
+('Explosion de titan', 'Un gran golpe que tiene consecuencias', 'F', 5); #5
+
+
+INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
+('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 4, 1), # 1
+('Minion', 'La unidad por defecto', 'minion.png', 200, 1, 1, 2, 0), # 2
+('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.png', 2000,3 ,1, 5, 0), # 3
+('Eventio', 'Te damos la bienvenida', 'eventio.png', 0,3 ,null, 3, 1); # 4
+
+/* Codigos */
+
+INSERT INTO codigos(codigo, currency, card, card_cant, uses_left, expiration_date) VALUES
+('GR4NDO0PENING', 2000, null, 0, 10000, null), # 1
+('F1RST3V3NTCARD', 0, 4, 1, -1, now()); # 2
+
+/* Relaciones */
+INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
+(1,1,20),
+(1,2,1),
+(2,2,1),
+(2,3,1);

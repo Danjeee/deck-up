@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Codigo;
+import com.javi.deckup.repository.entity.Usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,6 @@ public class CodigoDTO {
 	
 	private Timestamp expiration_date;
 	
-	private List<UsuarioDTO> usuarios;
 	
 	public static CodigoDTO convertToDTO(Codigo input) {
 		return CodigoDTO.builder()
@@ -43,11 +43,10 @@ public class CodigoDTO {
 					  .card_cant(input.getCard_cant())
 					  .uses_left(input.getUses_left())
 					  .expiration_date(input.getExpiration_date())
-					  .usuarios(input.getUsuarios().stream().map(u -> UsuarioDTO.convertToDTO(u)).collect(Collectors.toList()))
 					  .build();
 	}
 	
-	public static Codigo convertToEntity(CodigoDTO input) { //Sin carta
+	public static Codigo convertToEntity(CodigoDTO input, List<Usuario> users) { //Sin carta
 		return Codigo.builder()
 					  .id(input.getId())
 					  .codigo(input.getCodigo())
@@ -56,11 +55,11 @@ public class CodigoDTO {
 					  .card_cant(0)
 					  .uses_left(input.getUses_left())
 					  .expiration_date(input.getExpiration_date())
-					  .usuarios(input.getUsuarios().stream().map(u -> UsuarioDTO.convertToEntity(u)).collect(Collectors.toList()))
+					  .usuarios(users)
 					  .build();
 	}
 	
-	public static Codigo convertToEntity(CodigoDTO input, Carta carta) { //Con carta
+	public static Codigo convertToEntity(CodigoDTO input,List<Usuario> users, Carta carta) { //Con carta
 		return Codigo.builder()
 					  .id(input.getId())
 					  .codigo(input.getCodigo())
@@ -69,7 +68,7 @@ public class CodigoDTO {
 					  .card_cant(input.getCard_cant())
 					  .uses_left(input.getUses_left())
 					  .expiration_date(input.getExpiration_date())
-					  .usuarios(input.getUsuarios().stream().map(u -> UsuarioDTO.convertToEntity(u)).collect(Collectors.toList()))
+					  .usuarios(users)
 					  .build();
 	}
 }

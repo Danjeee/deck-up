@@ -42,6 +42,8 @@ public class Carta {
 	
 	private Integer precio;
 	
+	private boolean exclusive;
+	
 	@ManyToOne
 	@JoinColumn(name = "rareza")
 	private Rareza rareza;
@@ -58,7 +60,7 @@ public class Carta {
 	@ToString.Exclude
 	private List<Codigo> codigos;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name="cartas_habilidades", joinColumns = @JoinColumn(name="id_carta"), inverseJoinColumns = @JoinColumn(name = "id_habilidad"))
-	private List<Habilidad> habilidades;
+	@ManyToOne
+	@JoinColumn(name = "habilidad")
+	private Habilidad habilidad;
 }

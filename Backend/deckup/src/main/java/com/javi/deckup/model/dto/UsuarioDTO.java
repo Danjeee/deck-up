@@ -46,6 +46,7 @@ public class UsuarioDTO implements Serializable {
 						  .password(null) // No le paso la password al DTO para más seguridad
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
+						  .pfp(input.getPfp())
 						  .rolesDTO(input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
@@ -55,6 +56,7 @@ public class UsuarioDTO implements Serializable {
 						  .id(input.getId())
 						  .username(input.getUsername())
 						  .email(input.getUsername())
+						  .pfp(input.getPfp())
 						  .password(input.getPassword()) // Sin embargo, si se la paso a la entidad para poder operar con ella
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
