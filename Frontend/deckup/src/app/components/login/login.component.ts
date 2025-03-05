@@ -39,5 +39,11 @@ export class LoginComponent {
     return this.form.get(field)?.touched;
   }
 
-  login(){}
+  login(){
+    if (this.form.valid) {
+      console.log("login")
+    } else {
+      this.form.markAllAsTouched()
+    }
+  }
 }

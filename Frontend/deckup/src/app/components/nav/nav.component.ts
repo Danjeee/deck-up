@@ -42,7 +42,8 @@ export class NavComponent implements OnInit {
         const nav = document.getElementById('nav-element-login') as HTMLElement
         nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
       } else {
-
+        const navlogin = document.getElementById("nav-login") as HTMLElement
+        navlogin.style.display = "none"
       }
     }, 1);
   }

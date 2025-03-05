@@ -1,23 +1,31 @@
 <div class="container">
-    <img src="http://localhost/resources/img/foto-login.png" alt="">
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
-        <p>Hola, ¡es tiempo de cocinar!</p>
         <form [formGroup]="form" id="form" (submit)="login(); $event.preventDefault()" method=post>
             <div class="input-group">
-                <label for="email">Email:</label>
+                <label for="email">Email:</label><br>
                 <input type="text" name="email" placeholder="Email" id="email" formControlName="email" required>
-                <span class="icon"><i class="fas fa-user"></i></span>
-                <p *ngIf="errors('email') && touched('email')">El campo no puede estar vacío</p>
+                <span class="icon"><i class="bi bi-person-fill"></i></span>
+                
             </div>
             <div class="input-group">
-                <label for="passwd">Contraseña:</label>
+                <label for="passwd">Contraseña:</label><br>
                 <input type="password" name="passwd" placeholder="Contraseña" id="passwd" formControlName="passwd">
-                <span class="icon"><i class="fas fa-lock"></i></span>
-                <p *ngIf="errors('passwd') && touched('passwd')">El campo no puede estar vacío</p>
+                <span class="icon"><i class="bi bi-lock-fill"></i></span>
+                
             </div>
-            <button type="submit">Iniciar sesión</button>
+            <input type="submit" class="but bg-s" value="Iniciar sesión"/>
         </form>
+        <div id="errors">
+            <div *ngIf="errors('email') && touched('email')">
+                <i class="bi bi-exclamation-circle"></i>
+                <p>El email no puede estar vacio</p>
+            </div>
+            <div *ngIf="errors('passwd') && touched('passwd')">
+                <i class="bi bi-exclamation-circle"></i>
+                <p>La contraseña no puede estar vacia</p>
+            </div>
+        </div>
     </div>
 </div>
 
