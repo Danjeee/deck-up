@@ -1,0 +1,54 @@
+#nav-login>div{
+    width: 200vh;
+    height: 100vw;
+    rotate: 60deg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: filter .5s;
+    transition: scale .5s;
+    &:hover{
+        filter: brightness(.8);
+        scale: 1.05
+    }
+}
+#regbut, #logbut{
+    font-size: 30px;
+    position: absolute;
+    padding: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+#regbut{
+    top: 90%;
+    left: 45%;
+}
+#logbut{
+    top: 7%;
+    left: 45%;
+}
+#nav-login{
+    z-index: 3;
+    position: fixed;
+    top: -75%;
+    left: 0;
+    transform: translate(50%, -10%);
+    /*animation: login 0s linear forwards;*/
+}
+@keyframes register {
+    from{
+        transform: translate(50%, -10%);
+    }
+    to{
+        transform: translate(-50%, 35%);
+    }
+}
+@keyframes login {
+    from{
+        transform: translate(-50%, 35%);
+    }
+    to{
+        transform: translate(50%, -10%);
+    }
+}

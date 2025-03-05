@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+.but{
+    cursor: pointer;
+    border-radius: 7px;
+    transition: filter .5s;
+    transition: scale .5s;
+    &:hover{
+        scale: 1.05;
+        filter: brightness(.8);
+    }
+}
+.bg-p{
+    background-color: #13253e;
+    color: #fff;
+}
+.bg-s{
+    background-color: #5898d8;
+    color: #fff;
+}
+.bg-t{
+    background-color: #e5edf9;
+    color: #13253e;
+}
