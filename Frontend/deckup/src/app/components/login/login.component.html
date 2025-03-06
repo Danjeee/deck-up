@@ -1,30 +1,27 @@
 <div class="container">
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
+        <h2 class="tit">Iniciar Sesión</h2>
         <form [formGroup]="form" id="form" (submit)="login(); $event.preventDefault()" method=post>
             <div class="input-group">
-                <label for="email">Email:</label><br>
                 <input type="text" name="email" placeholder="Email" id="email" formControlName="email" required>
-                <span class="icon"><i class="bi bi-person-fill"></i></span>
-                
+                <i class="bi bi-envelope-at-fill"></i>
             </div>
             <div class="input-group">
-                <label for="passwd">Contraseña:</label><br>
-                <input type="password" name="passwd" placeholder="Contraseña" id="passwd" formControlName="passwd">
-                <span class="icon"><i class="bi bi-lock-fill"></i></span>
-                
+                <input type="password" name="password" placeholder="Contraseña" id="password" formControlName="password"> 
+                <i class="bi bi-lock-fill"></i>  
             </div>
-            <input type="submit" class="but bg-s" value="Iniciar sesión"/>
+            <input type="submit" class="but bg-s str" value="Iniciar sesión"/>
         </form>
         <div id="errors">
             <div *ngIf="errors('email') && touched('email')">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>El email no puede estar vacio</p>
             </div>
-            <div *ngIf="errors('passwd') && touched('passwd')">
+            <div *ngIf="errors('password') && touched('password')">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La contraseña no puede estar vacia</p>
             </div>
+            
         </div>
     </div>
 </div>

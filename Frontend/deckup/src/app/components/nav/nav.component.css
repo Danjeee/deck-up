@@ -52,3 +52,70 @@
         transform: translate(50%, -10%);
     }
 }
+@media only screen and (max-width:1900px) {
+    #nav-login{
+        transform: translate(40vw, 20vh);
+    }
+    #nav-login>div{
+        width: 170vh;
+        height: 85vw;
+    }
+}
+@media only screen and (max-width:1500px) {
+    #nav-login{
+        transform: translate(40vw, 40vh);
+    }
+    #nav-login>div{
+        width: 160vh;
+        height: 65vw;
+    }
+}
+
+@media only screen and (max-width:1200px) {
+    #nav-login{
+        transform: translate(40vw, 60vh);
+    }
+    #nav-login>div{
+        width: 150vh;
+        height: 55vw;
+    }
+}
+@media only screen and (max-width:1100px) {
+    #nav-login{
+        transform: translate(40vw, 70vh);
+    }
+    #nav-login>div{
+        padding: 55px;
+        width: 140vh;
+        height: 45vw;
+    }
+}
+@media only screen and (max-width:1000px) {
+    #nav-login{
+        transform: translate(15vw, 84vh);
+    }
+    #nav-login>div{
+        padding: 55px;
+        width: 140vh;
+        height: 45vw;
+    }
+}
+@media only screen and (max-width:800px) {
+    #nav-login{
+        transform: translate(0vh, 50vh);
+    }
+    #nav-login>div{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        padding: 55px;
+        width: 140vh;
+        height: 55vw;
+        rotate: 0deg;
+    }
+    #nav-login>div *{
+        position: absolute;
+        left: 30%;
+        transform: translateY(-3vh);
+    }
+    }

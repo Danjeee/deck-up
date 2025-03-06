@@ -1,0 +1,101 @@
+.reg-container{
+    width: 50vh;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 30%;
+    top: 10%;
+}
+.reg-container>p, .reg-container>h2{
+    align-self: start;
+    margin-left: 15%;
+    font-size: 30px;
+}
+.pfp{
+    position: absolute;
+    right: -150%;
+    top: 0;
+    border: #13253e 2px solid;
+    border-radius: 7px;
+    height: 29.7vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.pfp>*{
+    transform: skew(-30deg, 0deg);
+}
+img{
+    margin-top: 35px;
+    width: 20vh;
+    height: 20vh;
+    background-color: #13253e;
+    align-self: center;
+    border-radius: 7px;
+}
+#form{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 50px;
+    gap: 20px;
+    align-items: end;
+    width: auto;
+    transform: skew(30deg, 0deg);
+    border: #13253e 2px solid;
+    border-radius: 7px;
+}
+#form>*:not(.pfp){
+    transform: skew(-30deg, 0deg);
+    font-size: 20px;
+}
+input:not([type="submit"]){
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+    border-bottom: #13253e 2px solid;
+    font-size: 18px;
+}
+input[type='submit']{
+    align-self: center;
+    padding: 5px;
+}
+#errors{
+    position: fixed;
+    bottom: 15%;
+    right: 10%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 20px;
+    align-items: start;
+    width: auto;
+    transform: skew(30deg, 0deg);
+    border-radius: 7px;
+}
+#errors>div{
+    transform: skew(-30deg, 0deg);
+    padding: 10px;
+    font-size: 20px;
+    color: #55121A;
+    background-color: #EB9C95;
+    border-radius: 15px;
+    border: #55121A 2px solid;
+    display: flex;
+    gap: 5px;
+    width: 30vw;
+    animation: vanish 5s linear forwards;
+}
+#errors>div *{
+    margin: 0;
+}
+@keyframes vanish{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0.1;
+    }
+}

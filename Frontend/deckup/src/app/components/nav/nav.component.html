@@ -1,4 +1,4 @@
-<div id="nav-login" >
+<div id="nav-login" *ngIf="this.router.url == '/login' || this.router.url == '/register'" >
     <div id="nav-element-login" class="bg-p" (click)="togglelogin()">
         <div id="regbut" class="">Registro</div>
         <div id="logbut" class="">Login</div>

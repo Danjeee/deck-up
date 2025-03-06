@@ -27,7 +27,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		Usuario usuario = ur.findByEmail(email);
+		Usuario usuario = ur.findByEmail(email).orElse(null);
 		if (usuario != null) {
 			List<GrantedAuthority> listaPermisos = new ArrayList<GrantedAuthority>();
 			List<Rol> listaRoles = new ArrayList<Rol>(usuario.getRoles());
@@ -44,6 +44,18 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	@Override
 	public List<UsuarioDTO> findAll() {
 		return ur.findAll().stream().map(u -> UsuarioDTO.convertToDTO(u)).collect(Collectors.toList());
+	}
+
+	@Override
+	public UsuarioDTO findByEmail(String email) {
+		Usuario user = ur.findByEmail(email).orElse(null);
+		return user == null ? null : UsuarioDTO.convertToDTO(user);
+	}
+
+	@Override
+	public UsuarioDTO findByEmail(String email, boolean wantPass) {
+		Usuario user = ur.findByEmail(email).orElse(null);
+		return user == null ? null : UsuarioDTO.convertToDTO(user, wantPass);
 	}
 	
 }

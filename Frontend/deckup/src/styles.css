@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: def;
+    src: url('http://localhost/Resources/fonts/Ubuntu-Regular.ttf');
+}
+
+@font-face {
+    font-family: str;
+    src: url('http://localhost/Resources/fonts/Ubuntu-Bold.ttf');
+}
+
+@font-face {
+    font-family: tit;
+    src: url('http://localhost/Resources/fonts/Ubuntu-Regular.ttf');
+}
+ 
 body{
     margin: 0;
     padding: 0;
@@ -25,4 +40,13 @@ body{
 .bg-t{
     background-color: #e5edf9;
     color: #13253e;
+}
+.fd{
+    font-family: def;
+}
+.str{
+    font-family: str;
+}
+.tit{
+    font-family: tit;
 }

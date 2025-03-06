@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -13,14 +14,15 @@ export class NavComponent implements OnInit {
 
   cooldown = false;
 
+
   registanim = [
-    { transform: 'translate(-5%, 100%)' },
-    { transform: 'translate(0%, 0%)' },
+    { transform: 'translate(-10vh, 110vw)' },
+    { transform: 'translate(0vh, 0vw)' },
   ]
 
   loginanim = [
-    { transform: 'translate(0%, 0%)' },
-    { transform: 'translate(-5%, 100%)' },
+    { transform: 'translate(0vh, 0vw)' },
+    { transform: 'translate(-10vh, 110vw)' },
   ]
 
   animoptions = {
@@ -36,29 +38,39 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
+
       if (this.router.url == "/login" || this.router.url == "/register") {
-        const navcont = document.getElementById("nav-login") as HTMLElement
-        navcont.style.display = "flex"
         const nav = document.getElementById('nav-element-login') as HTMLElement
+        const cont = document.getElementById('nav-login') as HTMLElement
+        cont.style.zIndex = "-1"
         nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
       } else {
-        const navlogin = document.getElementById("nav-login") as HTMLElement
-        navlogin.style.display = "none"
       }
     }, 1);
   }
 
   togglelogin() {
     if (!this.cooldown) {
+      
       this.cooldown = true
+      const cont = document.getElementById("nav-login") as HTMLElement
       const nav = document.getElementById("nav-element-login") as HTMLElement
+       cont.style.zIndex = '3'
       if (this.router.url == "/login") {
-        this.router.navigate(['register'])
+        setTimeout(() => {
+          this.router.navigate(['register'])
+        }, 200);
         nav.animate(this.loginanim, this.animoptions)
       } else {
-        this.router.navigate(['login'])
+        setTimeout(() => {
+          this.router.navigate(['login'])
+        }, 200);
         nav.animate(this.registanim, this.animoptions)
       }
+      setTimeout(() => {
+        
+        cont.style.zIndex = '-1'
+      }, 400);
       setTimeout(() => {
         this.cooldown = false
       }, 650);

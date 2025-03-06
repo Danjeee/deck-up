@@ -32,6 +32,8 @@ public class UsuarioDTO implements Serializable {
 	
 	private Integer currency;
 	
+	private boolean estado;
+	
 	private Timestamp nextPayment;
 	
 	private List<RolDTO> rolesDTO;
@@ -47,6 +49,21 @@ public class UsuarioDTO implements Serializable {
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
+						  .estado(input.isEstado())
+						  .rolesDTO(input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
+						  .build();
+	}
+	
+	public static UsuarioDTO convertToDTO(Usuario input, boolean wantPass) {
+		return UsuarioDTO.builder()
+						  .id(input.getId())
+						  .username(input.getUsername())
+						  .email(input.getUsername())
+						  .password(wantPass ? input.getPassword() : null) // Le paso la contraseña SOLO si se pide
+						  .currency(input.getCurrency())
+						  .nextPayment(input.getNextPayment())
+						  .pfp(input.getPfp())
+						  .estado(input.isEstado())
 						  .rolesDTO(input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
@@ -56,6 +73,7 @@ public class UsuarioDTO implements Serializable {
 						  .id(input.getId())
 						  .username(input.getUsername())
 						  .email(input.getUsername())
+						  .estado(input.isEstado())
 						  .pfp(input.getPfp())
 						  .password(input.getPassword()) // Sin embargo, si se la paso a la entidad para poder operar con ella
 						  .currency(input.getCurrency())

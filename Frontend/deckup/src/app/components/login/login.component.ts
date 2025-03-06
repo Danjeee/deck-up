@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { AlertService } from '../../services/alert.service';
+import { Router } from '@angular/router';
+import { UserSession } from '../../utils/UserSession';
+import { User } from '../../utils/User';
+
 
 @Component({
   selector: 'app-login',
@@ -10,7 +16,7 @@ import { FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '
 })
 export class LoginComponent {
 
-  constructor(private formBuilder: FormBuilder){}
+  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router:Router){}
 
   form = this.formBuilder.group({
     email: [
@@ -19,7 +25,7 @@ export class LoginComponent {
         Validators.required,
       ],
     ],
-    passwd: [
+    password: [
       "",
       [
         Validators.required,
@@ -41,8 +47,20 @@ export class LoginComponent {
 
   login(){
     if (this.form.valid) {
-      console.log("login")
+      const formdata = new FormData(document.getElementById("form") as HTMLFormElement)
+      this.service.login(formdata).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            this.alert.success(data.tit, data.msg)
+            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+            this.router.navigate(['/home'])
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
     } else {
+      this.alert.error("Error", "Rellena todos los campos")
       this.form.markAllAsTouched()
     }
   }

@@ -195,8 +195,8 @@ CREATE TABLE `deckup`.`tienda` (
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
 INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado)VALUES 
-('admin', 'a@a.com', '123456', 'admin.png', 999999999 ,now(), 1),  # 1
-('javisores', 'j@j.com','123456', 'javi.jpg', 500 , now(), 1); # 2
+('admin', 'a@a.com', '$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'admin.png', 999999999 ,now(), 1),  # 1
+('javisores', 'j@j.com','$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'javi.jpg', 500 , now(), 1); # 2
 
 INSERT INTO roles(nombre, id_user)VALUES 
 ('ROLE_ADMIN', 1),

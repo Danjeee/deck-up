@@ -1,5 +1,7 @@
 package com.javi.deckup.repository.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,6 @@ import jakarta.transaction.Transactional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 	@Query(value="SELECT * FROM usuarios WHERE email = ?1", nativeQuery = true)
-	Usuario findByEmail(String email);
+	Optional<Usuario> findByEmail(String email);
 
 }
