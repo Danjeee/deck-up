@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 public class UsuarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private String auth;
 
 	private Long id;
 	
@@ -44,8 +46,9 @@ public class UsuarioDTO implements Serializable {
 		return UsuarioDTO.builder()
 						  .id(input.getId())
 						  .username(input.getUsername())
-						  .email(input.getUsername())
+						  .email(input.getEmail())
 						  .password(null) // No le paso la password al DTO para más seguridad
+						  .auth(null)
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
@@ -58,8 +61,9 @@ public class UsuarioDTO implements Serializable {
 		return UsuarioDTO.builder()
 						  .id(input.getId())
 						  .username(input.getUsername())
-						  .email(input.getUsername())
+						  .email(input.getEmail())
 						  .password(wantPass ? input.getPassword() : null) // Le paso la contraseña SOLO si se pide
+						  .auth(wantPass ? input.getAuth() : null)
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
@@ -72,10 +76,11 @@ public class UsuarioDTO implements Serializable {
 		return Usuario.builder()
 						  .id(input.getId())
 						  .username(input.getUsername())
-						  .email(input.getUsername())
+						  .email(input.getEmail())
 						  .estado(input.isEstado())
 						  .pfp(input.getPfp())
 						  .password(input.getPassword()) // Sin embargo, si se la paso a la entidad para poder operar con ella
+						  .auth(input.getAuth())
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
 						  .roles(input.getRolesDTO().stream().map(r -> RolDTO.convertToEntity(r, input)).collect(Collectors.toList()))

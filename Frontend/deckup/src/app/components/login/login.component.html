@@ -10,8 +10,14 @@
                 <input type="password" name="password" placeholder="Contraseña" id="password" formControlName="password"> 
                 <i class="bi bi-lock-fill"></i>  
             </div>
+            
             <input type="submit" class="but bg-s str" value="Iniciar sesión"/>
+            
         </form>
+        <div style="align-self: center; padding: 5px; margin-top: 10px;" class="but bg-s">
+            <input type="checkbox" value="savesession" id="savesession" style="accent-color: rgba(0,0,0,0);">
+            <label for="savesession" class="str" style="font-size: 15px; cursor: pointer;">Recordar</label>
+        </div>
         <div id="errors">
             <div *ngIf="errors('email') && touched('email')">
                 <i class="bi bi-exclamation-circle"></i>

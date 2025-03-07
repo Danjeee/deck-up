@@ -16,4 +16,18 @@ export class UserService {
       catchError(err => {throw err})
     )
   }
+
+  addVerification(mail: string) : Observable<any>{
+    const data: FormData = new FormData
+    data.append("email", mail)
+    return this.http.post(`${this.authApiURL}verify/${mail}`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  verify(data: FormData) : Observable<any>{
+    return this.http.post(`${this.authApiURL}verify`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
 }

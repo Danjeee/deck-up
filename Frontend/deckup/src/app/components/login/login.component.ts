@@ -16,7 +16,7 @@ import { User } from '../../utils/User';
 })
 export class LoginComponent {
 
-  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router:Router){}
+  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router) { }
 
   form = this.formBuilder.group({
     email: [
@@ -45,15 +45,27 @@ export class LoginComponent {
     return this.form.get(field)?.touched;
   }
 
-  login(){
+  login() {
     if (this.form.valid) {
       const formdata = new FormData(document.getElementById("form") as HTMLFormElement)
       this.service.login(formdata).subscribe({
         next: (data) => {
           if (data.status == 200) {
-            this.alert.success(data.tit, data.msg)
-            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
-            this.router.navigate(['/home'])
+            if (data.user.rolesDTO[0].nombre == "ROLE_ADMIN") {
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+              this.router.navigate(['/home'])
+            } else {
+              const check = document.getElementById("savesession") as HTMLInputElement
+              sessionStorage.setItem("saves", check.checked ? "t" : "f")
+              if (UserSession.wasLoggedAs(data.user.email)) {
+                UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+                this.router.navigate(['/home'])
+              } else {
+                sessionStorage.setItem("aux_user", data.user.email)
+                this.router.navigate(['/verify'])
+              }
+            }
+
           } else {
             this.alert.error(data.tit, data.msg)
           }

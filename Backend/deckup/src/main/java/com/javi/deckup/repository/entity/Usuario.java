@@ -37,6 +37,8 @@ public class Usuario {
 	
 	private String password;
 	
+	private String auth;
+	
 	private boolean estado;
 	
 	@Column(name = "pfp")

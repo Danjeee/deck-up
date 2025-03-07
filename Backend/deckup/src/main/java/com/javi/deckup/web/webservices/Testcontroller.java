@@ -12,6 +12,7 @@ import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.CartaService;
 import com.javi.deckup.service.CodigoService;
 import com.javi.deckup.service.UsuarioService;
+import com.javi.deckup.utils.EmailService;
 
 @RestController
 public class Testcontroller {
@@ -25,6 +26,9 @@ public class Testcontroller {
 	
 	@Autowired
 	CodigoService cds;
+	
+	@Autowired
+	private EmailService es;
 
 	@GetMapping("/")
 	public List<UsuarioDTO> getMethodName() {

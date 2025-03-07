@@ -32,5 +32,27 @@ export class UserSession{
             return "Guest"
         }
     }
+    public static wasLoggedAs(email: string) : boolean{
+        console.log(localStorage.getItem("past_users"))
+        if (localStorage.getItem("past_users") == null) {
+            localStorage.setItem("past_users", "")
+        }
+        const users = localStorage.getItem("past_users")?.split(",") as string[]
+        if (users.includes(email)) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    public static addToPastUsers(email: string) : void{
+        if (localStorage.getItem("past_users") == null) {
+            localStorage.setItem("past-users", "")
+        }
+        var users = localStorage.getItem("past_users") as string
+        users += email+ ","
+        localStorage.setItem("past_users", users)
+        
+    }
     
 }

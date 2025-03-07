@@ -1,8 +1,11 @@
 package com.javi.deckup.web.webservices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +42,22 @@ public class AuthController {
 		}
 		}
 	}
+	@PostMapping("/verify/{mail}")
+	public ResponseEntity<Response> addVerificationCode(@ModelAttribute UsuarioDTO user) {
+		us.addVerificationCode(user.getEmail());
+		return new ResponseEntity<>(Response.builder().status(200).tit("Done").msg("Código enviado correctamente").build(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/verify")
+	public Response verify(@ModelAttribute UsuarioDTO user) {
+		UsuarioDTO aux = us.findByEmail(user.getEmail(), true);
+		if (auth.matches(user.getAuth(), aux.getAuth())) {
+			return Response.builder().status(200).tit("Sesión iniciada").msg("Sesión iniciada correctamente").user(us.findByEmail(user.getEmail())).build();
+		} else {
+			return Response.builder().status(500).tit("Error").msg("Código incorrecto, intentelo de nuevo").build();
+		}
+
+	}
+	
 
 }

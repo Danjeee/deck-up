@@ -2,6 +2,7 @@ package com.javi.deckup.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +12,24 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.UsuarioRepository;
 import com.javi.deckup.repository.entity.Rol;
 import com.javi.deckup.repository.entity.Usuario;
+import com.javi.deckup.utils.EmailService;
+import com.javi.deckup.utils.Encrypt;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	
 	@Autowired
 	UsuarioRepository ur;
+	
+	@Autowired
+	private EmailService es;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -56,6 +63,24 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	public UsuarioDTO findByEmail(String email, boolean wantPass) {
 		Usuario user = ur.findByEmail(email).orElse(null);
 		return user == null ? null : UsuarioDTO.convertToDTO(user, wantPass);
+	}
+
+	@Override
+	public void addVerificationCode(String mail) {
+		int leftLimit = 97; // letter 'a'
+	    int rightLimit = 122; // letter 'z'
+	    int targetStringLength = 6;
+	    Random random = new Random();
+	    StringBuilder buffer = new StringBuilder(targetStringLength);
+	    for (int i = 0; i < targetStringLength; i++) {
+	        int randomLimitedInt = leftLimit + (int) 
+	          (random.nextFloat() * (rightLimit - leftLimit + 1));
+	        buffer.append((char) randomLimitedInt);
+	    }
+	    String generatedString = buffer.toString().toUpperCase();
+	    es.sendEmailWithHTML(mail, "Verification code", "<h1>"+generatedString+"</h1>");
+	    ur.addVerificationCode(mail, Encrypt.encriptarPassword(generatedString));
+		
 	}
 	
 }

@@ -1,0 +1,38 @@
+.cont{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.v-cont{
+    align-self: center;
+    width: 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.v-cont>div{
+    padding: 15px;
+    font-size: 20px;
+}
+.v-cont>input{
+    padding: 7px;
+    font-size: 16px;
+}
+.retry{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+.retry>*{
+    margin: 2px;
+}
+.r0{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}

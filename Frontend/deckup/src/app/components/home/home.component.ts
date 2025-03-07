@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserSession } from '../../utils/UserSession';
 
 @Component({
   selector: 'app-home',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+
+  usuario = UserSession.getUser()
 
 }

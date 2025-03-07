@@ -3,6 +3,7 @@ package com.javi.deckup.repository.dao;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 	@Query(value="SELECT * FROM usuarios WHERE email = ?1", nativeQuery = true)
 	Optional<Usuario> findByEmail(String email);
+
+	@Modifying
+	@Query(value="UPDATE usuarios SET auth = ?2	WHERE email = ?1", nativeQuery = true)
+	void addVerificationCode(String mail, String authcode);
 
 }

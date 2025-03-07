@@ -1,0 +1,16 @@
+<div class="loadcont" *ngIf="loading">
+    <div class="loader"></div>
+    <h3 style="color: #fff;" class="str">Estamos enviando un codigo de verificación a {{mail}}, espere un momento</h3>
+</div>
+<div class="cont">
+    <h1 class="str">Introduce el código de verificación que te hemos enviado</h1>
+    <div class="v-cont bg-t bd-p">
+        <input type="text" id="verify">
+        <div class="but bg-s str" (click)="check()">Confirmar</div>
+    </div>
+    <div class="fd retry">
+        <p *ngIf="countdown<=0" class="but bg-s bd-p" style="align-self: center;" (click)="resend()">Pulsa aqui para re-enviar el código de verificación</p>
+        <p *ngIf="countdown>0">Puedes reenviar un código en: {{countdown}}s</p>
+    </div>
+    
+</div>
