@@ -21,6 +21,9 @@ export class VerifyComponent implements OnInit {
   mail: string = sessionStorage.getItem("aux_user") as string
 
   ngOnInit(): void {
+    if (sessionStorage.getItem("aux_user") == null) {
+      this.router.navigate([UserSession.getUser() == "Guest" ? "/login" : "/home"])
+    }
     const input = document.getElementById("verify") as HTMLInputElement
     input.addEventListener('keyup', ()=>{
       input.value = input.value.toUpperCase()
@@ -48,6 +51,8 @@ export class VerifyComponent implements OnInit {
             if (sessionStorage.getItem("saves") == "t") {
               UserSession.addToPastUsers(sessionStorage.getItem("aux_user") as string)
             }
+            sessionStorage.removeItem("aux_user")
+            sessionStorage.removeItem("saves")
             this.alert.success(data.tit, data.msg)
             this.router.navigate(['/home'])
             
@@ -75,7 +80,15 @@ export class VerifyComponent implements OnInit {
 
   resend() {
     this.countdown = 60
-    this.countdown_func()
+    this.loading = true
+    this.service.addVerification(sessionStorage.getItem("aux_user") as string).subscribe({
+      next: (data) => {
+        //console.log(data)
+        this.loading = false
+        this.countdown_func()
+      }
+    })
+    
   }
 
 }

@@ -6,6 +6,7 @@ import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 import { UserSession } from '../../utils/UserSession';
 import { User } from '../../utils/User';
+import { ApacheService } from '../../services/apache.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,15 @@ import { User } from '../../utils/User';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router, private apacheService: ApacheService) { }
+
+  auth: string | null = null
+
+  auth_encoded: string | null = null
+
+  loading: boolean = false
+
+  fileName: string = ""
 
   form = this.formBuilder.group({
     email: [
@@ -62,7 +71,7 @@ export class RegisterComponent {
     return this.form.get(field)?.touched;
   }
 
-  changeImg(): void{
+  changeImg(): void {
     const imagen = document.getElementById("img") as HTMLImageElement
     const input = document.getElementById("pfp_inp") as HTMLInputElement
     const files: any = input.files
@@ -72,17 +81,67 @@ export class RegisterComponent {
   register() {
     if (this.form.valid) {
       const formdata = new FormData(document.getElementById("form") as HTMLFormElement)
-      this.service.login(formdata).subscribe({
-        next: (data) => {
-          if (data.status == 200) {
-            this.alert.success(data.tit, data.msg)
-            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
-            this.router.navigate(['/home'])
-          } else {
-            this.alert.error(data.tit, data.msg)
+      if (this.auth != null) {
+        formdata.append("auth", this.auth_encoded as string)
+      }
+      formdata.delete("pfp")
+      const pfpcont = document.getElementById("pfp_inp") as HTMLInputElement
+      if (pfpcont.files == null || pfpcont.files[0] == null) {
+        formdata.append("pfp", "user.png")
+      } else {
+        var file: FormData = new FormData()
+        file.append("pfp", pfpcont.files[0])
+        file.append("opc", "ADD")
+        this.apacheService.uploadUserImg(file).subscribe({
+          next: (data) => {
+            console.log(data)
+            this.fileName = data.name
+            formdata.append("pfp", this.fileName)
           }
-        }
-      })
+        })
+      }
+      setTimeout(() => {
+        this.loading = true
+        this.service.register(formdata, this.auth as string).subscribe({
+          next: (data) => {
+            this.loading = false
+            if (data.status == 100) {
+              var file: FormData = new FormData()
+              file.append("name", this.fileName)
+              file.append("opc", "DEL")
+              this.apacheService.uploadUserImg(file).subscribe({
+                next: (data) => {
+                  // console.log(data) lo dejo por si hubiera algun fallo
+                }
+              });
+              this.auth_encoded = data.msg
+              this.alert.ask("Codigo de verificacion", "Inserta el codigo de verificacion que te hemos mandado al correo: " + formdata.get("email")).then((result) => {
+                var resp: any = result
+                this.auth = resp.value;
+                if (resp.value == null || resp.value == "") {
+                  this.auth = "w"
+                }
+                this.register()
+              })
+            } else if (data.status == 200) {
+              this.alert.success(data.tit, data.msg)
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+              this.router.navigate(['/home'])
+            } else {
+              var file: FormData = new FormData()
+              file.append("name", this.fileName)
+              file.append("opc", "DEL")
+              this.apacheService.uploadUserImg(file).subscribe({
+                next: (data) => {
+                  // console.log(data) lo dejo por si hubiera algun fallo
+                }
+              });
+              this.alert.error(data.tit, data.msg)
+              this.auth = null
+            }
+          }
+        })
+      }, 200);
     } else {
       this.alert.error("Error", "Rellena todos los campos")
       this.form.markAllAsTouched()

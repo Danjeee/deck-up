@@ -22,4 +22,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query(value="UPDATE usuarios SET auth = ?2	WHERE email = ?1", nativeQuery = true)
 	void addVerificationCode(String mail, String authcode);
 
+	@Query(value="SELECT * FROM usuarios WHERE username = ?1", nativeQuery = true)
+	Optional<Usuario> findByUsername(String username);
+
 }

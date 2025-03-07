@@ -19,6 +19,7 @@ import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.UsuarioRepository;
 import com.javi.deckup.repository.entity.Rol;
 import com.javi.deckup.repository.entity.Usuario;
+import com.javi.deckup.utils.CodeGenerator;
 import com.javi.deckup.utils.EmailService;
 import com.javi.deckup.utils.Encrypt;
 
@@ -67,19 +68,25 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 
 	@Override
 	public void addVerificationCode(String mail) {
-		int leftLimit = 97; // letter 'a'
-	    int rightLimit = 122; // letter 'z'
-	    int targetStringLength = 6;
-	    Random random = new Random();
-	    StringBuilder buffer = new StringBuilder(targetStringLength);
-	    for (int i = 0; i < targetStringLength; i++) {
-	        int randomLimitedInt = leftLimit + (int) 
-	          (random.nextFloat() * (rightLimit - leftLimit + 1));
-	        buffer.append((char) randomLimitedInt);
-	    }
-	    String generatedString = buffer.toString().toUpperCase();
-	    es.sendEmailWithHTML(mail, "Verification code", "<h1>"+generatedString+"</h1>");
+	    String generatedString = CodeGenerator.generateNewCode();
+	    es.sendEmailWithHTML(mail, "Verification code", "<h1>Tu código de verificación es:</h1><br><div style='display: flex; gap: 10px;'>"
+	    		+ "<div style='border: #13253e 2px solid; padding: 20px; font-size: 30px; color: #fff; background-color: #5898d8; filter: drop-shadow(0px 0px 20px #13253e);'>"+generatedString+"</div>"
+	    		+ "</div>"
+	    		+ "<h2>Esperamos que disfrute su tiempo con nosotros</h2>"
+	    		+ "<p>Si usted no ha solicitado el código, ignore este email o pongase en contacto con nosotros pero bajo ningún concepto comparta el código enviado</p>");
 	    ur.addVerificationCode(mail, Encrypt.encriptarPassword(generatedString));
+		
+	}
+
+	@Override
+	public UsuarioDTO findByUsername(String username) {
+		Usuario user = ur.findByUsername(username).orElse(null);
+		return user == null ? null : UsuarioDTO.convertToDTO(user); 
+	}
+
+	@Override
+	public void save(UsuarioDTO user) {
+		ur.save(UsuarioDTO.convertToEntity(user));
 		
 	}
 	

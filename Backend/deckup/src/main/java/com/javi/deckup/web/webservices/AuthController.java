@@ -1,5 +1,11 @@
 package com.javi.deckup.web.webservices;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javi.deckup.model.dto.RolDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.UsuarioService;
+import com.javi.deckup.utils.CodeGenerator;
+import com.javi.deckup.utils.EmailService;
 import com.javi.deckup.utils.Encrypt;
 import com.javi.deckup.utils.Response;
 import com.javi.deckup.utils.Session;
@@ -22,6 +32,9 @@ public class AuthController {
 
 	@Autowired
 	UsuarioService us;
+	
+	@Autowired
+	EmailService mail;
 
 	BCryptPasswordEncoder auth = new BCryptPasswordEncoder();
 
@@ -56,7 +69,48 @@ public class AuthController {
 		} else {
 			return Response.builder().status(500).tit("Error").msg("Código incorrecto, intentelo de nuevo").build();
 		}
-
+	}
+	
+	@PostMapping("/register/verify/{code}")
+	public Response verifyRegister(@ModelAttribute UsuarioDTO user, @PathVariable("code") String verification) {
+	
+		if (us.findByEmail(user.getEmail()) != null) {
+			return Response.builder().status(503).tit("Error").msg("El usuario con el email "+user.getEmail()+" ya existe").build();
+		}
+		if (us.findByUsername(user.getUsername()) != null) {
+			return Response.builder().status(503).tit("Error").msg("El usuario "+user.getUsername()+" ya existe").build();
+		}
+		if (user.getAuth() == "w") {
+			return Response.builder().status(500).tit("Error").msg("Codigo incorrecto").build();
+		}
+		if (user.getAuth() == null) {
+			String code = CodeGenerator.generateNewCode();
+			mail.sendEmailWithHTML(user.getEmail(), "Verification code", "<h1>Tu código de verificación es:</h1><br><div style='display: flex; gap: 10px;'>"
+		    		+ "<div style='border: #13253e 2px solid; padding: 20px; font-size: 30px; color: #fff; background-color: #5898d8; filter: drop-shadow(0px 0px 20px #13253e);'>"+code+"</div>"
+		    		+ "</div>"
+		    		+ "<h2>Esperamos que disfrute su tiempo con nosotros</h2>"
+		    		+ "<p>Si usted no ha solicitado el código, ignore este email o pongase en contacto con nosotros pero bajo ningún concepto comparta el código enviado</p>");
+			return Response.builder().status(100).msg(Encrypt.encriptarPassword(code)).build(); // Vuelve a mandar la peticion para indicar que se puede crear el usuario junto con el codigo encriptado
+		} else {
+			if (auth.matches(verification, user.getAuth())){
+				user.setCurrency(1000);
+				user.setPassword(Encrypt.encriptarPassword(user.getPassword()));
+				user.setEstado(true);
+				user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusHours(4)));
+				user.setAuth(null);
+				us.save(user);
+				UsuarioDTO aux = us.findByEmail(user.getEmail(), true);
+				List<RolDTO> roles = new ArrayList<>();
+				roles.add(RolDTO.builder().nombre("ROLE_USER").usuarioDTO(aux).build());
+				aux.setRolesDTO(roles);
+				us.save(aux);
+				aux = us.findByEmail(user.getEmail());
+				return Response.builder().status(200).tit("Cuenta creada").msg("Cuenta creada correctamente").user(aux).build();
+			} else {
+				return Response.builder().status(500).tit("Error").msg("Codigo incorrecto").build();
+			}
+		}
+		
 	}
 	
 

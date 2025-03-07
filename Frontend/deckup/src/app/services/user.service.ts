@@ -7,7 +7,7 @@ import { catchError, Observable } from 'rxjs';
 })
 export class UserService {
 
-  authApiURL = "http://localhost:8888/auth/"
+  authApiURL = "https://localhost:8888/auth/"
 
   constructor(private http: HttpClient) { }
 
@@ -27,6 +27,12 @@ export class UserService {
 
   verify(data: FormData) : Observable<any>{
     return this.http.post(`${this.authApiURL}verify`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  register(data: FormData, code: string) : Observable<any>{
+    return this.http.post(`${this.authApiURL}register/verify/${code}`, data).pipe(
       catchError(err => {throw err})
     )
   }

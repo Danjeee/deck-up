@@ -5,6 +5,7 @@ import Swal, { SweetAlertResult } from 'sweetalert2';
   providedIn: 'root'
 })
 export class AlertService {
+ 
 
   constructor() { }
 
@@ -22,6 +23,15 @@ export class AlertService {
       text: text,
       showCloseButton: true,
       icon: 'error'
+    })
+  }
+  ask(title: string, text: string) {
+    return Swal.fire({
+      title: title,
+      text: text,
+      input: 'text',
+      showCloseButton: false,
+      icon: 'question'
     })
   }
 }

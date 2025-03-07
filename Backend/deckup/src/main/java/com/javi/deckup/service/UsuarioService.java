@@ -13,5 +13,9 @@ public interface UsuarioService {
 	UsuarioDTO findByEmail(String email, boolean wantPass);
 
 	void addVerificationCode(String mail);
+
+	UsuarioDTO findByUsername(String username);
+
+	void save(UsuarioDTO user);
 	
 }

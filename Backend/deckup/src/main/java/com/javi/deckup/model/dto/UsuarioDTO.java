@@ -53,7 +53,7 @@ public class UsuarioDTO implements Serializable {
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
 						  .estado(input.isEstado())
-						  .rolesDTO(input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
+						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
 	
@@ -68,7 +68,7 @@ public class UsuarioDTO implements Serializable {
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
 						  .estado(input.isEstado())
-						  .rolesDTO(input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
+						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
 	
@@ -78,12 +78,12 @@ public class UsuarioDTO implements Serializable {
 						  .username(input.getUsername())
 						  .email(input.getEmail())
 						  .estado(input.isEstado())
-						  .pfp(input.getPfp())
+						  .pfp(input.getPfp() == null ? "user.png" : input.getPfp())
 						  .password(input.getPassword()) // Sin embargo, si se la paso a la entidad para poder operar con ella
 						  .auth(input.getAuth())
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
-						  .roles(input.getRolesDTO().stream().map(r -> RolDTO.convertToEntity(r, input)).collect(Collectors.toList()))
+						  .roles(input.getRolesDTO() == null ? null : input.getRolesDTO().stream().map(r -> RolDTO.convertToEntity(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
 	
