@@ -4,3 +4,16 @@
         <div id="logbut" class="">Login</div>
     </div>
 </div>
+<div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register'">
+    <div class="btn but" id="perfil">
+        <img src="http://localhost/Resources/img/users/{{user.pfp}}" alt="">
+        <p class="str">{{user.username}}</p>
+    </div>
+    <div class="btn but" id="friends">
+        <i class="bi bi-person-lines-fill"></i>
+        <p class="str">Amigos</p>
+    </div>
+    <div class="btn but" id="menu">
+        <i class="bi bi-list"></i>
+    </div>
+</div>

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from '../../utils/User';
+import { UserSession } from '../../utils/UserSession';
 
 @Component({
   selector: 'app-nav',
@@ -14,6 +16,7 @@ export class NavComponent implements OnInit {
 
   cooldown = false;
 
+  user: User | any = UserSession.getUser()
 
   registanim = [
     { transform: 'translate(-10vh, 110vw)' },
@@ -38,7 +41,7 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-
+      this.user == UserSession.getUser() as User
       if (this.router.url == "/login" || this.router.url == "/register") {
         const nav = document.getElementById('nav-element-login') as HTMLElement
         const cont = document.getElementById('nav-login') as HTMLElement

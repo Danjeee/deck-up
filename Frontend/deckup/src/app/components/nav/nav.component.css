@@ -1,4 +1,4 @@
-#nav-login>div{
+#nav-login>div {
     width: 200vh;
     height: 100vw;
     rotate: 60deg;
@@ -8,27 +8,33 @@
     cursor: pointer;
     transition: filter .5s;
     transition: scale .5s;
-    &:hover{
+
+    &:hover {
         filter: brightness(.8);
         scale: 1.05
     }
 }
-#regbut, #logbut{
+
+#regbut,
+#logbut {
     font-size: 30px;
     position: absolute;
     padding: 20px;
     padding-left: 30px;
     padding-right: 30px;
 }
-#regbut{
+
+#regbut {
     top: 90%;
     left: 45%;
 }
-#logbut{
+
+#logbut {
     top: 7%;
     left: 45%;
 }
-#nav-login{
+
+#nav-login {
     z-index: 3;
     position: fixed;
     top: -75%;
@@ -36,75 +42,90 @@
     transform: translate(50%, -10%);
     /*animation: login 0s linear forwards;*/
 }
+
 @keyframes register {
-    from{
+    from {
         transform: translate(50%, -10%);
     }
-    to{
+
+    to {
         transform: translate(-50%, 35%);
     }
 }
+
 @keyframes login {
-    from{
+    from {
         transform: translate(-50%, 35%);
     }
-    to{
+
+    to {
         transform: translate(50%, -10%);
     }
 }
+
 @media only screen and (max-width:1900px) {
-    #nav-login{
+    #nav-login {
         transform: translate(40vw, 20vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         width: 170vh;
         height: 85vw;
     }
 }
+
 @media only screen and (max-width:1500px) {
-    #nav-login{
+    #nav-login {
         transform: translate(40vw, 40vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         width: 160vh;
         height: 65vw;
     }
 }
 
 @media only screen and (max-width:1200px) {
-    #nav-login{
+    #nav-login {
         transform: translate(40vw, 60vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         width: 150vh;
         height: 55vw;
     }
 }
+
 @media only screen and (max-width:1100px) {
-    #nav-login{
+    #nav-login {
         transform: translate(40vw, 70vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         padding: 55px;
         width: 140vh;
         height: 45vw;
     }
 }
+
 @media only screen and (max-width:1000px) {
-    #nav-login{
+    #nav-login {
         transform: translate(15vw, 84vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         padding: 55px;
         width: 140vh;
         height: 45vw;
     }
 }
+
 @media only screen and (max-width:800px) {
-    #nav-login{
+    #nav-login {
         transform: translate(0vh, 50vh);
     }
-    #nav-login>div{
+
+    #nav-login>div {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -113,9 +134,86 @@
         height: 55vw;
         rotate: 0deg;
     }
-    #nav-login>div *{
+
+    #nav-login>div * {
         position: absolute;
         left: 30%;
         transform: translateY(-3vh);
     }
+}
+
+.btn {
+    transform: skew(-7deg, 0deg);
+    background-color: #13253e;
+    border: #000 1px solid;
+    box-shadow: inset 0px -6px 0px 0px rgba(0, 0, 0, 0.4), inset 0px 4px 0px 0px rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border-radius: 7px;
+    padding: .5vw;
+}
+
+.btn>* {
+    transform: skew(7deg, 0deg);
+}
+#perfil{
+    position: fixed;
+    top: 1vh;
+    left: 1vw;
+    width: 5vw;
+    height: 5vw;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: .9vw;
+    &>img{
+        width: 65%;
+        border-radius: 99px;
     }
+    &>*{
+        margin: 0;
+    }
+}
+#friends{
+    position: fixed;
+    top: 1vh;
+    left: calc(50px + 6vw);
+    width: 5vw;
+    height: 5vw;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: .9vw;
+    &>i{
+        font-size: 2.5vw;
+    }
+    &>*{
+        margin: 0;
+    }
+}
+
+#menu{
+    position: fixed;
+    top: 1vh;
+    right: 1vw;
+    width: 5vw;
+    height: 5vw;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: .9vw;
+    &>i{
+        font-size: 2.5vw;
+    }
+    &>*{
+        margin: 0;
+    }
+}
+
+#nav {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
