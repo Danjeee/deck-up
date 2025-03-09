@@ -142,23 +142,6 @@
     }
 }
 
-.btn {
-    transform: skew(-7deg, 0deg);
-    background-color: #13253e;
-    border: #000 1px solid;
-    box-shadow: inset 0px -6px 0px 0px rgba(0, 0, 0, 0.4), inset 0px 4px 0px 0px rgba(255, 255, 255, 0.4);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    border-radius: 7px;
-    padding: .5vw;
-}
-
-.btn>* {
-    transform: skew(7deg, 0deg);
-}
 #perfil{
     position: fixed;
     top: 1vh;
@@ -216,4 +199,24 @@
     position: fixed;
     top: 0;
     left: 0;
+}
+
+#currency{
+    position: fixed;
+    right: calc(50px + 6vw);
+    top: 1vh;
+    display: flex;
+    flex-direction: row;
+    width: calc(100px + 2vw);
+    background-color: #000;
+    height: 2.5vh;
+    justify-content: space-around;
+    font-size: calc(10px + 1.5vh);
+    &>img{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -30%;
+        width: 60%;
+    }
 }

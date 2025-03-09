@@ -15,7 +15,7 @@
                 <i class="bi bi-envelope-at-fill"></i>
             </div>
             <div class="input-group pfp">
-                <input (change)="changeImg()" type="file" name="pfp" id="pfp_inp" formControlName="pfp">
+                <input (change)="changeImg()" type="file" name="pfp" id="pfp_inp" class="but" formControlName="pfp">
                 <img src="http://localhost/Resources/img/users/user.png" alt="user" id="img">
             </div>
             <div class="input-group">
@@ -26,34 +26,34 @@
                 <input type="password" name="passwordc" placeholder="Confirmar contraseña" id="passwordc" formControlName="passwordc"> 
                 <i class="bi bi-lock-fill"></i>  
             </div>
-            <input type="submit" class="but bg-s str" value="Iniciar sesión"/>
+            <input type="submit" class="but btn bg-p str" value="Iniciar sesión"/>
         </form>
         <div id="errors">
-            <div *ngIf="errors('email') && touched('email')">
+            <div *ngIf="errors('email') && touched('email')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>El email no puede estar vacio</p>
             </div>
-            <div *ngIf="errors('password')?.['required'] && touched('password')">
+            <div *ngIf="errors('password')?.['required'] && touched('password')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La contraseña no puede estar vacia</p>
             </div>
-            <div *ngIf="errors('password')?.['maxlength'] && touched('password')">
+            <div *ngIf="errors('password')?.['maxlength'] && touched('password')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La contraseña no puede ser mayor a 30 caracteres</p>
             </div>
-            <div *ngIf="errors('password')?.['minlength'] && touched('password')">
+            <div *ngIf="errors('password')?.['minlength'] && touched('password')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La contraseña no puede ser menor a 6 caracteres</p>
             </div>
-            <div *ngIf="errors('passwordc')?.['required'] && touched('passwordc')">
+            <div *ngIf="errors('passwordc')?.['required'] && touched('passwordc')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La confirmación no puede estar vacia</p>
             </div>
-            <div *ngIf="errors('passwordc')?.['eq'] && touched('passwordc')">
+            <div *ngIf="errors('passwordc')?.['eq'] && touched('passwordc')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>Las contraseñas deben coincidir</p>
             </div>
-            <div *ngIf="errors('username') && touched('username')">
+            <div *ngIf="errors('username') && touched('username')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>El nombre de usuario no puede estar vacio</p>
             </div>

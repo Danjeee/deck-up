@@ -1,0 +1,39 @@
+#home{
+    position: fixed;
+    display: flex;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: calc(1vw);
+    &:hover div:not(:hover){
+        scale: .9;
+    }
+    &>div{
+        margin: 0;
+        width: calc(100px + 10vw);
+        height: calc(300px + 20vh);
+        &>*{
+            margin:0 ;
+        }
+        &>h1{
+            font-size: 50px;
+        }
+    }
+}
+#shop{
+    color: #173d2e;
+    background-color: #80EF80;
+}
+#play_mp{
+    color: #a46b04;
+    background-color: #FFFAA0;
+}
+#play_solo{
+    color: #183a62;
+    background-color: #80CEE1;
+}
+#collection{
+    color: #a20f49;
+    background-color: #ffa2b9;
+}

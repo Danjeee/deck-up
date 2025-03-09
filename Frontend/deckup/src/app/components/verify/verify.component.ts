@@ -47,13 +47,20 @@ export class VerifyComponent implements OnInit {
       this.service.verify(data).subscribe({
         next: (data) => {
           if (data.status == 200) {
-            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
             if (sessionStorage.getItem("saves") == "t") {
               UserSession.addToPastUsers(sessionStorage.getItem("aux_user") as string)
             }
             sessionStorage.removeItem("aux_user")
             sessionStorage.removeItem("saves")
             this.alert.success(data.tit, data.msg)
+            .then((resp) => {
+              if (resp.isDismissed) {
+                window.location.reload()
+              } else {
+                window.location.reload()
+              }
+            })
             this.router.navigate(['/home'])
             
           } else {

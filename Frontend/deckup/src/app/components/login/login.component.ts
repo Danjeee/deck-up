@@ -6,6 +6,7 @@ import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 import { UserSession } from '../../utils/UserSession';
 import { User } from '../../utils/User';
+import { NavComponent } from '../nav/nav.component';
 
 
 @Component({
@@ -52,13 +53,21 @@ export class LoginComponent {
         next: (data) => {
           if (data.status == 200) {
             if (data.user.rolesDTO[0].nombre == "ROLE_ADMIN") {
-              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
               this.router.navigate(['/home'])
             } else {
               const check = document.getElementById("savesession") as HTMLInputElement
               sessionStorage.setItem("saves", check.checked ? "t" : "f")
               if (UserSession.wasLoggedAs(data.user.email)) {
-                UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO))
+                this.alert.success(data.tit, data.msg)
+                  .then((resp) => {
+                    if (resp.isDismissed) {
+                      window.location.reload()
+                    } else {
+                      window.location.reload()
+                    }
+                  })
+                UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
                 this.router.navigate(['/home'])
               } else {
                 sessionStorage.setItem("aux_user", data.user.email)

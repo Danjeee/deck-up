@@ -92,6 +92,7 @@ public class AuthController {
 		    		+ "<p>Si usted no ha solicitado el código, ignore este email o pongase en contacto con nosotros pero bajo ningún concepto comparta el código enviado</p>");
 			return Response.builder().status(100).msg(Encrypt.encriptarPassword(code)).build(); // Vuelve a mandar la peticion para indicar que se puede crear el usuario junto con el codigo encriptado
 		} else {
+			verification = verification.toUpperCase();
 			if (auth.matches(verification, user.getAuth())){
 				user.setCurrency(1000);
 				user.setPassword(Encrypt.encriptarPassword(user.getPassword()));

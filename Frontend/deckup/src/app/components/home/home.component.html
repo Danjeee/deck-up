@@ -1,1 +1,24 @@
-<p>home works!</p>
+<div id="home">
+    <div id="shop" class="btn but">
+        <i></i>
+        <h1 class="str">Tienda</h1>
+    </div>
+    <div id="play_mp" class="btn but">
+        <i></i>
+        <h1 class="str">Jugar</h1>
+        <h2 class="str">Multijugador</h2>
+    </div>
+    <div id="play_solo" class="btn but">
+        <i></i>
+        <h1 class="str">Jugar</h1>
+        <h2 class="str">Local</h2>
+    </div>
+    <div id="collection" class="btn but">
+        <i></i>
+        <h1 class="str">Colección</h1>
+    </div>
+</div>
+<div>
+    <div *ngIf="!can_pay">No</div>
+    <div *ngIf="can_pay">Puede recibir su pago</div>    
+</div>

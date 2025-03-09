@@ -11,19 +11,19 @@
                 <i class="bi bi-lock-fill"></i>  
             </div>
             
-            <input type="submit" class="but bg-s str" value="Iniciar sesión"/>
+            <input type="submit" class="but btn bg-p str" value="Iniciar sesión"/>
             
         </form>
-        <div style="align-self: center; padding: 5px; margin-top: 10px;" class="but bg-s">
+        <div style="align-self: center; padding: 5px; margin-top: 10px; flex-direction: row;" class="but btn bg-s">
             <input type="checkbox" value="savesession" id="savesession" style="accent-color: rgba(0,0,0,0);">
             <label for="savesession" class="str" style="font-size: 15px; cursor: pointer;">Recordar</label>
         </div>
         <div id="errors">
-            <div *ngIf="errors('email') && touched('email')">
+            <div *ngIf="errors('email') && touched('email')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>El email no puede estar vacio</p>
             </div>
-            <div *ngIf="errors('password') && touched('password')">
+            <div *ngIf="errors('password') && touched('password')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>
                 <p>La contraseña no puede estar vacia</p>
             </div>

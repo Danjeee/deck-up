@@ -64,7 +64,7 @@ input[type='submit']{
 }
 #errors{
     position: fixed;
-    bottom: 15%;
+    bottom: 10%;
     right: 10%;
     display: flex;
     flex-wrap: wrap;
@@ -76,7 +76,8 @@ input[type='submit']{
     border-radius: 7px;
 }
 #errors>div{
-    transform: skew(-30deg, 0deg);
+    transform: skew(-37deg, 0deg);
+    flex-direction: row;
     padding: 10px;
     font-size: 20px;
     color: #55121A;

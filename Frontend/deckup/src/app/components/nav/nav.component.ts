@@ -39,9 +39,10 @@ export class NavComponent implements OnInit {
     fill: 'forwards'
   } as KeyframeAnimationOptions
 
+
   ngOnInit(): void {
     setTimeout(() => {
-      this.user == UserSession.getUser() as User
+      this.user = UserSession.getUser() as User
       if (this.router.url == "/login" || this.router.url == "/register") {
         const nav = document.getElementById('nav-element-login') as HTMLElement
         const cont = document.getElementById('nav-login') as HTMLElement
