@@ -1,5 +1,10 @@
 package com.javi.deckup.service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -88,6 +93,22 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	public void save(UsuarioDTO user) {
 		ur.save(UsuarioDTO.convertToEntity(user));
 		
+	}
+
+	@Override
+	public UsuarioDTO findById(Long id) {
+		Usuario aux = ur.findById(id).orElse(null);
+		return aux == null ? null : UsuarioDTO.convertToDTO(aux);
+	}
+
+	@Override
+	public void pay(UsuarioDTO user, Integer amount) {
+		Integer total = (user.getCurrency()+amount);
+		Timestamp np = (Timestamp.valueOf(LocalDateTime.now().plusHours(4)));
+		Usuario user_final = ur.findById(user.getId()).orElse(null);
+		user_final.setCurrency(total);
+		user_final.setNextPayment(np);
+		ur.save(user_final);
 	}
 	
 }

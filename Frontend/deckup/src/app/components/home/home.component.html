@@ -18,7 +18,7 @@
         <h1 class="str">Colección</h1>
     </div>
 </div>
-<div>
-    <div *ngIf="!can_pay">No</div>
-    <div *ngIf="can_pay">Puede recibir su pago</div>    
+<div id="pago">
+    <div *ngIf="!can_pay" class="btn str no">Siguiente pago en: {{time_left_h}}h {{time_left_m}}m {{time_left_s}}s</div>
+    <div *ngIf="can_pay" class="btn but str si" (click)="get_paid()">Puede recibir su pago</div>    
 </div>

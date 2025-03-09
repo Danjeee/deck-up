@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { UserSession } from '../../utils/UserSession';
+import { UserService } from '../../services/user.service';
+import { User } from '../../utils/User';
 
 @Component({
   selector: 'app-load',
@@ -10,49 +12,56 @@ import { UserSession } from '../../utils/UserSession';
   styleUrl: './load.component.css'
 })
 export class LoadComponent implements AfterViewInit {
-  constructor (private router: Router, private alert: AlertService){}
+  constructor(private router: Router, private alert: AlertService, private service: UserService) { }
 
-  url = "/" + window.location.href.split("/")[window.location.href.split("/").length-1]
+  url = "/" + window.location.href.split("/")[window.location.href.split("/").length - 1]
 
   ngAfterViewInit(): void {
-    switch (this.url){
+    if (UserSession.getUser() != "Guest") {
+      this.service.findById(UserSession.getId()).subscribe({
+        next: (data) => {
+          UserSession.setUser(new User(data.id, data.username, data.email, data.pfp, data.currency, data.rolesDTO, data.nextPayment))
+        }
+      })
+    }
+    switch (this.url) {
       case "/login":
         this.toggleAccess(1)
         break;
-        case "/register":
-          this.toggleAccess(1)
+      case "/register":
+        this.toggleAccess(1)
         break;
-        case "/home":
+      case "/home":
         this.toggleAccess(2)
-      break;
+        break;
       case "/admin":
         this.toggleAccess(3)
-      break;
+        break;
     }
   }
-  
-  toggleAccess(access_level: number){
+
+  toggleAccess(access_level: number) {
     // 0 All
     // 1 Guests only
     // 2 Users and admin
     // 3 Admin only
     // Default all
 
-    switch (access_level){
+    switch (access_level) {
       case 1:
         if (UserSession.getUser() != "Guest") {
           this.router.navigate(["/home"])
         }
         break;
 
-        case 2:
+      case 2:
         if (UserSession.getUser() == "Guest") {
           this.alert.error("Error", "Inicia sesión para ver este contenido")
           this.router.navigate(["/login"])
         }
         break;
 
-        case 3:
+      case 3:
         if (UserSession.getRole() != "ROLE_ADMIN") {
           this.alert.error("Error", "No puedes acceder a este contenido")
           this.router.navigate(["/home"])

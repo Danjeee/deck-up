@@ -1,5 +1,6 @@
 package com.javi.deckup.repository.dao;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +25,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 	@Query(value="SELECT * FROM usuarios WHERE username = ?1", nativeQuery = true)
 	Optional<Usuario> findByUsername(String username);
+
+	@Modifying
+	@Query(value = "UPDATE usuarios SET next_payment = ?3 AND currency = ?2 WHERE id = ?1", nativeQuery = true)
+	void pay(Long id, Integer total, Timestamp np);
 
 }

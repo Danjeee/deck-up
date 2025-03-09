@@ -13,11 +13,22 @@
         <i class="bi bi-person-lines-fill"></i>
         <p class="str">Amigos</p>
     </div>
-    <div class="btn but bg-p" id="menu">
+    <div class="btn but bg-p" id="menu" (click)="toggle()">
         <i class="bi bi-list"></i>
     </div>
     <div class="btn" id="currency">
         <img src="http://localhost/Resources/img/misc/gema.png" alt="gems">
         <p class="str">{{user.currency}}</p>
     </div>
+</div>
+<div id="menuHamb" class="btn" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify'">
+    <h1 class="str">Menú</h1>
+    <div class="btn but str conf">Configuración</div>
+    <div class="btn but str conf">Partidas recientes</div>
+    <div class="btn but str conf">Contactanos</div>
+    <div class="btn but str logout" (click)="logout()">Cerrar sesión</div>
+    <div class="btn but str logout" id="close" (click)="toggle()">X</div>
+</div>
+<div id="shadow" (click)="toggle()" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify'">
+
 </div>

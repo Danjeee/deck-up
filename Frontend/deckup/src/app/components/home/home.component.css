@@ -37,3 +37,27 @@
     color: #a20f49;
     background-color: #ffa2b9;
 }
+#pago{
+    width: 50vw;
+    position: fixed;
+    bottom: 7vh;
+    left: 50%;
+    height: calc(100px + 1vh);
+    transform: translateX(-50%);
+    &>div{
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 40px;
+    }
+}
+.no{
+    background-color: #808080;
+    color: #000;
+}
+.si{
+    background-color: #FF964F;
+    color: #9d2c0f;
+}

@@ -71,6 +71,12 @@ public class AuthController {
 		}
 	}
 	
+	@PostMapping("/logout")
+	public Response logout() {
+		Session.logOut();
+		return Response.builder().status(200).tit("Sesión cerrada").msg("Sesión cerrada correctamente").build();
+	}
+	
 	@PostMapping("/register/verify/{code}")
 	public Response verifyRegister(@ModelAttribute UsuarioDTO user, @PathVariable("code") String verification) {
 	
@@ -94,10 +100,12 @@ public class AuthController {
 		} else {
 			verification = verification.toUpperCase();
 			if (auth.matches(verification, user.getAuth())){
-				user.setCurrency(1000);
+				user.setCurrency(500);
 				user.setPassword(Encrypt.encriptarPassword(user.getPassword()));
 				user.setEstado(true);
-				user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusHours(4)));
+				//user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusHours(4)));
+				//user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusMinutes(2)));
+				user.setNextPayment(Timestamp.valueOf(LocalDateTime.now()));
 				user.setAuth(null);
 				us.save(user);
 				UsuarioDTO aux = us.findByEmail(user.getEmail(), true);

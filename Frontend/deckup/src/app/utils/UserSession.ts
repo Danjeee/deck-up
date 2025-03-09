@@ -1,4 +1,11 @@
+import { HttpClient } from "@angular/common/http"
+import { UserService } from "../services/user.service"
+import { User } from "./User"
+
 export class UserSession{
+
+    constructor(service: UserService){}
+
     public static setUser(user:any){
         localStorage.setItem("user", JSON.stringify(user))
     }

@@ -17,5 +17,9 @@ public interface UsuarioService {
 	UsuarioDTO findByUsername(String username);
 
 	void save(UsuarioDTO user);
+
+	UsuarioDTO findById(Long id);
+
+	void pay(UsuarioDTO user, Integer amount);
 	
 }
