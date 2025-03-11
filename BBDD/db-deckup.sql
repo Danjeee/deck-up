@@ -136,14 +136,15 @@ CREATE TABLE `deckup`.`jugadores_cartas` (
 /* Especial: Tienda */
 
 CREATE TABLE `deckup`.`tienda` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
   `carta1` INT NOT NULL,
   `carta2` INT NOT NULL,
   `carta3` INT NOT NULL,
   `carta4` INT NOT NULL,
   `carta5` INT NOT NULL,
   `paq1` INT NOT NULL,
-  `paq2` INT NOT NULL,
-  `paq3` INT NOT NULL,
+  `paq2` INT NULL,
+  `paq3` INT NULL,
   INDEX `fk_carta1_idx` (`carta1` ASC) VISIBLE,
   INDEX `fk_carta2_idx` (`carta2` ASC) VISIBLE,
   INDEX `fk_carta3_idx` (`carta3` ASC) VISIBLE,
@@ -226,6 +227,7 @@ Aclaración de los tipos:
     - H = Cura
     - P = Pasiva
     - F = Ataque fuerte (te deja un turno sin atacar)
+    - D = Dominio
 */
 ('Admin', 'Oponente.setVida() = 0', 'A', 999999), # 1
 ('Golpe', 'Golpea al rival', 'A', 1), # 2
@@ -252,3 +254,6 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (1,2,1),
 (2,2,1),
 (2,3,1);
+
+/*Tienda*/
+INSERT INTO tienda VALUES(1,2,2,2,3,3,1,null,null)

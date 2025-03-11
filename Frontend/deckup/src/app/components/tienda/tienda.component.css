@@ -1,0 +1,51 @@
+.cardcont{
+    position: fixed;
+    right: 10vw;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    gap: calc(20px + 5vw);
+    top: 50%;
+    transform: translateY(-50%);
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px;
+    width: calc(100px + 6vw);
+    height: calc(220px + 10vh);
+    border-radius: 7px;
+    border: #000 2px solid;
+    text-align: center;
+    &>img{
+        width: 100%;
+        height: auto;
+        background-color: #000;
+        border-radius: 7px;
+    }
+    &>*{
+        margin: 0;
+    }
+}
+.precio{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 20px;
+    &>img{
+        height: 140%;
+    }
+}
+.aff{
+    background-color: #198754;
+}
+.naff{
+    background-color: #6C757D;
+}

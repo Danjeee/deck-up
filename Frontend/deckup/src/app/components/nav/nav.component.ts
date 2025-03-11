@@ -67,23 +67,25 @@ export class NavComponent implements AfterViewInit {
       setTimeout(() => {
         this.user = UserSession.getUser() as User
       }, 100);
-      if (this.router.url == "/login" || this.router.url == "/register") {
-        const nav = document.getElementById('nav-element-login') as HTMLElement
-        const cont = document.getElementById('nav-login') as HTMLElement
-        cont.style.zIndex = "-1"
-        nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
-        window.removeEventListener("keydown", e=>{
-          if (e.key == "Escape" || e.key == "Tab") {
-            this.toggle()
-          }
-        })
-      } else {
-        window.addEventListener("keydown", e=>{
-          if (e.key == "Escape" || e.key == "Tab") {
-            this.toggle()
-          }
-        })
-      }
+      setTimeout(() => {
+        if (this.router.url == "/login" || this.router.url == "/register" || this.router.url == "/") {
+          const nav = document.getElementById('nav-element-login') as HTMLElement
+          const cont = document.getElementById('nav-login') as HTMLElement
+          cont.style.zIndex = "-1"
+          nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
+          window.removeEventListener("keydown", e=>{
+            if (e.key == "Escape" || e.key == "Tab") {
+              this.toggle()
+            }
+          })
+        } else {
+          window.addEventListener("keydown", e=>{
+            if (e.key == "Escape" || e.key == "Tab") {
+              this.toggle()
+            }
+          })
+        }
+      }, 1);
   }
 
   togglelogin() {
@@ -119,7 +121,16 @@ export class NavComponent implements AfterViewInit {
       title: 'Cerrar sesión',
       text: '¿Estas seguro de cerrar sesión?',
       icon: 'warning',
-      confirmButtonText: 'Confirmar'
+      confirmButtonText: 'Confirmar',
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: "#DC3545",
+      customClass: {
+        popup: "swal-drk btn",
+        title: "swal-drk",
+        confirmButton: "btn but str swal-btn",
+        cancelButton: "btn but str swal-btn"
+      }
     }).then(result => {
       if (result.isConfirmed) {
         this.service.logout().subscribe({

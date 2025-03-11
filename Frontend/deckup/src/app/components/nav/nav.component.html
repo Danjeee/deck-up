@@ -4,7 +4,7 @@
         <div id="logbut" class="">Login</div>
     </div>
 </div>
-<div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify'">
+<div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
     <div class="btn but bg-p" id="perfil">
         <img src="http://localhost/Resources/img/users/{{user.pfp}}" alt="">
         <p class="str">{{user.username}}</p>
@@ -18,14 +18,15 @@
     </div>
     <div class="btn" id="currency">
         <img src="http://localhost/Resources/img/misc/gema.png" alt="gems">
-        <p class="str">{{user.currency}}</p>
+        <p class="str" id="currency_txt">{{user.currency}}</p>
     </div>
 </div>
-<div id="menuHamb" class="btn" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify'">
+<div id="menuHamb" class="btn" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
     <h1 class="str">Menú</h1>
     <div class="btn but str conf">Configuración</div>
     <div class="btn but str conf">Partidas recientes</div>
     <div class="btn but str conf">Contactanos</div>
+    <div class="btn but str conf">Codigos</div>
     <div class="btn but str logout" (click)="logout()">Cerrar sesión</div>
     <div class="btn but str logout" id="close" (click)="toggle()">X</div>
 </div>

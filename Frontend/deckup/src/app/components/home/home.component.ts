@@ -5,6 +5,8 @@ import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
 import { User } from '../../utils/User';
 import { NavComponent } from '../nav/nav.component';
+import { ParticleComponent } from '../particle/particle.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,7 @@ import { NavComponent } from '../nav/nav.component';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private service: UserService, private alert: AlertService){}
+  constructor(private service: UserService, private alert: AlertService, protected router: Router){}
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -36,17 +38,26 @@ export class HomeComponent implements OnInit {
 
   can_pay: boolean = false
 
+  pay_anim(){
+    for (let i = 0; i < 100; i++) {
+      ParticleComponent.generateGems([47,47])
+    }
+    const currency = document.getElementById("currency_txt") as HTMLElement
+    setTimeout(() => {
+      for (let i = Number.parseInt(currency.innerHTML); i < (UserSession.getUser().currency as number); i++) {
+        setTimeout(() => {
+          currency.innerHTML = (Number.parseInt(currency.innerHTML) + 1) +""
+        }, 50);
+      }
+    }, 2000);
+  }
+
   get_paid() {
     this.service.getPaid().subscribe({
       next: (data) => {
         if (data.status == 200) {
-          this.alert.success(data.tit, data.msg).then((resp) => {
-          if (resp.isDismissed) {
-              window.location.reload()
-            } else {
-              window.location.reload()
-            }
-          })
+          this.pay_anim()
+          this.alert.pago_recibido(data.msg)
           this.can_pay = false
           const user: User = UserSession.getUser()
           user.pay = data.user.nextPayment
