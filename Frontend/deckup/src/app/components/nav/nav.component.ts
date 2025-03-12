@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
 import { User } from '../../utils/User';
 import { UserSession } from '../../utils/UserSession';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { AlertService } from '../../services/alert.service';
+import { filter, pairwise } from 'rxjs/operators';
+import { LoadComponent } from '../load/load.component';
 
 @Component({
   selector: 'app-nav',
@@ -14,6 +16,7 @@ import { AlertService } from '../../services/alert.service';
   styleUrl: './nav.component.css'
 })
 export class NavComponent implements AfterViewInit {
+
 
   constructor(protected router: Router, private service: UserService, private alert: AlertService) { }
 
@@ -63,10 +66,11 @@ export class NavComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-      this.user = UserSession.getUser() as User
-      setTimeout(() => {
-        this.user = UserSession.getUser() as User
-      }, 100);
+    this.router.events.subscribe(e => {
+      if (e instanceof NavigationEnd) {
+        this.user = UserSession.getUser()
+      }
+    })
       setTimeout(() => {
         if (this.router.url == "/login" || this.router.url == "/register" || this.router.url == "/") {
           const nav = document.getElementById('nav-element-login') as HTMLElement
@@ -87,6 +91,11 @@ export class NavComponent implements AfterViewInit {
         }
       }, 1);
   }
+
+  back() {
+    console.log(LoadComponent.prev)
+      //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
+    }
 
   togglelogin() {
     if (!this.cooldown) {

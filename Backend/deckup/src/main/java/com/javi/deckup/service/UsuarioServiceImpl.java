@@ -110,5 +110,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		user_final.setNextPayment(np);
 		ur.save(user_final);
 	}
+
+	@Override
+	public UsuarioDTO findById(Long id, boolean wantPass) {
+		Usuario user = ur.findById(id).orElse(null);
+		return user == null ? null : UsuarioDTO.convertToDTO(user, wantPass);
+	}
 	
 }

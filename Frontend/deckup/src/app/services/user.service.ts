@@ -26,6 +26,15 @@ export class UserService {
     )
   }
 
+  restoreUser(id: number, auth: string) : Observable<any>{
+    const data: FormData = new FormData()
+    data.append("id", id + "");
+    data.append("auth", auth)
+    return this.http.post(`${this.authApiURL}restore`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   findById(id: number) : Observable<any>{
     return this.http.get(`${this.userApiURL}${id}`).pipe(
       catchError(err => {throw err})

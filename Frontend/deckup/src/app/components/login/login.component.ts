@@ -53,21 +53,15 @@ export class LoginComponent {
         next: (data) => {
           if (data.status == 200) {
             if (data.user.rolesDTO[0].nombre == "ROLE_ADMIN") {
-              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
+              this.alert.success(data.tit, data.msg)
               this.router.navigate(['/home'])
             } else {
               const check = document.getElementById("savesession") as HTMLInputElement
               sessionStorage.setItem("saves", check.checked ? "t" : "f")
               if (UserSession.wasLoggedAs(data.user.email)) {
                 this.alert.success(data.tit, data.msg)
-                  .then((resp) => {
-                    if (resp.isDismissed) {
-                      window.location.reload()
-                    } else {
-                      window.location.reload()
-                    }
-                  })
-                UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
+                UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
                 this.router.navigate(['/home'])
               } else {
                 sessionStorage.setItem("aux_user", data.user.email)

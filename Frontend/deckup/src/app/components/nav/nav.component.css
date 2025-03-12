@@ -175,6 +175,25 @@
         margin: 0;
     }
 }
+#back{
+    position: fixed;
+    flex-direction: row;
+    top: 1vh;
+    left: calc(100px + 11vw);
+    width: 7vw;
+    height: 5vw;
+    min-width: 70px;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    font-size: 1.3vw;
+    &>i{
+        font-size: 2.5vw;
+    }
+    &>*{
+        margin: 0;
+    }
+}
 
 #menu{
     position: fixed;

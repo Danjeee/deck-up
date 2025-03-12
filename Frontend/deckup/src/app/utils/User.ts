@@ -7,9 +7,10 @@ export class User{
     pfp: string = ""
     currency: number = 0
     estado: string = ""
+    auth: string = ""
     rol: any[] = []
     pay: Date = new Date()
-    constructor(id: number, username:string, email:string, pfp:string, currency:number, rol:any[], pay:string){
+    constructor(id: number, username:string, email:string, pfp:string, currency:number, rol:any[], pay:string, auth?: string){
         this.id = id
         this.username = username
         this.email = email
@@ -17,5 +18,6 @@ export class User{
         this.currency = currency
         this.rol = rol
         this.pay = new Date(pay)
+        auth? this.auth = auth : {}
     }
 }

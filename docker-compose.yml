@@ -1,0 +1,51 @@
+services:
+  api_db:
+    build: ./BBDD
+    restart: always
+    ports:
+      - 3307:3306
+    networks:
+      - api_network
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+
+  apache:
+    build: ./Apache/
+    restart: always
+    ports: 
+      - 80:443
+    networks:
+      - api_network
+
+  api:
+    build: ./Backend/deckup/
+    restart: always
+    ports:
+      - 8888:8888
+    depends_on:
+      - api_db
+    networks:
+      - api_network
+    environment:
+      - spring.datasource.url=jdbc:mysql://api_db:3306/deckup
+      - spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+
+  web:
+    build: ./Frontend/deckup/
+    restart: always
+    ports:
+      - 4200:4200
+    depends_on:
+      - api
+    networks:
+      - api_network
+
+networks:
+  api_network:
+
+volumes:
+  mysql-data:

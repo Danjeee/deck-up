@@ -47,7 +47,7 @@ export class VerifyComponent implements OnInit {
       this.service.verify(data).subscribe({
         next: (data) => {
           if (data.status == 200) {
-            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
+            UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
             if (sessionStorage.getItem("saves") == "t") {
               UserSession.addToPastUsers(sessionStorage.getItem("aux_user") as string)
             }

@@ -19,6 +19,8 @@ public interface UsuarioService {
 	void save(UsuarioDTO user);
 
 	UsuarioDTO findById(Long id);
+	
+	UsuarioDTO findById(Long id, boolean wantPass);
 
 	void pay(UsuarioDTO user, Integer amount);
 	

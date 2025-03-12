@@ -16,7 +16,8 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private service: UserService, private alert: AlertService, protected router: Router){}
+
+  constructor(private service: UserService, private alert: AlertService, private router: Router){}
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -51,6 +52,10 @@ export class HomeComponent implements OnInit {
       }
     }, 2000);
   }
+
+  goto(locat: string) {
+    this.router.navigate([locat])
+    }
 
   get_paid() {
     this.service.getPaid().subscribe({

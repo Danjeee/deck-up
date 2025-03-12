@@ -49,6 +49,7 @@ public class AuthController {
 		} else {
 		if (auth.matches(data.getPassword(), aux.getPassword())) {
 			Session.logIn(data.getUsername(), data.getPassword());
+			aux.setPassword("");
 			return new Response(200, "Sesión iniciada", "Sesión iniciada correctamente", aux);
 		} else {
 			return new Response(500, "Error", "Contraseña incorrecta");
@@ -65,7 +66,9 @@ public class AuthController {
 	public Response verify(@ModelAttribute UsuarioDTO user) {
 		UsuarioDTO aux = us.findByEmail(user.getEmail(), true);
 		if (auth.matches(user.getAuth(), aux.getAuth())) {
-			return Response.builder().status(200).tit("Sesión iniciada").msg("Sesión iniciada correctamente").user(us.findByEmail(user.getEmail())).build();
+			UsuarioDTO finaluser = us.findByEmail(user.getEmail());
+			finaluser.setAuth(aux.getAuth());
+			return Response.builder().status(200).tit("Sesión iniciada").msg("Sesión iniciada correctamente").user(finaluser).build();
 		} else {
 			return Response.builder().status(500).tit("Error").msg("Código incorrecto, intentelo de nuevo").build();
 		}
@@ -75,6 +78,19 @@ public class AuthController {
 	public Response logout() {
 		Session.logOut();
 		return Response.builder().status(200).tit("Sesión cerrada").msg("Sesión cerrada correctamente").build();
+	}
+	
+	@PostMapping("/restore")
+	public Response restore(@ModelAttribute UsuarioDTO user) {
+		UsuarioDTO aux = us.findById(user.getId(), true);
+		if (aux == null) {
+			return Response.builder().status(500).tit("Lo sentimos").msg("Ha habido un error en su sesión, vuelva a iniciar sesión").build();
+		}
+		if (aux.getAuth().equals(user.getAuth())) {
+			return Response.builder().status(200).user(aux).build();
+		} else {
+			return Response.builder().status(500).tit("Lo sentimos").msg("Ha habido un error en su sesión, vuelva a iniciar sesión").build();
+		}
 	}
 	
 	@PostMapping("/register/verify/{code}")
@@ -106,7 +122,7 @@ public class AuthController {
 				//user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusHours(4)));
 				//user.setNextPayment(Timestamp.valueOf(LocalDateTime.now().plusMinutes(2)));
 				user.setNextPayment(Timestamp.valueOf(LocalDateTime.now()));
-				user.setAuth(null);
+				user.setAuth(user.getAuth());
 				us.save(user);
 				UsuarioDTO aux = us.findByEmail(user.getEmail(), true);
 				List<RolDTO> roles = new ArrayList<>();

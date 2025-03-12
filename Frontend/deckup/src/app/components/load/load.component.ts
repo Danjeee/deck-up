@@ -11,19 +11,15 @@ import { User } from '../../utils/User';
   templateUrl: './load.component.html',
   styleUrl: './load.component.css'
 })
-export class LoadComponent implements AfterViewInit {
-  constructor(private router: Router, private alert: AlertService, private service: UserService) { }
+export class LoadComponent implements OnInit {
+  constructor(private router: Router, private alert: AlertService, private service: UserService) {}
 
   url = "/" + window.location.href.split("/")[window.location.href.split("/").length - 1]
 
-  ngAfterViewInit(): void {
-    if (UserSession.getUser() != "Guest") {
-      this.service.findById(UserSession.getId()).subscribe({
-        next: (data) => {
-          UserSession.setUser(new User(data.id, data.username, data.email, data.pfp, data.currency, data.rolesDTO, data.nextPayment))
-        }
-      })
-    }
+  static prev = "/home"
+
+  ngOnInit(): void {
+    
     switch (this.url) {
       case "/login":
         this.toggleAccess(1)
