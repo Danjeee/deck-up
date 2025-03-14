@@ -1,7 +1,7 @@
 <div class="cardcont">
     <div *ngFor="let card of cards" class="card {{card.rarezaDTO.nombre}} {{user.currency>=card.precio ? 'but' : ''}}">
         <h3 class="str">{{card.nombre}}</h3>
-        <img src="http://localhost/Resources/img/misc/gema.png" alt="{{card.imagen}}">
+        <img src="{{resURL}}/Resources/img/misc/gema.png" alt="{{card.imagen}}">
         <p class="str">{{card.descripcion}}</p>
         <div class="precio str btn {{user.currency>=card.precio ? 'aff' : 'naff'}}">
             <img src="http://localhost/Resources/img/misc/gema.png" alt="gema">

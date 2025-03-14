@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { TiendaService } from '../../services/tienda.service';
 import { User } from '../../utils/User';
 import { UserSession } from '../../utils/UserSession';
+import { environmentsURLs } from '../../utils/environmentsURls';
 
 @Component({
   selector: 'app-tienda',
@@ -10,13 +11,15 @@ import { UserSession } from '../../utils/UserSession';
   templateUrl: './tienda.component.html',
   styleUrl: './tienda.component.css'
 })
-export class TiendaComponent implements OnInit {
+export class TiendaComponent extends environmentsURLs implements OnInit  {
 
   cards: any
   packs: any
   user: User = UserSession.getUser() 
 
-  constructor(private service: TiendaService){}
+  constructor(private service: TiendaService){
+    super()
+  }
 
   ngOnInit(): void {
       this.service.get().subscribe({

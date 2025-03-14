@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { AlertService } from '../../services/alert.service';
 import { filter, pairwise } from 'rxjs/operators';
 import { LoadComponent } from '../load/load.component';
+import { environmentsURLs } from '../../utils/environmentsURls';
 
 @Component({
   selector: 'app-nav',
@@ -15,10 +16,12 @@ import { LoadComponent } from '../load/load.component';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent implements AfterViewInit {
+export class NavComponent extends environmentsURLs implements AfterViewInit {
 
 
-  constructor(protected router: Router, private service: UserService, private alert: AlertService) { }
+  constructor(protected router: Router, private service: UserService, private alert: AlertService) { 
+    super()
+  }
 
   cooldown = false;
 

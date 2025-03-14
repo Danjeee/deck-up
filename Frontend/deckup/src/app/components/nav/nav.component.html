@@ -6,7 +6,7 @@
 </div>
 <div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
     <div class="btn but bg-p" id="perfil">
-        <img src="http://localhost/Resources/img/users/{{user.pfp}}" alt="">
+        <img src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">
         <p class="str">{{user.username}}</p>
     </div>
     <div class="btn but bg-p" id="friends">
@@ -21,7 +21,7 @@
         <i class="bi bi-list"></i>
     </div>
     <div class="btn" id="currency">
-        <img src="http://localhost/Resources/img/misc/gema.png" alt="gems">
+        <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gems">
         <p class="str" id="currency_txt">{{user.currency}}</p>
     </div>
 </div>

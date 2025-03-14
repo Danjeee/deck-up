@@ -130,6 +130,7 @@ public class AuthController {
 				aux.setRolesDTO(roles);
 				us.save(aux);
 				aux = us.findByEmail(user.getEmail());
+				user.setAuth(user.getAuth());
 				return Response.builder().status(200).tit("Cuenta creada").msg("Cuenta creada correctamente").user(aux).build();
 			} else {
 				return Response.builder().status(500).tit("Error").msg("Codigo incorrecto").build();

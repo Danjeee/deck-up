@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
       this.router.events.subscribe( e => {
         if (e instanceof NavigationStart) {
-          if (UserSession.getUser() != "Guest") {
+          if (UserSession.getUser() != "Guest" && this.router.url != "/login" && this.router.url != "/register") {
             this.service.restoreUser(UserSession.getId(), UserSession.getUser().auth).subscribe({
               next: (data) => {
                 if (data.status == 200) {

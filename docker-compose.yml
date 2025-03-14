@@ -12,14 +12,43 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
+  
+  php:
+    build: ./PHP
+    expose:
+      - "9000"
+    volumes:
+      - ./app-res:/var/www/html
 
-  apache:
-    build: ./Apache/
-    restart: always
-    ports: 
-      - 80:443
-    networks:
-      - api_network
+  nginx:
+    build: ./NGINX
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app-res:/var/www/html
+    depends_on:
+      - php
+  # php:
+  #   build: ./PHP
+  #   restart: always
+  #   networks:
+  #     - api_network
+  #   volumes:
+  #     - ./Apache/apacheUtils:/usr/local/apache2/htdocs
+
+  # apache:
+  #   build: ./Apache/
+  #   restart: always
+  #   ports: 
+  #     - 8080:80
+  #     - 443:443
+  #   networks:
+  #     - api_network
+  #   depends_on:
+  #     - php
+  
+  
 
   api:
     build: ./Backend/deckup/

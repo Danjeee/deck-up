@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { UserSession } from '../../utils/UserSession';
 import { User } from '../../utils/User';
 import { ApacheService } from '../../services/apache.service';
+import { environmentsURLs } from '../../utils/environmentsURls';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +15,10 @@ import { ApacheService } from '../../services/apache.service';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
-  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router, private apacheService: ApacheService) { }
+export class RegisterComponent extends environmentsURLs {
+  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router, private apacheService: ApacheService) {
+    super()
+   }
 
   auth: string | null = null
 
@@ -94,7 +97,6 @@ export class RegisterComponent {
         file.append("opc", "ADD")
         this.apacheService.uploadUserImg(file).subscribe({
           next: (data) => {
-            console.log(data)
             this.fileName = data.name
             formdata.append("pfp", this.fileName)
           }

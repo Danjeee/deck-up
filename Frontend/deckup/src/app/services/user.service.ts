@@ -2,17 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { UserSession } from '../utils/UserSession';
+import { environmentsURLs } from '../utils/environmentsURls';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends environmentsURLs {
 
-  authApiURL = "https://localhost:8888/auth/"
+  authApiURL = this.apiURL + "/auth/"
 
-  userApiURL = "https://localhost:8888/users/"
+  userApiURL = this.apiURL + "/users/"
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    super()
+  }
 
   login(data: FormData) : Observable<any>{
     return this.http.post(`${this.authApiURL}login`, data).pipe(

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environmentsURLs } from '../../utils/environmentsURls';
 
 @Component({
   selector: 'app-particle',
@@ -6,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './particle.component.html',
   styleUrl: './particle.component.css'
 })
-export class ParticleComponent {
+export class ParticleComponent extends environmentsURLs {
 
-  private static gemImgURL = "http://localhost/Resources/img/misc/gema.png"
+  constructor(){
+    super()
+  }
+
+  private static gemImgURL = ParticleComponent.resURL + "/Resources/img/misc/gema.png"
 
   private static totalGems = 0;
 
