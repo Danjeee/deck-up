@@ -1,24 +1,24 @@
 <div id="home">
-    <div id="shop" class="btn but" (click)="goto('tienda')">
+    <div id="shop" class="btn but skew" (click)="goto('tienda')">
         <i></i>
         <h1 class="str" >Tienda</h1>
     </div>
-    <div id="play_mp" class="btn but">
+    <div id="play_mp" class="btn but skew">
         <i></i>
         <h1 class="str">Jugar</h1>
         <h2 class="str">Multijugador</h2>
     </div>
-    <div id="play_solo" class="btn but">
+    <div id="play_solo" class="btn but skew">
         <i></i>
         <h1 class="str">Jugar</h1>
         <h2 class="str">Local</h2>
     </div>
-    <div id="collection" class="btn but">
+    <div id="collection" class="btn but skew">
         <i></i>
         <h1 class="str">Colección</h1>
     </div>
 </div>
 <div id="pago">
-    <div *ngIf="!can_pay" class="btn str no">Siguiente pago en: {{time_left_h}}h {{time_left_m}}m {{time_left_s}}s</div>
-    <div *ngIf="can_pay" class="btn but str si" (click)="get_paid()">Puede recibir su pago</div>    
+    <div *ngIf="!can_pay" class="btn str no skew">Siguiente pago en: {{time_left_h}}h {{time_left_m}}m {{time_left_s}}s</div>
+    <div *ngIf="can_pay" class="btn but str si skew" (click)="get_paid()">Puede recibir su pago</div>    
 </div>

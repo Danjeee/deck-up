@@ -138,7 +138,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       cancelButtonText: "Cancelar",
       cancelButtonColor: "#DC3545",
       customClass: {
-        popup: "swal-drk btn",
+        popup: "swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn",
         cancelButton: "btn but str swal-btn"

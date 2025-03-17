@@ -59,7 +59,8 @@
           "options": {
             "ssl": true,
             "sslKey": "./https/deckup.key",
-            "sslCert": "./https/deckup.crt"
+            "sslCert": "./https/deckup.crt",
+            "port": 443
           },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
@@ -70,6 +71,7 @@
               "buildTarget": "deckup:build:development"
             }
           },
+          
           "defaultConfiguration": "development"
         },
         "extract-i18n": {

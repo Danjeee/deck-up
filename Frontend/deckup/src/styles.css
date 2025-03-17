@@ -1,17 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
     font-family: def;
-    src: url('http://localhost/Resources/fonts/Ubuntu-Regular.ttf');
+    src: url('https://localhost:444/Resources/fonts/Ubuntu-Regular.ttf');
 }
 
 @font-face {
     font-family: str;
-    src: url('http://localhost/Resources/fonts/Ubuntu-Bold.ttf');
+    src: url('https://localhost:444/Resources/fonts/Ubuntu-Bold.ttf');
 }
 
 @font-face {
     font-family: tit;
-    src: url('http://localhost/Resources/fonts/Ubuntu-Regular.ttf');
+    src: url('https://localhost:444/Resources/fonts/Ubuntu-Regular.ttf');
+}
+
+.bi-pack_deckup{
+    width: 75px;
+    height: 75px;
+    /* background-image: url('https://localhost:444/Resources/img/misc/pack.svg'); */
+    mask-image: url('https://localhost:444/Resources/img/misc/pack.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    background-color: currentColor;
+}
+.bi-cards_deckup{
+    width: 75px;
+    height: 75px;
+    mask-image: url('https://localhost:444/Resources/img/misc/cards.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    background-color: currentColor;
 }
  
 body{
@@ -24,7 +44,7 @@ body{
     border-radius: 7px;
     transition: filter .5s;
     transition: scale .5s;
-    &:hover{
+    &:hover:not(.selected){
         scale: 1.05;
         filter: brightness(.8);
     }
@@ -56,7 +76,6 @@ body{
     font-family: tit;
 }
 .btn {
-    transform: skew(-7deg, 0deg);
     border: #000 1px solid;
     box-shadow: inset 0px -6px 0px 0px rgba(0, 0, 0, 0.4), inset 0px 4px 0px 0px rgba(255, 255, 255, 0.4);
     display: flex;
@@ -67,8 +86,11 @@ body{
     border-radius: 7px;
     padding: .5vw;
 }
+.skew{
+    transform: skew(-7deg, 0deg);
+}
 
-.btn>* {
+.skew>*{
     transform: skew(7deg, 0deg);
 }
 /* From Uiverse.io by bociKond */ 
@@ -163,7 +185,8 @@ body{
     padding-right: 1vw;
 }
 .Comun{
-    
+    background: rgb(46,46,46);
+    background: linear-gradient(305deg, rgba(46,46,46,1) 0%, rgba(103,103,103,1) 100%);
 }
 .Rara{
 

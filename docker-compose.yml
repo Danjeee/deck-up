@@ -23,8 +23,7 @@ services:
   nginx:
     build: ./NGINX
     ports:
-      - "80:80"
-      - "443:443"
+      - "444:444"
     volumes:
       - ./app-res:/var/www/html
     depends_on:
@@ -67,7 +66,8 @@ services:
     build: ./Frontend/deckup/
     restart: always
     ports:
-      - 4200:4200
+      - 80:80
+      - 443:443
     depends_on:
       - api
     networks:

@@ -17,7 +17,7 @@ export class AlertService {
       showCloseButton: true,
       iconHtml: '<i class="bi bi-gem swal-gm"></i>',
       customClass: {
-        popup: "swal-c1 swal-drk btn",
+        popup: "swal-c1 swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn"
       }
@@ -30,7 +30,7 @@ export class AlertService {
       showCloseButton: true,
       icon: 'success',
       customClass: {
-        popup: "swal-drk btn",
+        popup: "swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn"
       }
@@ -43,7 +43,7 @@ export class AlertService {
       showCloseButton: true,
       icon: 'error',
       customClass: {
-        popup: "swal-drk btn",
+        popup: "swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn"
       }
@@ -57,7 +57,7 @@ export class AlertService {
       showCloseButton: false,
       icon: 'question',
       customClass: {
-        popup: "swal-drk btn",
+        popup: "swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn"
       }

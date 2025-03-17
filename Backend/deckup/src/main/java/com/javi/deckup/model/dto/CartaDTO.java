@@ -2,6 +2,8 @@ package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Codigo;
 import com.javi.deckup.repository.entity.Habilidad;
@@ -104,6 +106,23 @@ public class CartaDTO implements Serializable {
 			aux += (i.getCant());
 		}
 		return aux;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CartaDTO other = (CartaDTO) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 	
 

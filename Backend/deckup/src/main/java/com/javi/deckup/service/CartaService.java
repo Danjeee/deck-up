@@ -8,4 +8,6 @@ public interface CartaService {
 
 	List<CartaDTO> findAll();
 
+	CartaDTO findById(Integer id);
+
 }

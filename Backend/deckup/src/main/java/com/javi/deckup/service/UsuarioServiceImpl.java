@@ -20,8 +20,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.javi.deckup.model.dto.CartaDTO;
+import com.javi.deckup.model.dto.PlayerCardsDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
+import com.javi.deckup.repository.dao.CartaRepository;
+import com.javi.deckup.repository.dao.PlayerCardsRepository;
 import com.javi.deckup.repository.dao.UsuarioRepository;
+import com.javi.deckup.repository.entity.Carta;
+import com.javi.deckup.repository.entity.PlayerCards;
 import com.javi.deckup.repository.entity.Rol;
 import com.javi.deckup.repository.entity.Usuario;
 import com.javi.deckup.utils.CodeGenerator;
@@ -35,7 +41,16 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	UsuarioRepository ur;
 	
 	@Autowired
+	PlayerCardsRepository pr;
+	
+	@Autowired
 	private EmailService es;
+	
+	@Autowired
+	PlayerCardsService ps;
+	
+	@Autowired
+	CartaRepository cr;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -115,6 +130,37 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	public UsuarioDTO findById(Long id, boolean wantPass) {
 		Usuario user = ur.findById(id).orElse(null);
 		return user == null ? null : UsuarioDTO.convertToDTO(user, wantPass);
+	}
+
+	@Override
+	public void buy(UsuarioDTO user, CartaDTO card) {
+		boolean bought = false;
+		Long id = 0L;
+		for (PlayerCardsDTO i : ps.getAllByUser(user.getId())) {
+			if (i.getCarta().equals(card)) {
+				id = i.getId();
+				bought = true;
+			}
+		}
+		Usuario user_aux = UsuarioDTO.convertToEntity(user);
+		Carta card_aux = cr.findById(card.getId()).get();
+		if (!bought) {
+			PlayerCards newpc = PlayerCards.builder().usuario(user_aux).carta(card_aux).cant(1).build();
+			pr.save(newpc);
+		} else {
+			PlayerCards oldpc = pr.findById(id).get();
+			oldpc.setCant(oldpc.getCant()+1);
+			pr.save(oldpc);
+		}
+		user_aux = ur.findById(user_aux.getId()).get();
+		user_aux.setCurrency(user_aux.getCurrency()-card.getPrecio());
+		ur.save(user_aux);
+	}
+
+	@Override
+	public UsuarioDTO findByToken(String auth) {
+		Usuario usuario = ur.findByAuth(auth).orElse(null);
+		return usuario == null ? null : UsuarioDTO.convertToDTO(usuario);
 	}
 	
 }

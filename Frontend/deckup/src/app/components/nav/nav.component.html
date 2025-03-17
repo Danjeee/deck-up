@@ -5,27 +5,27 @@
     </div>
 </div>
 <div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
-    <div class="btn but bg-p" id="perfil">
+    <div class="btn but bg-p skew" id="perfil">
         <img src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">
         <p class="str">{{user.username}}</p>
     </div>
-    <div class="btn but bg-p" id="friends">
+    <div class="btn but bg-p skew" id="friends">
         <i class="bi bi-person-lines-fill"></i>
         <p class="str">Amigos</p>
     </div>
-    <div class="btn but bg-p" id="back" (click)="back()">
+    <div class="btn but bg-p skew" id="back" (click)="back()">
         <i class="bi bi-caret-left-fill"></i>
         <p class="str">Volver</p>
     </div>
-    <div class="btn but bg-p" id="menu" (click)="toggle()">
+    <div class="btn but bg-p skew" id="menu" (click)="toggle()">
         <i class="bi bi-list"></i>
     </div>
-    <div class="btn" id="currency">
+    <div class="btn skew" id="currency">
         <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gems">
         <p class="str" id="currency_txt">{{user.currency}}</p>
     </div>
 </div>
-<div id="menuHamb" class="btn" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
+<div id="menuHamb" class="btn skew" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
     <h1 class="str">Menú</h1>
     <div class="btn but str conf">Configuración</div>
     <div class="btn but str conf">Partidas recientes</div>

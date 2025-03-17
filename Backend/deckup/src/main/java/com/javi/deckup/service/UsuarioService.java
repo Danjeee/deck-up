@@ -2,6 +2,7 @@ package com.javi.deckup.service;
 
 import java.util.List;
 
+import com.javi.deckup.model.dto.CartaDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 
 public interface UsuarioService {
@@ -23,5 +24,9 @@ public interface UsuarioService {
 	UsuarioDTO findById(Long id, boolean wantPass);
 
 	void pay(UsuarioDTO user, Integer amount);
+
+	void buy(UsuarioDTO user, CartaDTO card);
+
+	UsuarioDTO findByToken(String auth);
 	
 }

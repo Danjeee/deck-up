@@ -1,17 +1,23 @@
-.cardcont{
+#cardcont{
+    background-color: #13253e;
+    padding: calc(20px + 1dvw);
     position: fixed;
-    right: 10vw;
+    right: 12.5vw;
     display: flex;
     flex-wrap: wrap-reverse;
     width: 60%;
     align-items: center;
     justify-content: center;
     flex-direction: row-reverse;
-    gap: calc(20px + 5vw);
+    gap: calc(20px + 3vw);
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%) skew(-7deg, 0deg);
+    &>*{
+        transform: skew(7deg,0deg);
+        filter: drop-shadow(0px 0px 15px rgba(0,0,0,.5));
+    }
 }
-.card{
+.card_deckup{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,4 +54,40 @@
 }
 .naff{
     background-color: #6C757D;
+}
+.naff_card{
+    cursor: not-allowed;
+}
+.shopmenu{
+    position: fixed;
+    left: 3dvw;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    &>div{
+        width: calc(100px + 3dvw);
+        height: calc(100px + 3dvw);
+        &>i{
+            font-size: 30px;
+        }
+    }
+}
+#sh1{
+    top: 35.5%;
+    transform: translateY(-50%) skew(7deg, 0deg);
+    &>*>*{
+        transform: skew(-7deg, 0deg);
+    }
+}
+#sh2{
+    top: 75%;
+    transform: translateY(-50%) skew(-7deg, 0deg);
+    &>*>*{
+        transform: skew(7deg, 0deg);
+    }
+}
+.selected{
+    scale: 1.1;
+    z-index: 1;
+    cursor: default;
 }
