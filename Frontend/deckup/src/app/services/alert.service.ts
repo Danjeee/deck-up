@@ -63,4 +63,27 @@ export class AlertService {
       }
     })
   }
+  confirm(title: string, text: string, ifConfirmed: () => void, icon?: any, ifNot?: () => void ){
+    Swal.fire({
+          title: title,
+          text: text,
+          icon: icon ? icon : "warning",
+          confirmButtonText: 'Confirmar',
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          cancelButtonColor: "#DC3545",
+          customClass: {
+            popup: "swal-drk btn skew",
+            title: "swal-drk",
+            confirmButton: "btn but str swal-btn",
+            cancelButton: "btn but str swal-btn",
+          }
+        }).then(result => {
+          if (result.isConfirmed) {
+            ifConfirmed()
+          } else {
+            ifNot ? ifNot() : {}
+          }
+        })
+  }
 }

@@ -96,7 +96,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   }
 
   back() {
-    console.log(LoadComponent.prev)
+      this.router.navigate([LoadComponent.prev])
       //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
     }
 
@@ -129,34 +129,17 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   }
 
   logout() {
-    Swal.fire({
-      title: 'Cerrar sesión',
-      text: '¿Estas seguro de cerrar sesión?',
-      icon: 'warning',
-      confirmButtonText: 'Confirmar',
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      cancelButtonColor: "#DC3545",
-      customClass: {
-        popup: "swal-drk btn skew",
-        title: "swal-drk",
-        confirmButton: "btn but str swal-btn",
-        cancelButton: "btn but str swal-btn"
-      }
-    }).then(result => {
-      if (result.isConfirmed) {
-        this.service.logout().subscribe({
-          next: (data) => {
-            if (data.status == 200) {
-              this.alert.success(data.tit, data.msg)
-              UserSession.logOut()
-              this.router.navigate(["/login"])
-            }
-          },
+    this.alert.confirm('Cerrar sesión', '¿Estas seguro de cerrar sesión?', () => {
+      this.service.logout().subscribe({
+      next: (data) => {
+        if (data.status == 200) {
+          this.alert.success(data.tit, data.msg)
+          UserSession.logOut()
+          this.router.navigate(["/login"])
         }
-        )
-      }
-    })
+      },
+    }
+    )})
   }
 
   toggle(){

@@ -66,4 +66,29 @@ export class ParticleComponent extends environmentsURLs {
       }, dur+2050);
 
   }
+  public static getCard(card_data: any){
+     const max_exp = [(Math.random()*50)-20, (Math.random()*45)-20]
+      const dur = Math.floor(Math.random()*5+2)*100
+      
+
+      const card = document.createElement("div") as HTMLElement
+      card.id = card_data.id + "getcard"
+      card.style.position = "fixed"
+      card.style.top = "40vh"
+      card.style.left = "40vw"
+      card.style.width = "50px"
+      card.style.height = "50px"
+      const card_img = document.createElement("img")
+      card_img.style.width = "100%"
+      card_img.src = this.resURL + "/Resources/img/cards/" + card_data.imagen
+      card.appendChild(card_img)
+      document.body.appendChild(card)
+      card.animate(ParticleComponent.explosion(max_exp), this.explosion_anim(dur))
+      setTimeout(() => {
+        card.animate(ParticleComponent.gotoCurrency(max_exp), this.explosion_anim(1000))
+      }, dur+1000);
+      setTimeout(() => {
+        document.body.removeChild(document.getElementById(card_data.id + "getcard") as Node)
+      }, dur+2050);
+  }
 }

@@ -134,7 +134,7 @@ export class RegisterComponent extends environmentsURLs {
                   window.location.reload()
                 }
               })
-              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment))
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
               this.router.navigate(['/home'])
             } else {
               var file: FormData = new FormData()

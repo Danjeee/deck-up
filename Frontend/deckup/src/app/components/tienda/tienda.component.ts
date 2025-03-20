@@ -5,6 +5,7 @@ import { User } from '../../utils/User';
 import { UserSession } from '../../utils/UserSession';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { AlertService } from '../../services/alert.service';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-tienda',
@@ -29,15 +30,20 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   toggle(table: string){
     this.selecteed = table
   }
-  buy(id: number){
-    this.service.buy(id).subscribe({
-      next: (data) => {
-        if (data.status == 200) {
-          this.alert.success(data.tit, data.msg)
-        } else {
-          this.alert.error(data.tit, data.msg)
+  buy(card: any){
+    this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${card.nombre} por ${card.precio} gemas?`, () => {
+      this.service.buy(card.id).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            this.alert.success(data.tit, data.msg)
+            UserSession.pay(card.precio)
+            this.user = UserSession.getUser()
+            ParticleComponent.getCard(card)
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
         }
-      }
+      })
     })
   }
 

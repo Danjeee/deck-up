@@ -238,8 +238,8 @@ Aclaración de los tipos:
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
 ('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 4, 1), # 1
-('Minion', 'La unidad por defecto', 'minion.png', 200, 1, 1, 2, 0), # 2
-('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.png', 2000,3 ,1, 5, 0), # 3
+('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
+('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
 ('Eventio', 'Te damos la bienvenida', 'eventio.png', 0,3 ,null, 3, 1); # 4
 
 /* Codigos */

@@ -20,9 +20,11 @@
     </div>
 </div>
 <div id="cardcont" class="cont btn" *ngIf="selecteed == 'cards'">
-    <div *ngFor="let card of cards" class="card_deckup {{card.rarezaDTO.nombre}} {{user.currency>=card.precio ? 'but' : 'naff_card'}}" (click)="buy(card.id)">
+    <div *ngFor="let card of cards" class="card_deckup {{card.rarezaDTO.nombre}} {{user.currency>=card.precio ? 'but' : 'naff_card'}}" (click)="user.currency>=card.precio ? buy(card) : ''">
         <h3 class="str">{{card.nombre}}</h3>
-        <img src="{{resURL}}/Resources/img/misc/gema.png" alt="{{card.imagen}}">
+        <div class="imgcont">
+            <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="{{card.imagen}}">
+        </div>
         <p class="str">{{card.descripcion}}</p>
         <div class="precio str btn {{user.currency>=card.precio ? 'aff' : 'naff'}}">
             <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gema">

@@ -1,24 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
     font-family: def;
-    src: url('https://localhost:444/Resources/fonts/Ubuntu-Regular.ttf');
+    src: url('https://192.168.1.146:444/Resources/fonts/Ubuntu-Regular.ttf');
 }
 
 @font-face {
     font-family: str;
-    src: url('https://localhost:444/Resources/fonts/Ubuntu-Bold.ttf');
+    src: url('https://192.168.1.146:444/Resources/fonts/Ubuntu-Bold.ttf');
 }
 
 @font-face {
     font-family: tit;
-    src: url('https://localhost:444/Resources/fonts/Ubuntu-Regular.ttf');
+    src: url('https://192.168.1.146:444/Resources/fonts/Ubuntu-Regular.ttf');
 }
 
 .bi-pack_deckup{
     width: 75px;
     height: 75px;
-    /* background-image: url('https://localhost:444/Resources/img/misc/pack.svg'); */
-    mask-image: url('https://localhost:444/Resources/img/misc/pack.svg');
+    /* background-image: url('https://192.168.1.146:444/Resources/img/misc/pack.svg'); */
+    mask-image: url('https://192.168.1.146:444/Resources/img/misc/pack.svg');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
@@ -27,7 +27,7 @@
 .bi-cards_deckup{
     width: 75px;
     height: 75px;
-    mask-image: url('https://localhost:444/Resources/img/misc/cards.svg');
+    mask-image: url('https://192.168.1.146:444/Resources/img/misc/cards.svg');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
@@ -203,4 +203,12 @@ body{
 }
 .idk{
 
+}
+.card_deckup>.imgcont>img{
+    width: 100%;
+    height: 100%;
+    scale: 2;
+    object-position: 0px 30px;
+    object-fit: cover;
+    object-fit: cover;
 }

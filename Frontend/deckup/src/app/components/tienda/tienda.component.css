@@ -28,10 +28,10 @@
     border-radius: 7px;
     border: #000 2px solid;
     text-align: center;
-    &>img{
+    &>.imgcont{
         width: 100%;
-        height: auto;
-        background-color: #000;
+        overflow: hidden;
+        border: #000 2px solid;
         border-radius: 7px;
     }
     &>*{

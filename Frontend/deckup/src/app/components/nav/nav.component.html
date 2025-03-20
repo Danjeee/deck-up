@@ -13,7 +13,7 @@
         <i class="bi bi-person-lines-fill"></i>
         <p class="str">Amigos</p>
     </div>
-    <div class="btn but bg-p skew" id="back" (click)="back()">
+    <div class="btn but bg-p skew" id="back" (click)="back()" *ngIf="router.url != '/home'">
         <i class="bi bi-caret-left-fill"></i>
         <p class="str">Volver</p>
     </div>
