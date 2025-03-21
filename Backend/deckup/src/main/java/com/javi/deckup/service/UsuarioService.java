@@ -28,5 +28,9 @@ public interface UsuarioService {
 	void buy(UsuarioDTO user, CartaDTO card);
 
 	UsuarioDTO findByToken(String auth);
+
+	void recive(UsuarioDTO user, CartaDTO i);
+
+	void buy(UsuarioDTO user, Integer precio);
 	
 }

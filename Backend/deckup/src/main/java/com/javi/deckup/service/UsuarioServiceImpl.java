@@ -162,5 +162,34 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		Usuario usuario = ur.findByAuth(auth).orElse(null);
 		return usuario == null ? null : UsuarioDTO.convertToDTO(usuario);
 	}
+
+	@Override
+	public void recive(UsuarioDTO user, CartaDTO card) {
+		boolean has = false;
+		Long id = 0L;
+		for (PlayerCardsDTO i : ps.getAllByUser(user.getId())) {
+			if (i.getCarta().equals(card)) {
+				id = i.getId();
+				has = true;
+			}
+		}
+		Usuario user_aux = ur.findById(user.getId()).get();
+		Carta card_aux = cr.findById(card.getId()).get();
+		if (!has) {
+			PlayerCards newpc = PlayerCards.builder().usuario(user_aux).carta(card_aux).cant(1).build();
+			pr.save(newpc);
+		} else {
+			PlayerCards oldpc = pr.findById(id).get();
+			oldpc.setCant(oldpc.getCant()+1);
+			pr.save(oldpc);
+		}
+	}
+
+	@Override
+	public void buy(UsuarioDTO user, Integer precio) {
+		Usuario user_aux = ur.findById(user.getId()).get();
+		user_aux.setCurrency(user_aux.getCurrency()-precio);
+		ur.save(user_aux);
+	}
 	
 }

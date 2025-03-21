@@ -17,6 +17,7 @@ import com.javi.deckup.service.TiendaService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.Response;
 import com.javi.deckup.utils.Session;
+import com.javi.deckup.utils.UserAction;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +41,8 @@ public class TiendaController {
 		return ts.findById(1);
 	}
 	@PostMapping("/buy")
-	public Response buy(@ModelAttribute UsuarioDTO data) {
-		CartaDTO card = cs.findById(Math.toIntExact(data.getId()));
+	public Response buy(@ModelAttribute UserAction data) {
+		CartaDTO card = cs.findById(Math.toIntExact(data.getArtifact_id()));
 		if (card == null) {
 			return Response.error("No se ha encontrado la carta que quieres comprar", 404);
 		}
@@ -55,7 +56,7 @@ public class TiendaController {
 		if (!cartasEnTienda.contains(card)) {
 			return Response.error("La carta que quieres comprar no se encuentra en la tienda");
 		}
-		UsuarioDTO user = us.findByToken(data.getAuth());
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
 		if (user == null) {
 			return Response.error("Ha habido un error con la sesión, intentalo de nuevo");
 		}

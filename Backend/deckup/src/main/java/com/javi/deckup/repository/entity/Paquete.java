@@ -36,6 +36,8 @@ public class Paquete {
 	
 	private Integer precio;
 	
+	private Integer cant;
+	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "paquete")
 	@ToString.Exclude
 	private List<Carta> cartas;

@@ -32,8 +32,15 @@
         </div>
     </div>
 </div>
-<div id="packcont" *ngIf="selecteed == 'packs'">
-
+<div id="packcont" class="cont btn" *ngIf="selecteed == 'packs'">
+    <div *ngFor="let pack of packs" class="pack {{user.currency>=pack.precio ? 'but' : 'naff_pack'}}" (click)="user.currency>=pack.precio ? buy_pack(pack) : ''">
+        <img src="{{resURL}}/Resources/img/packs/{{pack.imagen}}" alt="{{pack.nombre}}">
+        <h4 class="str" style="text-align: center;">{{pack.nombre}}</h4>
+        <div class="precio str btn {{user.currency>=pack.precio ? 'aff' : 'naff'}}">
+            <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gema">
+            <p>{{pack.precio}}</p>
+        </div>
+    </div>
 </div>
 <div id="offercont" *ngIf="selecteed == 'offers'">
 

@@ -1,5 +1,9 @@
 package com.javi.deckup.utils;
 
+import java.util.List;
+
+import com.javi.deckup.model.dto.CartaDTO;
+import com.javi.deckup.model.dto.PaqueteDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 
 import lombok.AllArgsConstructor;
@@ -16,12 +20,29 @@ public class Response {
 	private String tit;
 	private String msg;
 	private UsuarioDTO user;
+	private List<CartaDTO> cartas;
+	private PaqueteDTO pack;
 
 	public Response(int status, String tit, String msg) {
 		super();
 		this.status = status;
 		this.tit = tit;
 		this.msg = msg;
+	}
+	
+	public Response(int status, String tit, String msg, UsuarioDTO user) {
+		super();
+		this.status = status;
+		this.tit = tit;
+		this.msg = msg;
+		this.user = user;
+	}
+	
+	public Response(List<CartaDTO> cards, PaqueteDTO pack) {
+		super();
+		this.status = 200;
+		this.cartas = cards;
+		this.pack = pack;
 	}
 
 	public static Response error(String msg) {

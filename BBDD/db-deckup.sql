@@ -38,6 +38,7 @@ CREATE TABLE `deckup`.`rarezas` (
   `descripcion` VARCHAR(255) NOT NULL,
   `imagen` VARCHAR(100) NOT NULL,
   `precio` INT NOT NULL,
+  `cant` INT NOT NULL,
   PRIMARY KEY (`id`));
   
   CREATE TABLE `deckup`.`habilidades` (
@@ -206,12 +207,14 @@ INSERT INTO roles(nombre, id_user)VALUES
 
 /*Habilidades, rarezas, paquetes y cartas*/
 
-INSERT INTO paquetes(nombre, descripcion, imagen, precio) VALUES
-('Basico', 'Paquete normal', 'paquete1.png', 500); # 1
+INSERT INTO paquetes(nombre, descripcion, imagen, precio, cant) VALUES
+('Básico', 'Paquete normal', 'paquete1.png', 500, 6), # 1
+('Avanzado', 'Paquete avanzado', 'paquete2.png', 1500, 6), # 1
+('Mágico', 'Paquete mágico', 'paquete3.png', 2500, 8); # 1
 
 INSERT INTO rarezas(nombre, porcentaje) VALUES
 ('Comun', 40), # 1
-('Rara', 20), # 2
+('Rara', 20), # 2 
 ('Epica', 10), # 3
 ('Legendaria', 3), # 4
 ('Mitica', 0.5), # 5
@@ -256,4 +259,4 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (2,3,1);
 
 /*Tienda*/
-INSERT INTO tienda VALUES(1,2,2,2,3,3,1,null,null)
+INSERT INTO tienda VALUES(1,2,2,2,3,3,1,2,3)

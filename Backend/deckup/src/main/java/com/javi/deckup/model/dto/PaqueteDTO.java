@@ -26,6 +26,8 @@ private Integer id;
 	
 	private Integer precio;
 	
+	private Integer cant;
+	
 	private List<CartaDTO> cartas;
 	
 	public static PaqueteDTO convertToDTO(Paquete input) { // No incluir las cartas
@@ -38,6 +40,7 @@ private Integer id;
 						  .descripcion(input.getDescripcion())
 						  .imagen(input.getImagen())
 						  .precio(input.getPrecio())
+						  .cant(input.getCant())
 						  .cartas(null)
 						  .build();
 	}
@@ -52,6 +55,7 @@ private Integer id;
 						  .descripcion(input.getDescripcion())
 						  .imagen(input.getImagen())
 						  .precio(input.getPrecio())
+						  .cant(input.getCant())
 						  .cartas(mostrarCartas ? input.getCartas().stream().map(c -> CartaDTO.convertToDTO(c)).collect(Collectors.toList()) : null)
 						  .build();
 	}
@@ -63,6 +67,7 @@ private Integer id;
 						  .descripcion(input.getDescripcion())
 						  .imagen(input.getImagen())
 						  .precio(input.getPrecio())
+						  .cant(input.getCant())
 						  .cartas(cartas)
 						  .build();
 	}

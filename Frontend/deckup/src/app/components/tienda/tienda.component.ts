@@ -6,6 +6,7 @@ import { UserSession } from '../../utils/UserSession';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { AlertService } from '../../services/alert.service';
 import { ParticleComponent } from '../particle/particle.component';
+import { PackComponent } from '../pack/pack.component';
 
 @Component({
   selector: 'app-tienda',
@@ -46,13 +47,27 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
       })
     })
   }
+  buy_pack(pack: any){
+    this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${pack.nombre} por ${pack.precio} gemas?`, () => {
+      this.service.buy_pack(pack.id).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            PackComponent.showRecivedCards(data.pack, data.cartas)
+            UserSession.pay(pack.precio)
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
+    })
+  }
 
   ngOnInit(): void {
       this.service.get().subscribe({
         next: (data) =>{
           console.log(data)
           this.cards = [data.carta1,data.carta2,data.carta3,data.carta4,data.carta5]
-          this.packs = [data.paq1, data.paq2, data.paq3]
+          this.packs = [data.paq3, data.paq2, data.paq1]
         }
 
       })

@@ -10,6 +10,7 @@ import { UserSession } from '../utils/UserSession';
 export class TiendaService extends environmentsURLs{
 
   tiendaURL = this.apiURL + "/tienda"
+  packURL = this.apiURL + "/packs"
 
   constructor(private http: HttpClient) {
     super()
@@ -22,9 +23,15 @@ export class TiendaService extends environmentsURLs{
   }
   buy(id: any) : Observable<any>{
     const data:FormData = new FormData(); 
-    data.append("id", id)
-    data.append("auth", UserSession.getUser().auth)
+    data.append("artifact_id", id)
+    data.append("user_auth", UserSession.getUser().auth)
     return this.http.post(`${this.tiendaURL}/buy`, data)
+  }
+  buy_pack(id: any) : Observable<any>{
+    const data:FormData = new FormData(); 
+    data.append("artifact_id", id)
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.packURL}/buy`, data)
   }
 
 }
