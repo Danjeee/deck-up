@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javi.deckup.model.dto.CartaDTO;
+import com.javi.deckup.model.dto.OfertaGemaDTO;
 import com.javi.deckup.model.dto.TiendaDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.CartaService;
+import com.javi.deckup.service.OfertaGemaService;
 import com.javi.deckup.service.TiendaService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.Response;
@@ -35,10 +37,18 @@ public class TiendaController {
 	
 	@Autowired
 	UsuarioService us;
+	
+	@Autowired
+	OfertaGemaService gs;
 
 	@GetMapping("/get")
 	public TiendaDTO get() {
 		return ts.findById(1);
+	}
+	
+	@GetMapping("/getGems")
+	public List<OfertaGemaDTO> getGems() {
+		return gs.findAll();
 	}
 	@PostMapping("/buy")
 	public Response buy(@ModelAttribute UserAction data) {

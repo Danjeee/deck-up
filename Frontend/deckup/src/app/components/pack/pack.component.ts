@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-pack',
@@ -32,9 +33,18 @@ export class PackComponent extends environmentsURLs {
     document.body.appendChild(pack_div)
 
     pack_div.addEventListener("click", () => {
-      document.body.removeChild(pack_div)
-      const nextcard = document.getElementById(`element_card${cards_left}`) as HTMLElement
-      nextcard.style.display = "flex"
+      pack_div.style.animation = "pack_open 1s linear 1"
+      const shadow = document.getElementById("card_open_shadow") as HTMLElement
+      shadow.style.animation = "pack_open_shadow 1s linear 1"
+      setTimeout(() => {
+        ParticleComponent.wave("fff", .5)
+      }, 500);
+      setTimeout(() => {
+        shadow.style.animation = ""
+        document.body.removeChild(pack_div)
+        const nextcard = document.getElementById(`element_card${cards_left}`) as HTMLElement
+        nextcard.style.display = "flex"
+      }, 1100);
     })
 
     cards.forEach(card => {

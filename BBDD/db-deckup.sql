@@ -76,6 +76,14 @@ CREATE TABLE `deckup`.`rarezas` (
     REFERENCES `deckup`.`cartas` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+    
+CREATE TABLE `deckup`.`catalogo_gemas` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `precio` DECIMAL(10,2) NOT NULL,
+  `cant` INT NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  `imagen` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`));
 
   
 /* Relaciones */
@@ -259,4 +267,11 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (2,3,1);
 
 /*Tienda*/
-INSERT INTO tienda VALUES(1,2,2,2,3,3,1,2,3)
+INSERT INTO tienda VALUES(1,2,2,2,3,3,1,2,3);
+
+/* Gemas */
+INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
+(0.99, 500, "Bolsa de gemas", "bolsa_gem.png"),
+(2.99, 2000, "Caja de gemas", "caja_gem.png"),
+(5.99, 5000, "Baul de gemas", "baul_gem.png"),
+(9.99, 1000, "Cofre de gemas", "cofre_gem.png");

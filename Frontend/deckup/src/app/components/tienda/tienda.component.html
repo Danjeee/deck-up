@@ -21,11 +21,7 @@
 </div>
 <div id="cardcont" class="cont btn" *ngIf="selecteed == 'cards'">
     <div *ngFor="let card of cards" class="card_deckup {{card.rarezaDTO.nombre}} {{user.currency>=card.precio ? 'but' : 'naff_card'}}" (click)="user.currency>=card.precio ? buy(card) : ''">
-        <h3 class="str">{{card.nombre}}</h3>
-        <div class="imgcont">
-            <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="{{card.imagen}}">
-        </div>
-        <p class="str">{{card.descripcion}}</p>
+        <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="{{card.imagen}}">
         <div class="precio str btn {{user.currency>=card.precio ? 'aff' : 'naff'}}">
             <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gema">
             <p>{{card.precio}}</p>
@@ -42,9 +38,15 @@
         </div>
     </div>
 </div>
-<div id="offercont" *ngIf="selecteed == 'offers'">
-
+<div id="offercont" class="btn" *ngIf="selecteed == 'offers'">
+    <h1 class="str" style="margin-top: 10dvw; margin-bottom: 10dvw; font-size: 250px;">WIP</h1>
 </div>
-<div id="gemcont" *ngIf="selecteed == 'gems'">
-
+<div id="gemcont" class="btn" *ngIf="selecteed == 'gems'">
+    <div *ngFor="let gem of gems" class="gem_offer btn but aff">
+        <img src="{{resURL}}/Resources/img/misc/{{gem.imagen}}" alt="{{gem.nombre}}">
+        <h4 class="str" style="text-align: center;">{{gem.nombre}}</h4>
+        <div class="precio str btn aff">
+            <p>{{gem.precio}}€</p>
+        </div>
+    </div>
 </div>

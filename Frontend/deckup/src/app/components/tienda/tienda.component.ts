@@ -19,6 +19,7 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   selecteed: string = "cards"
   cards: any
   packs: any
+  gems: any
   user: User = UserSession.getUser() 
 
   constructor(private service: TiendaService, private alert: AlertService){
@@ -63,14 +64,17 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   }
 
   ngOnInit(): void {
-      this.service.get().subscribe({
-        next: (data) =>{
-          console.log(data)
-          this.cards = [data.carta1,data.carta2,data.carta3,data.carta4,data.carta5]
-          this.packs = [data.paq3, data.paq2, data.paq1]
-        }
-
-      })
+    this.service.get().subscribe({
+      next: (data) =>{
+        this.cards = [data.carta1,data.carta2,data.carta3,data.carta4,data.carta5]
+        this.packs = [data.paq3, data.paq2, data.paq1]
+      }
+    })
+    this.service.getgems().subscribe({
+      next: (data) =>{
+        this.gems = data
+      }
+    })
   }
 
 }

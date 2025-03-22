@@ -1,4 +1,4 @@
-#cardcont, #packcont{
+#cardcont, #packcont, #offercont, #gemcont{
     background-color: #13253e;
     padding: calc(20px + 1dvw);
     position: fixed;
@@ -16,6 +16,11 @@
         transform: skew(7deg,0deg);
         filter: drop-shadow(0px 0px 15px rgba(0,0,0,.5));
     }
+}
+#gemcont{
+    flex-direction: column;
+    flex-wrap: wrap;
+
 }
 .pack{
     display: flex;
@@ -43,22 +48,24 @@
     align-items: center;
     justify-content: space-between;
     padding: 7px;
-    width: calc(100px + 6vw);
-    height: calc(220px + 10vh);
+    max-width: 220px;
+    max-height: 330px;
+    width: calc(30dvw - 10px);
+    height: calc(45dvw - 20px);
     border-radius: 7px;
     border: #000 2px solid;
     text-align: center;
-    &>.imgcont{
+    &>img{
         width: 100%;
-        overflow: hidden;
-        border: #000 2px solid;
-        border-radius: 7px;
+        height: 100%;
     }
     &>*{
         margin: 0;
     }
 }
 .precio{
+    position: absolute;
+    bottom: calc(-10px + -1dvw);
     display: flex;
     flex-direction: row;
     justify-content: center;

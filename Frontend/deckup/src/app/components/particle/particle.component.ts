@@ -39,6 +39,20 @@ export class ParticleComponent extends environmentsURLs {
   ]
 }
 
+  public static wave(backgroundColor?: string, dur?: number){
+    const wave = document.createElement("div")
+    wave.className = "onda"
+    wave.style.zIndex = "40"
+    wave.style.animation = "expandir "+(dur?dur: 1.5)+"s ease-out infinite"
+    if (backgroundColor) {
+      wave.style.backgroundColor = backgroundColor
+    }
+    document.body.append(wave)
+    setTimeout(() => {
+      document.body.removeChild(wave)
+    }, (dur ? dur*1050 : 1050));
+  }
+
   public static generateGems(startingPoint: number[]){ // This is not used as a x and y values, instaad is a position top and left so 0,0 is 40,40 (aprox) (since is not transformed)
       const max_exp = [(Math.random()*50)-20, (Math.random()*45)-20]
       const dur = Math.floor(Math.random()*5+2)*100

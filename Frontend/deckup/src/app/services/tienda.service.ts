@@ -21,6 +21,11 @@ export class TiendaService extends environmentsURLs{
       catchError(err => {throw err})
     )
   }
+  getgems() : Observable<any>{
+    return this.http.get(`${this.tiendaURL}/getGems`).pipe(
+      catchError(err => {throw err})
+    )
+  }
   buy(id: any) : Observable<any>{
     const data:FormData = new FormData(); 
     data.append("artifact_id", id)
