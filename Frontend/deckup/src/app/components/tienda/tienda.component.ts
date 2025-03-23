@@ -7,6 +7,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 import { AlertService } from '../../services/alert.service';
 import { ParticleComponent } from '../particle/particle.component';
 import { PackComponent } from '../pack/pack.component';
+import { PaymentService } from '../../services/payment.service';
 
 @Component({
   selector: 'app-tienda',
@@ -21,8 +22,9 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   packs: any
   gems: any
   user: User = UserSession.getUser() 
+  currency = 'EUR';
 
-  constructor(private service: TiendaService, private alert: AlertService){
+  constructor(private service: TiendaService, private alert: AlertService, private paymentService: PaymentService){
     super()
   }
 
@@ -76,5 +78,19 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
       }
     })
   }
+  buygems(gemoffer: any) {
+    this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${gemoffer.nombre} por ${gemoffer.precio}€?`, () => {
+      this.paymentService
+      .createPayment(gemoffer.precio, this.currency, gemoffer.nombre, "https://localhost/tienda", "https://localhost/tienda")
+      .subscribe({
+        next: (response: any) => {
+          window.location.href = response.links.find((link: any) => link.rel === 'approve').href;
+        },
+        error: (err) => console.error('Error al crear el pago:', err),
+      });
+
+    })
+  }
+
 
 }

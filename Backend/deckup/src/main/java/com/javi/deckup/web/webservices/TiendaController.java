@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javi.deckup.model.dto.CartaDTO;
@@ -15,6 +16,7 @@ import com.javi.deckup.model.dto.TiendaDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.CartaService;
 import com.javi.deckup.service.OfertaGemaService;
+import com.javi.deckup.service.PayPalService;
 import com.javi.deckup.service.TiendaService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.Response;
@@ -40,6 +42,9 @@ public class TiendaController {
 	
 	@Autowired
 	OfertaGemaService gs;
+	
+	@Autowired
+	PayPalService pps;
 
 	@GetMapping("/get")
 	public TiendaDTO get() {
@@ -77,6 +82,20 @@ public class TiendaController {
 		}
 		return Response.success("Carta añadida a tu colección");
 	}
+	
+    @PostMapping("/pay")
+    public String createPayment(@RequestParam String amount,
+                                @RequestParam String currency,
+                                @RequestParam String description,
+                                @RequestParam String returnUrl,
+                                @RequestParam String cancelUrl) {
+        try {
+            return pps.createPayment(amount, currency, description, returnUrl, cancelUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al procesar el pago: " + e.getMessage());
+        }
+    }
+
 	
 	
 	
