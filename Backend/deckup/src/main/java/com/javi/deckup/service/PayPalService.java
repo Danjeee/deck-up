@@ -1,6 +1,8 @@
 package com.javi.deckup.service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +15,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.PaymentRepository;
+import com.javi.deckup.repository.dao.UsuarioRepository;
 import com.javi.deckup.repository.entity.Payment;
+import com.javi.deckup.repository.entity.Usuario;
 
 import ch.qos.logback.classic.Logger;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +35,9 @@ public class PayPalService {
     
     @Autowired
     PaymentRepository pr;
+    
+    @Autowired
+    UsuarioRepository ur;
 	
     @Value("${paypal.client.id}")
     private String clientId;
@@ -103,6 +110,7 @@ public class PayPalService {
             						.user(UsuarioDTO.convertToEntity(user))
             						.claimed(false)
             						.cant(cant)
+            						.time_created(Timestamp.from(Instant.now()))
             						.build();
             pr.save(pago);
             return responseBody;
@@ -133,6 +141,7 @@ public class PayPalService {
         }
     }
 	public Integer getAllVerifiedPayments(UsuarioDTO user) {
+		Usuario user_final = ur.findByAuth(user.getAuth()).orElse(null);
 		Integer total = 0;
 		for (Payment i : pr.findByUser(user.getId())) {
 			try {
@@ -141,11 +150,16 @@ public class PayPalService {
 				e.printStackTrace();
 			}
 		}
+
 		for (Payment i : pr.findUnclaimedVerifiedPaymentsByUser(user.getId())) {
+
+			log.info(user.toString());
 			total += i.getCant();
 			i.setClaimed(true);
 			pr.save(i);
 		}
+		user_final.setCurrency(user_final.getCurrency()+total);
+		ur.save(user_final);
 		return total;
 		
 	}	

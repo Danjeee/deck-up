@@ -3,6 +3,7 @@ import { UserService } from "../services/user.service"
 import { User } from "./User"
 
 export class UserSession {
+    
 
 
     constructor(service: UserService) { }
@@ -76,5 +77,18 @@ export class UserSession {
         }
 
     }
+
+    static get_paid(cant: any) {
+        var sessionuser = localStorage.getItem("user") as string
+        let user = JSON.parse(sessionuser)
+        user.currency = user.currency + cant
+        this.setUser(user)
+        const currency = document.getElementById("currency_txt") as HTMLElement
+        for (let i = Number.parseInt(currency.innerHTML); i < (UserSession.getUser().currency as number); i++) {
+            setTimeout(() => {
+                currency.innerHTML = (Number.parseInt(currency.innerHTML) + 1) + ""
+            }, 50);
+        }
+      }
 
 }

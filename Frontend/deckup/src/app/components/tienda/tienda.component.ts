@@ -8,6 +8,7 @@ import { AlertService } from '../../services/alert.service';
 import { ParticleComponent } from '../particle/particle.component';
 import { PackComponent } from '../pack/pack.component';
 import { PaymentService } from '../../services/payment.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tienda',
@@ -21,10 +22,11 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   cards: any
   packs: any
   gems: any
+  loading: boolean = false
   user: User = UserSession.getUser() 
   currency = 'EUR';
 
-  constructor(private service: TiendaService, private alert: AlertService, private paymentService: PaymentService){
+  constructor(private service: TiendaService, private alert: AlertService, private paymentService: PaymentService, private router:Router){
     super()
   }
 
@@ -33,6 +35,7 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   }
   toggle(table: string){
     this.selecteed = table
+    localStorage.setItem("tienda", table)
   }
   buy(card: any){
     this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${card.nombre} por ${card.precio} gemas?`, () => {
@@ -66,6 +69,9 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem("tienda")) {
+      this.selecteed = localStorage.getItem("tienda") as string
+    }
     this.service.get().subscribe({
       next: (data) =>{
         this.cards = [data.carta1,data.carta2,data.carta3,data.carta4,data.carta5]
@@ -80,11 +86,11 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   }
   buygems(gemoffer: any) {
     this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${gemoffer.nombre} por ${gemoffer.precio}€?`, () => {
+      this.loading = true
       this.paymentService
       .createPayment(gemoffer.precio, this.currency, gemoffer.nombre, this.paymentVerifyUrl, this.paymentCancelUrl, UserSession.getUser().auth, gemoffer.cant)
       .subscribe({
         next: (response: any) => {
-          console.log(response)
           window.location.href = response.links.find((link: any) => link.rel === 'approve').href;
         },
         error: (err) => console.error('Error al crear el pago:', err),

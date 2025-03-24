@@ -42,11 +42,15 @@
     <h1 class="str" style="margin-top: 10dvw; margin-bottom: 10dvw; font-size: 250px;">WIP</h1>
 </div>
 <div id="gemcont" class="btn" *ngIf="selecteed == 'gems'">
-    <div *ngFor="let gem of gems" class="gem_offer btn but aff" (click)="buygems(gem)">
+    <div *ngFor="let gem of gems" class="gem_offer btn but" (click)="buygems(gem)">
         <img src="{{resURL}}/Resources/img/misc/{{gem.imagen}}" alt="{{gem.nombre}}">
         <h4 class="str" style="text-align: center;">{{gem.nombre}}</h4>
         <div class="precio str btn aff">
             <p>{{gem.precio}}€</p>
         </div>
     </div>
+</div>
+<div class="loadcont" *ngIf="loading">
+    <div class="loader"></div>
+    <h3 style="color: #fff;" class="str">Redirigiendo a PayPal...</h3>
 </div>

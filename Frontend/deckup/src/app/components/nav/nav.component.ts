@@ -164,4 +164,12 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }, 650);
     }
   }
+  codeinput(){
+    this.alert.ask("Codigo promocional", "Inserta un codigo promocional", true, false).then((resp) => {
+      const value = resp.value
+      if (value){
+        
+      }
+    })
+  }
 }

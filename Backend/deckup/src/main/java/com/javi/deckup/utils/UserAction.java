@@ -15,4 +15,6 @@ public class UserAction {
 	
 	private Integer artifact_id;
 	
+	private String code;
+	
 }

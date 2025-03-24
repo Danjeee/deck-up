@@ -191,5 +191,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		user_aux.setCurrency(user_aux.getCurrency()-precio);
 		ur.save(user_aux);
 	}
+
+	@Override
+	public UsuarioDTO findByToken(String auth, boolean wantPass) {
+		Usuario usuario = ur.findByAuth(auth).orElse(null);
+		return usuario == null ? null : UsuarioDTO.convertToDTO(usuario, wantPass);
+	}
 	
 }

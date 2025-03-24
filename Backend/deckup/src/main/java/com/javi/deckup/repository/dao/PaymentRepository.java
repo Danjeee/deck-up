@@ -17,7 +17,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>{
 	@Query(value = "SELECT * FROM payments WHERE orderid = ?1", nativeQuery = true)
 	Payment findByOrderId(String orderId);
 
-	@Query(value = "SELECT * FROM payments WHERE id_user = ?1 AND claimed = false", nativeQuery = true)
+	@Query(value = "SELECT * FROM payments WHERE id_user = ?1 AND status = 'CREATED'", nativeQuery = true)
 	List<Payment> findByUser(Long id);
 
 	@Query(value = "SELECT * FROM payments WHERE id_user = ?1 AND claimed = false AND status = 'APPROVED'", nativeQuery = true)

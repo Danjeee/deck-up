@@ -211,6 +211,7 @@ CREATE TABLE `deckup`.`payments` (
   `id_user` BIGINT NOT NULL,
   `claimed` TINYINT NOT NULL,
   `cant` INT NOT NULL,
+  `time_created` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_userpayments_idx` (`id_user` ASC) VISIBLE,
   CONSTRAINT `fk_userpayments`

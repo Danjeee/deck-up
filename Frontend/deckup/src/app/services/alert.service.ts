@@ -49,18 +49,23 @@ export class AlertService {
       }
     })
   }
-  ask(title: string, text: string) {
+  ask(title: string, text: string, canempty: boolean = false, icon: any = 'question') {
     return Swal.fire({
       title: title,
       text: text,
       input: 'text',
       showCloseButton: false,
-      icon: 'question',
+      icon: icon,
       customClass: {
         popup: "swal-drk btn skew",
         title: "swal-drk",
         confirmButton: "btn but str swal-btn"
-      }
+      },
+      preConfirm: (value) => {
+        if (!value && !canempty) {
+          Swal.showValidationMessage('<i class="fa fa-info-circle"></i> No puedes dejar este campo vacío')
+        }
+      },
     })
   }
   confirm(title: string, text: string, ifConfirmed: () => void, icon?: any, ifNot?: () => void ){

@@ -28,6 +28,8 @@ public interface UsuarioService {
 	void buy(UsuarioDTO user, CartaDTO card);
 
 	UsuarioDTO findByToken(String auth);
+	
+	UsuarioDTO findByToken(String auth , boolean wantPass);
 
 	void recive(UsuarioDTO user, CartaDTO i);
 

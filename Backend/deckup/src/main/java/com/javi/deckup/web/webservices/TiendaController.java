@@ -104,7 +104,7 @@ public class TiendaController {
     
     @PostMapping("/verify")
     public Response postMethodName(@ModelAttribute UsuarioDTO aux) {
-        UsuarioDTO user = us.findByToken(aux.getAuth());
+        UsuarioDTO user = us.findByToken(aux.getAuth(), true);
         if (user == null) {
         	return Response.error("Ha habido un error con tu sesión, intentalo de nuveo (No te preocupes, tu pago se ha guardado)");
         }

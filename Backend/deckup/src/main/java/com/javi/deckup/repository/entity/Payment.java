@@ -1,5 +1,8 @@
 package com.javi.deckup.repository.entity;
 
+import java.sql.Timestamp;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +34,9 @@ public class Payment {
 	private boolean claimed;
 	
 	private Integer cant;
+	
+	@Column(name = "time_created")
+	private Timestamp time_created;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_user")
