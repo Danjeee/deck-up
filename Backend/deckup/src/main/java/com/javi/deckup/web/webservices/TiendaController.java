@@ -88,13 +88,31 @@ public class TiendaController {
                                 @RequestParam String currency,
                                 @RequestParam String description,
                                 @RequestParam String returnUrl,
-                                @RequestParam String cancelUrl) {
+                                @RequestParam String cancelUrl,
+                                @RequestParam String auth,
+                                @RequestParam Integer cant) {
+    	UsuarioDTO user = us.findByToken(auth);
+    	if (user == null) {
+    		throw new RuntimeException("Error al procesar el pago: Error con el token");
+    	}
         try {
-            return pps.createPayment(amount, currency, description, returnUrl, cancelUrl);
+            return pps.createPayment(amount, currency, description, returnUrl, cancelUrl, user, cant);
         } catch (Exception e) {
             throw new RuntimeException("Error al procesar el pago: " + e.getMessage());
         }
     }
+    
+    @PostMapping("/verify")
+    public Response postMethodName(@ModelAttribute UsuarioDTO aux) {
+        UsuarioDTO user = us.findByToken(aux.getAuth());
+        if (user == null) {
+        	return Response.error("Ha habido un error con tu sesión, intentalo de nuveo (No te preocupes, tu pago se ha guardado)");
+        }
+        Integer total = pps.getAllVerifiedPayments(user);
+        
+        return total == 0 ? Response.error("No tienes pagos pendientes") : Response.success(total, "Pago recibido correctamente");
+    }
+    
 
 	
 	

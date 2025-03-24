@@ -81,9 +81,10 @@ export class TiendaComponent extends environmentsURLs implements OnInit  {
   buygems(gemoffer: any) {
     this.alert.confirm('Confirmar compra', `Estas seguro de comprar ${gemoffer.nombre} por ${gemoffer.precio}€?`, () => {
       this.paymentService
-      .createPayment(gemoffer.precio, this.currency, gemoffer.nombre, "https://localhost/tienda", "https://localhost/tienda")
+      .createPayment(gemoffer.precio, this.currency, gemoffer.nombre, this.paymentVerifyUrl, this.paymentCancelUrl, UserSession.getUser().auth, gemoffer.cant)
       .subscribe({
         next: (response: any) => {
+          console.log(response)
           window.location.href = response.links.find((link: any) => link.rel === 'approve').href;
         },
         error: (err) => console.error('Error al crear el pago:', err),

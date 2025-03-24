@@ -203,6 +203,22 @@ CREATE TABLE `deckup`.`tienda` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
     
+/* Especial: Paypal */
+CREATE TABLE `deckup`.`payments` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `orderid` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(50) NOT NULL,
+  `id_user` BIGINT NOT NULL,
+  `claimed` TINYINT NOT NULL,
+  `cant` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_userpayments_idx` (`id_user` ASC) VISIBLE,
+  CONSTRAINT `fk_userpayments`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
 INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado, auth)VALUES 
@@ -274,4 +290,4 @@ INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
 (0.99, 500, "Bolsa de gemas", "bolsa_gem.png"),
 (2.99, 2000, "Caja de gemas", "caja_gem.png"),
 (5.99, 5000, "Baul de gemas", "baul_gem.png"),
-(9.99, 1000, "Cofre de gemas", "cofre_gem.png");
+(9.99, 10000, "Cofre de gemas", "cofre_gem.png");

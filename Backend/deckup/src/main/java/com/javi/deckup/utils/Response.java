@@ -22,6 +22,7 @@ public class Response {
 	private UsuarioDTO user;
 	private List<CartaDTO> cartas;
 	private PaqueteDTO pack;
+	private Integer cant;
 
 	public Response(int status, String tit, String msg) {
 		super();
@@ -55,6 +56,9 @@ public class Response {
 	
 	public static Response success(String msg, String tit) {
 		return Response.builder().status(200).tit(tit).msg(msg).build();
+	}
+	public static Response success(Integer cant, String tit) {
+		return Response.builder().status(200).tit(tit).cant(cant).build();
 	}
 	
 	public static Response success(String msg) {
