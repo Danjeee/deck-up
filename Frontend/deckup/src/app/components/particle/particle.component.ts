@@ -32,10 +32,17 @@ export class ParticleComponent extends environmentsURLs {
   } as KeyframeAnimationOptions
   }
 
-  private static gotoCurrency(max: number[]){
-  return [
-    { transform: `translate(${max[0]}vw, ${max[1]}vh)`},
-    { transform: `translate(35vw, -45vh)`},
+  private static gotoCurrency(max: number[], vanish?: boolean){
+    let op = 0
+    if (!vanish) {
+      op = 1
+    }
+    return [
+    { transform: `translate(${max[0]}vw, ${max[1]}vh)`,
+      opacity: 1},
+    { transform: `translate(35vw, -45vh)`,
+      opacity: op
+    },
   ]
 }
 
@@ -73,7 +80,7 @@ export class ParticleComponent extends environmentsURLs {
       document.body.appendChild(gem)
       gem.animate(ParticleComponent.explosion(max_exp), this.explosion_anim(dur))
       setTimeout(() => {
-        gem.animate(ParticleComponent.gotoCurrency(max_exp), this.explosion_anim(1000))
+        gem.animate(ParticleComponent.gotoCurrency(max_exp, true), this.explosion_anim(1000))
       }, dur+1000);
       setTimeout(() => {
         document.body.removeChild(document.getElementById(id + "") as Node)
@@ -90,16 +97,18 @@ export class ParticleComponent extends environmentsURLs {
       card.style.position = "fixed"
       card.style.top = "40vh"
       card.style.left = "40vw"
-      card.style.width = "50px"
-      card.style.height = "50px"
+      card.style.width = "75px"
+      card.style.height = "112.5px"
+      card.style.overflow = "none"
       const card_img = document.createElement("img")
       card_img.style.width = "100%"
+      card_img.style.height = "100%"
       card_img.src = this.resURL + "/Resources/img/cards/" + card_data.imagen
       card.appendChild(card_img)
       document.body.appendChild(card)
       card.animate(ParticleComponent.explosion(max_exp), this.explosion_anim(dur))
       setTimeout(() => {
-        card.animate(ParticleComponent.gotoCurrency(max_exp), this.explosion_anim(1000))
+        card.animate(ParticleComponent.gotoCurrency(max_exp, true), this.explosion_anim(1000))
       }, dur+1000);
       setTimeout(() => {
         document.body.removeChild(document.getElementById(card_data.id + "getcard") as Node)
