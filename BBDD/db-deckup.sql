@@ -14,6 +14,8 @@ CREATE TABLE `deckup`.`usuarios` (
   `next_payment` DATETIME NOT NULL,
   `estado` TINYINT NOT NULL DEFAULT 1,
   `auth` VARCHAR(255) NULL,
+  `mazo` BIGINT NULL,
+  `notis` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`));
   
   CREATE TABLE `deckup`.`cartas` (
@@ -220,6 +222,76 @@ CREATE TABLE `deckup`.`payments` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
     
+/* Especial: Mazos */
+
+CREATE TABLE `deckup`.`mazos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `carta1` INT NOT NULL,
+  `carta2` INT NOT NULL,
+  `carta3` INT NOT NULL,
+  `carta4` INT NOT NULL,
+  `carta5` INT NOT NULL,
+  `carta6` INT NOT NULL,
+  `carta7` INT NOT NULL,
+  `carta8` INT NOT NULL,
+  `id_usuario` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_mazo_c1_idx` (`carta1` ASC) VISIBLE,
+  INDEX `fk_mazo_c2_idx` (`carta2` ASC) VISIBLE,
+  INDEX `fk_mazo_c3_idx` (`carta3` ASC) VISIBLE,
+  INDEX `fk_mazo_c4_idx` (`carta4` ASC) VISIBLE,
+  INDEX `fk_mazo_c5_idx` (`carta5` ASC) VISIBLE,
+  INDEX `fk_mazo_c6_idx` (`carta6` ASC) VISIBLE,
+  INDEX `fk_mazo_c7_idx` (`carta7` ASC) VISIBLE,
+  INDEX `fk_mazo_c8_idx` (`carta8` ASC) VISIBLE,
+  INDEX `fk_mazo_usr_idx` (`id_usuario` ASC) VISIBLE,
+  CONSTRAINT `fk_mazo_c1`
+    FOREIGN KEY (`carta1`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c2`
+    FOREIGN KEY (`carta2`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c3`
+    FOREIGN KEY (`carta3`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c4`
+    FOREIGN KEY (`carta4`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c5`
+    FOREIGN KEY (`carta5`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c6`
+    FOREIGN KEY (`carta6`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c7`
+    FOREIGN KEY (`carta7`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_c8`
+    FOREIGN KEY (`carta8`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_mazo_usr`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+    
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
 INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado, auth)VALUES 
@@ -268,13 +340,13 @@ INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilid
 ('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 4, 1), # 1
 ('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
 ('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
-('Eventio', 'Te damos la bienvenida', 'eventio.png', 0,3 ,null, 3, 1); # 4
+('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1); # 4
 
 /* Codigos */
 
 INSERT INTO codigos(codigo, currency, card, card_cant, uses_left, expiration_date) VALUES
 ('GR4NDO0PENING', 2000, null, 0, 10000, null), # 1
-('F1RST3V3NTCARD', 0, 4, 1, -1, now()); # 2
+('F1RST3V3NTCARD', 0, 4, 1, -1, '2025-03-26 12:34:56'); # 2
 
 /* Relaciones */
 INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES

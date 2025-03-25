@@ -9,6 +9,7 @@ import { AlertService } from '../../services/alert.service';
 import { filter, pairwise } from 'rxjs/operators';
 import { LoadComponent } from '../load/load.component';
 import { environmentsURLs } from '../../utils/environmentsURls';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-nav',
@@ -19,7 +20,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 export class NavComponent extends environmentsURLs implements AfterViewInit {
 
 
-  constructor(protected router: Router, private service: UserService, private alert: AlertService) { 
+  constructor(protected router: Router, private service: UserService, private alert: AlertService) {
     super()
   }
 
@@ -74,39 +75,39 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         this.user = UserSession.getUser()
       }
     })
-      setTimeout(() => {
-        if (this.router.url == "/login" || this.router.url == "/register" || this.router.url == "/") {
-          const nav = document.getElementById('nav-element-login') as HTMLElement
-          const cont = document.getElementById('nav-login') as HTMLElement
-          cont.style.zIndex = "-1"
-          nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
-          window.removeEventListener("keydown", e=>{
-            if (e.key == "Escape" || e.key == "Tab") {
-              this.toggle()
-            }
-          })
-        } else {
-          window.addEventListener("keydown", e=>{
-            if (e.key == "Escape" || e.key == "Tab") {
-              this.toggle()
-            }
-          })
-        }
-      }, 1);
+    setTimeout(() => {
+      if (this.router.url == "/login" || this.router.url == "/register" || this.router.url == "/") {
+        const nav = document.getElementById('nav-element-login') as HTMLElement
+        const cont = document.getElementById('nav-login') as HTMLElement
+        cont.style.zIndex = "-1"
+        nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
+        window.removeEventListener("keydown", e => {
+          if (e.key == "Escape" || e.key == "Tab") {
+            this.toggle()
+          }
+        })
+      } else {
+        window.addEventListener("keydown", e => {
+          if (e.key == "Escape" || e.key == "Tab") {
+            this.toggle()
+          }
+        })
+      }
+    }, 1);
   }
 
   back() {
-      this.router.navigate([LoadComponent.prev])
-      //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
-    }
+    this.router.navigate([LoadComponent.prev])
+    //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
+  }
 
   togglelogin() {
     if (!this.cooldown) {
-      
+
       this.cooldown = true
       const cont = document.getElementById("nav-login") as HTMLElement
       const nav = document.getElementById("nav-element-login") as HTMLElement
-       cont.style.zIndex = '3'
+      cont.style.zIndex = '3'
       if (this.router.url == "/login") {
         setTimeout(() => {
           this.router.navigate(['register'])
@@ -119,7 +120,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         nav.animate(this.registanim, this.animoptions)
       }
       setTimeout(() => {
-        
+
         cont.style.zIndex = '-1'
       }, 400);
       setTimeout(() => {
@@ -131,25 +132,26 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   logout() {
     this.alert.confirm('Cerrar sesión', '¿Estas seguro de cerrar sesión?', () => {
       this.service.logout().subscribe({
-      next: (data) => {
-        if (data.status == 200) {
-          this.alert.success(data.tit, data.msg)
-          UserSession.logOut()
-          this.router.navigate(["/login"])
-        }
-      },
-    }
-    )})
+        next: (data) => {
+          if (data.status == 200) {
+            this.alert.success(data.tit, data.msg)
+            UserSession.logOut()
+            this.router.navigate(["/login"])
+          }
+        },
+      }
+      )
+    })
   }
 
-  toggle(){
+  toggle() {
     const mh = document.getElementById("menuHamb") as HTMLElement
     const shadow = document.getElementById("shadow") as HTMLElement
     if (!this.cd) {
       this.cd = true
       if (!this.open) {
-          mh.style.display = "flex"
-          shadow.style.display = "flex"
+        mh.style.display = "flex"
+        shadow.style.display = "flex"
       } else {
         mh.animate(this.closeanim, this.close)
         shadow.animate(this.shadowvanish, this.close)
@@ -164,11 +166,35 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }, 650);
     }
   }
-  codeinput(){
+  codeinput() {
     this.alert.ask("Codigo promocional", "Inserta un codigo promocional", true, false).then((resp) => {
       const value = resp.value
-      if (value){
-        
+      if (value) {
+        this.service.claimCode(value).subscribe({
+          next: (data) => {
+            if (data.status == 200) {
+              if (data.cant != 0) {
+                for (let i = 0; i < 100; i++) {
+                  ParticleComponent.generateGems([47, 47])
+                }
+                this.alert.pago_recibido(data.cant)
+                setTimeout(() => {
+                  UserSession.get_paid(data.cant)
+                }, 2000);
+                setTimeout(() => {
+                  const currency = document.getElementById("currency_txt") as HTMLElement
+                  currency.innerHTML = UserSession.getUser().currency
+                }, 2500);
+              }
+              if (data.cartas != null){
+                this.alert.carta_recibida(data.cartas[0], data.msg)
+                ParticleComponent.getCard(data.cartas[0])
+              }
+            } else {
+              this.alert.error(data.tit, data.msg)
+            }
+          }
+        })
       }
     })
   }

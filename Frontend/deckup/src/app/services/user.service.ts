@@ -13,6 +13,8 @@ export class UserService extends environmentsURLs {
 
   userApiURL = this.apiURL + "/users/"
 
+  codeUrl = this.apiURL + "/code/"
+
   constructor(private http: HttpClient) { 
     super()
   }
@@ -68,6 +70,15 @@ export class UserService extends environmentsURLs {
     const data: FormData = new FormData()
     data.append("id", UserSession.getId())
     return this.http.post(`${this.userApiURL}getPaid`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  claimCode(code: string): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("code", code)
+    return this.http.post(`${this.codeUrl}`, data).pipe(
       catchError(err => {throw err})
     )
   }

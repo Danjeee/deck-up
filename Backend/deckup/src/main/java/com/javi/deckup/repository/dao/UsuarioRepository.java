@@ -1,6 +1,7 @@
 package com.javi.deckup.repository.dao;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +34,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 	@Query(value = "SELECT * FROM usuarios WHERE auth = ?1", nativeQuery = true)
 	Optional<Usuario> findByAuth(String auth);
+
+	@Query(value = "SELECT * FROM usuarios u JOIN usuarios_codigos c ON u.id = c.id_usuario WHERE c.id_codigo = ?1 ", nativeQuery = true)
+	List<Usuario> findByClaimedCode(Integer id);
 
 }

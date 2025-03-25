@@ -106,6 +106,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 
 	@Override
 	public void save(UsuarioDTO user) {
+		Usuario aux = ur.findByAuth(user.getAuth()).orElse(null);
+		if (aux != null) {
+			user.setPassword(aux.getPassword());
+		}
 		ur.save(UsuarioDTO.convertToEntity(user));
 		
 	}

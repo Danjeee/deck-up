@@ -40,6 +40,8 @@ public class UsuarioDTO implements Serializable {
 	
 	private List<RolDTO> rolesDTO;
 	
+	private MazoDTO mazo;
+	
 	// No pongo la lista de codigos y cartas porque es una carga innecesaria de datos en la aplicación
 	
 	public static UsuarioDTO convertToDTO(Usuario input) {
@@ -54,6 +56,7 @@ public class UsuarioDTO implements Serializable {
 						  .pfp(input.getPfp())
 						  .estado(input.isEstado())
 						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
+						  .mazo(MazoDTO.convertToDTO(input.getMazo()))
 						  .build();
 	}
 	
@@ -68,6 +71,7 @@ public class UsuarioDTO implements Serializable {
 						  .nextPayment(input.getNextPayment())
 						  .pfp(input.getPfp())
 						  .estado(input.isEstado())
+						  .mazo(MazoDTO.convertToDTO(input.getMazo()))
 						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .build();
 	}
@@ -83,6 +87,7 @@ public class UsuarioDTO implements Serializable {
 						  .auth(input.getAuth())
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
+						  .mazo(MazoDTO.convertToEntity(input.getMazo()))
 						  .roles(input.getRolesDTO() == null ? null : input.getRolesDTO().stream().map(r -> RolDTO.convertToEntity(r, input)).collect(Collectors.toList()))
 						  .build();
 	}

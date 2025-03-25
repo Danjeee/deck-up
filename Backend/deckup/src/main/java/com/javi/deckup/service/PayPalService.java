@@ -138,6 +138,7 @@ public class PayPalService {
             String status = orderDetails.get("status").asText();
             Payment p = pr.findByOrderId(orderId);
             p.setStatus(status);
+            pr.save(p);
         }
     }
 	public Integer getAllVerifiedPayments(UsuarioDTO user) {

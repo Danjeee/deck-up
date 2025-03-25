@@ -23,6 +23,19 @@ export class AlertService {
       }
     })
   }
+  carta_recibida(carta: any, cant: number){
+    return Swal.fire({
+      title: "¡Enhorabuena!",
+      text: "¡Has recibido "+cant +" "+carta.nombre +"!",
+      showCloseButton: true,
+      iconHtml: '<i class="bi bi-gem swal-gm"></i>',
+      customClass: {
+        popup: "swal-c1 swal-drk btn skew",
+        title: "swal-drk",
+        confirmButton: "btn but str swal-btn"
+      }
+    })
+  }
   success(title: string, text: string): Promise<SweetAlertResult<any>>{
     return Swal.fire({
       title: title,

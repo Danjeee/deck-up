@@ -45,6 +45,7 @@
     <div *ngFor="let gem of gems" class="gem_offer btn but" (click)="buygems(gem)">
         <img src="{{resURL}}/Resources/img/misc/{{gem.imagen}}" alt="{{gem.nombre}}">
         <h4 class="str" style="text-align: center;">{{gem.nombre}}</h4>
+        <p class="str">Contiene {{gem.cant}} gemas</p>
         <div class="precio str btn aff">
             <p>{{gem.precio}}€</p>
         </div>

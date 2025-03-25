@@ -84,7 +84,7 @@ export class UserSession {
         user.currency = user.currency + cant
         this.setUser(user)
         const currency = document.getElementById("currency_txt") as HTMLElement
-        for (let i = Number.parseInt(currency.innerHTML); i < (UserSession.getUser().currency as number); i++) {
+        for (let i = Number.parseInt(currency.innerHTML); i < (UserSession.getUser().currency as number) - cant; i++) {
             setTimeout(() => {
                 currency.innerHTML = (Number.parseInt(currency.innerHTML) + 1) + ""
             }, 50);
