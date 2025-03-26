@@ -65,7 +65,7 @@ body {
 
 .bg-t {
     background-color: #e5edf9;
-    color: #13253e;
+    color: #13253e !important;
 }
 
 .bd-p {
@@ -187,6 +187,10 @@ body {
     100% {
         background-position: 0% 50%;
     }
+}
+
+img{
+    pointer-events: none;
 }
 
 .swal-gm {

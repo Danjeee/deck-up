@@ -346,7 +346,7 @@ INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilid
 
 INSERT INTO codigos(codigo, currency, card, card_cant, uses_left, expiration_date) VALUES
 ('GR4NDO0PENING', 2000, null, 0, 10000, null), # 1
-('F1RST3V3NTCARD', 0, 4, 1, -1, '2025-03-26 12:34:56'); # 2
+('F1RST3V3NTCARD', 0, 4, 1, -1, '2026-03-26 12:34:56'); # 2
 
 /* Relaciones */
 INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
