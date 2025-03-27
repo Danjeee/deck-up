@@ -22,7 +22,7 @@
     <div class="bigcardshadow" (click)="close()"></div>
     <div class="btn bg-p">
         <div class="bigcard-img">
-            <div class="str btn but bg-p ability">Mostrar habilidad</div>
+            <div class="str btn but bg-p ability" (click)="showhab()">{{showh ? "Ocultar" : "Mostrar"}} habilidad</div>
             <img src="{{resURL}}/Resources/img/cards/{{bigcard.imagen}}" alt="{{bigcard.nombre}}" (click)="showArt()">
         </div>
         <div class="bigcard-data">
@@ -49,6 +49,20 @@
             <div *ngIf="bigcard.exclusive">
                 <h4>Exclusiva</h4>
             </div>
+        </div>
+    </div>
+    <div id="hab" class="hab bg-p" *ngIf="showh">
+        <div>
+            <h4 class="str">Nombre: </h4>
+            <p class="str">{{bigcard.habilidadDTO.nombre}}</p>
+        </div>
+        <div>
+            <h4 class="str">Descripción: </h4>
+            <p class="str">{{bigcard.habilidadDTO.descripcion}}</p>
+        </div>
+        <div>
+            <h4 class="str">Daño: </h4>
+            <p class="str">{{bigcard.habilidadDTO.dmg}}</p>
         </div>
     </div>
 </div>

@@ -26,6 +26,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
   showcd: boolean = false
   showh: boolean = false
   showart: boolean = false
+  showhcd: boolean = false
 
   constructor(private service: ColeccionService) {
     super()
@@ -114,6 +115,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
     cont.style.opacity = "0"
     cont.style.scale = "0"
     setTimeout(() => {
+      this.showh = false
       this.showing = false
       this.bigcard = null
       this.showcd = false
@@ -129,6 +131,33 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
     setTimeout(() => {
       this.showart = false
     }, 600);
+  }
+  showhab(){
+    if (!this.showhcd){
+      this.showhcd = true
+      if (this.showh) {
+        const hab = document.getElementById("hab") as HTMLElement
+        hab.animate(
+          [ 
+            {height: '10dvh', opacity: 1},
+            {height: '0px', opacity: 0}
+          ],
+          {
+            fill: "forwards",
+            duration: 500
+          }
+        )
+        console.log("neg")
+        setTimeout(() => {
+          this.showh = !this.showh
+        }, 500);
+      } else {
+        this.showh = !this.showh
+      }
+      setTimeout(() => {
+        this.showhcd = false
+      }, 700);
+    }
   }
 
   mirarAlCursorAlClick3D(sensibilidad: number = 0.02): void {

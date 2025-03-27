@@ -329,7 +329,7 @@ Aclaración de los tipos:
     - F = Ataque fuerte (te deja un turno sin atacar)
     - D = Dominio
 */
-('Admin', 'Oponente.setVida() = 0', 'A', 999999), # 1
+('Admin', 'Oponente.setVida(0)', 'A', 999999), # 1
 ('Golpe', 'Golpea al rival', 'A', 1), # 2
 ('Puntapie', 'Golpea al rival, este pierde un turno', 'C', 1), # 3
 ('Ignicion', 'Quema al rival', 'Q', 0), # 4
@@ -337,7 +337,7 @@ Aclaración de los tipos:
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
-('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 4, 1), # 1
+('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1), # 1
 ('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
 ('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
 ('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1); # 4

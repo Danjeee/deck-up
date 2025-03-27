@@ -35,7 +35,7 @@ public class HabilidadDTO implements Serializable {
 		return HabilidadDTO.builder()
 							.id(input.getId())
 							.nombre(input.getNombre())
-							.descripcion(input.getNombre())
+							.descripcion(input.getDescripcion())
 							.tipo(input.getTipo())
 							.dmg(input.getDmg())
 							.build();
@@ -45,7 +45,7 @@ public class HabilidadDTO implements Serializable {
 		return Habilidad.builder()
 							.id(input.getId())
 							.nombre(input.getNombre())
-							.descripcion(input.getNombre())
+							.descripcion(input.getDescripcion())
 							.tipo(input.getTipo())
 							.dmg(input.getDmg())
 							.cartas(cartas)
