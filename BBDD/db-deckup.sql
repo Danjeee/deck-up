@@ -43,13 +43,47 @@ CREATE TABLE `deckup`.`rarezas` (
   `cant` INT NOT NULL,
   PRIMARY KEY (`id`));
   
+  CREATE TABLE `deckup`.`entornos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(255) NOT NULL,
+  `dmg` INT NULL,
+  `heal` INT NULL,
+  `prnct_up` DECIMAL(3,2) NULL,
+  `prcnt_dwn` DECIMAL(3,2) NULL,
+  `crit` DECIMAL(3,2) NULL,
+  `crit_dmg` DECIMAL(3,2) NULL,
+  `especial` VARCHAR(1) NULL,
+  PRIMARY KEY (`id`));
+  
   CREATE TABLE `deckup`.`habilidades` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
-  `tipo` VARCHAR(1) NOT NULL,
-  `dmg` INT NOT NULL,
-  PRIMARY KEY (`id`));
+  `especial` VARCHAR(1) NULL,
+  `dmg` INT NULL,
+  `heal` INT NULL,
+  `freeze` INT NULL,
+  `freeze_name` VARCHAR(50) NULL,
+  `burn` INT NULL,
+  `poisn` INT NULL,
+  `bleed` INT NULL,
+  `prcnt` DECIMAL(3,2) NULL,
+  `entorno` INT NULL,
+  `load_atq` INT NULL,
+  `crit` DECIMAL (3,2) NULL,
+  `crit_mult` DECIMAL (3,2) NULL,
+  `leth` DECIMAL (3,2) NULL,
+  `esq`	DECIMAL (3,2) NULL,
+  `prcnt_up` DECIMAL (3,2) NULL,
+  `prcnt_dwn` DECIMAL (3,2) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_hab_ent_idx` (`entorno` ASC) VISIBLE,
+  CONSTRAINT `fk_hab_ent`
+    FOREIGN KEY (`entorno`)
+    REFERENCES `deckup`.`entornos` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
   
   CREATE TABLE `deckup`.`roles` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -317,30 +351,20 @@ INSERT INTO rarezas(nombre, porcentaje) VALUES
 ('Mitica', 0.5), # 5
 ('???', 0.01); # 6
 
-INSERT INTO habilidades(nombre, descripcion, tipo, dmg) VALUES
-/*
-Aclaración de los tipos:
-	- A = Ataque (Unicamente golpea)
-    - Q = Quema
-    - C = Congela
-    - K = Congela 2 turnos
-    - H = Cura
-    - P = Pasiva
-    - F = Ataque fuerte (te deja un turno sin atacar)
-    - D = Dominio
-*/
-('Admin', 'Oponente.setVida(0)', 'A', 999999), # 1
-('Golpe', 'Golpea al rival', 'A', 1), # 2
-('Puntapie', 'Golpea al rival, este pierde un turno', 'C', 1), # 3
-('Ignicion', 'Quema al rival', 'Q', 0), # 4
-('Explosion de titan', 'Un gran golpe que tiene consecuencias', 'F', 5); #5
+INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name, burn) VALUES
+('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null), # 1
+('Golpe', 'Golpea al rival', 1, null, null, null, null), # 2
+('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 1, 'Noqueado', null), # 3
+('Ignicion', 'Quema al rival', 0, null, null, null, 1), # 4
+('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
 ('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1), # 1
 ('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
 ('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
-('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1); # 4
+('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1), # 4
+('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0); # 5
 
 /* Codigos */
 
@@ -356,7 +380,7 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (2,3,1);
 
 /*Tienda*/
-INSERT INTO tienda VALUES(1,2,2,2,3,3,1,2,3);
+INSERT INTO tienda VALUES(1,2,2,5,3,3,1,2,3);
 
 /* Gemas */
 INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES

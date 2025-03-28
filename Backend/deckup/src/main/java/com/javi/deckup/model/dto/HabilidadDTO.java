@@ -6,6 +6,7 @@ import java.util.List;
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Habilidad;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,31 +26,89 @@ public class HabilidadDTO implements Serializable {
 	
 	private String descripcion;
 	
-	private char tipo;
-	
 	private Integer dmg;
+	
+	private String especial;
+    
+	private Integer heal;
+    
+	private Integer freeze;
+    
+	private String freezeName;
+    
+	private Integer burn;
+    
+	private Integer poisn;
+    
+	private Integer bleed;
+    
+	private Double prcnt;
+    
+	private EntornoDTO entorno;
+    
+	private Integer loadAtq;
+    
+	private Double crit;
+	
+	private Double critMult;
+    
+	private Double leth;
+    
+	private Double esq;
+    
+	private Double prcntUp;
+    
+	private Double prcntDwn;
 	
 	// No incluyo la lista de cartas porque es innecesaria
 	
 	public static HabilidadDTO convertToDTO(Habilidad input) {
 		return HabilidadDTO.builder()
-							.id(input.getId())
-							.nombre(input.getNombre())
-							.descripcion(input.getDescripcion())
-							.tipo(input.getTipo())
-							.dmg(input.getDmg())
-							.build();
+		        .id(input.getId())
+		        .nombre(input.getNombre())
+		        .descripcion(input.getDescripcion())
+		        .dmg(input.getDmg())
+		        .especial(input.getEspecial())
+		        .freeze(input.getFreeze())
+		        .freezeName(input.getFreezeName())
+		        .burn(input.getBurn())
+		        .poisn(input.getPoisn())
+		        .bleed(input.getBleed())
+		        .prcnt(input.getPrcnt())
+		        .entorno(EntornoDTO.convertToDTO(input.getEntorno()))
+		        .loadAtq(input.getLoadAtq())
+		        .crit(input.getCrit())
+		        .critMult(input.getCritMult())
+		        .leth(input.getLeth())
+		        .esq(input.getEsq())
+		        .prcntUp(input.getPrcntUp())
+		        .prcntDwn(input.getPrcntDwn())
+		        .build();
 	}
 	
-	public static Habilidad convertToEntity(HabilidadDTO input, List<Carta> cartas) {
-		return Habilidad.builder()
-							.id(input.getId())
-							.nombre(input.getNombre())
-							.descripcion(input.getDescripcion())
-							.tipo(input.getTipo())
-							.dmg(input.getDmg())
-							.cartas(cartas)
-							.build();
+	public static Habilidad convertToEntity(HabilidadDTO input) {
+	    return Habilidad.builder()
+	        .id(input.getId())
+	        .nombre(input.getNombre())
+	        .descripcion(input.getDescripcion())
+	        .dmg(input.getDmg())
+	        //.cartas(cartas)
+	        .especial(input.getEspecial())
+	        .freeze(input.getFreeze())
+	        .freezeName(input.getFreezeName())
+	        .burn(input.getBurn())
+	        .poisn(input.getPoisn())
+	        .bleed(input.getBleed())
+	        .prcnt(input.getPrcnt())
+	        .entorno(EntornoDTO.convertToEntity(input.getEntorno()))
+	        .loadAtq(input.getLoadAtq())
+	        .crit(input.getCrit())
+	        .critMult(input.getCritMult())
+	        .leth(input.getLeth())
+	        .esq(input.getEsq())
+	        .prcntUp(input.getPrcntUp())
+	        .prcntDwn(input.getPrcntDwn())
+	        .build();
 	}
 	
 }

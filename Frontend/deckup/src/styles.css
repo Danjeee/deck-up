@@ -189,7 +189,7 @@ body {
     }
 }
 
-img{
+img {
     pointer-events: none;
 }
 
@@ -208,22 +208,179 @@ img{
 }
 
 .Comun {
-    background: rgb(46, 46, 46);
-    background: linear-gradient(305deg, rgba(46, 46, 46, 1) 0%, rgba(103, 103, 103, 1) 100%);
+    background: linear-gradient(to right,
+            #41A7C3,
+            #3065A2);
 }
 
-.Rara {}
+.Rara {
+    background: linear-gradient(to right, #FF7F50, #FFA07A);
+}
 
 .Epica {
     background: rgb(163, 4, 250);
     background: linear-gradient(305deg, rgba(163, 4, 250, 1) 0%, rgba(207, 124, 252, 1) 100%);
 }
 
-.Legendaria {}
+.Legendaria {
+    color: #000;
+    background: linear-gradient(to right,
+            #fddde6,
+            #fceabb,
+            #e0f7fa,
+            #d1c4e9,
+            #c8e6c9);
+    background-size: 200% 100%;
+    animation: bckgMovement 5s linear infinite;
+}
 
-.Mitica {}
+.Comun_txt {
+    background: linear-gradient(to right, #41A7C3, #3065A2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    /* Para compatibilidad con WebKit */
+    color: transparent;
+    /* Hace el texto transparente para que se vea el degradado */
+}
 
-.idk {}
+.Rara_txt {
+    background: linear-gradient(to right, #FF7F50, #FFA07A);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.Epica_txt {
+    background: linear-gradient(305deg, rgba(163, 4, 250, 1) 0%, rgba(207, 124, 252, 1) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.Legendaria_txt {
+    background: linear-gradient(to right, #fddde6, #fceabb, #e0f7fa, #d1c4e9, #c8e6c9);
+    background-size: 200% 100%;
+    animation: bckgMovement 5s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.Mitica_txt {
+    background: linear-gradient(to right, #FF4500, #DC143C, #FF6347, #DC143C, #FF4500);
+    background-size: 300% 100%;
+    animation: bckgMovement 10s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.idk_txt {
+    background: linear-gradient(to bottom right, #333, #111, #444, #000, #222);
+    background-size: 200% 200%;
+    animation: grisNegroAnimado 15s ease infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+@keyframes bckgMovement {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.Mitica {
+    background: linear-gradient(to right,
+            #FF4500,
+            #DC143C,
+            #FF6347,
+            #DC143C,
+            #FF4500);
+    background-size: 300% 100%;
+    animation: bckgMovement 10s linear infinite;
+}
+
+.idk {
+    background: linear-gradient(to bottom right,
+            #333,
+            #111,
+            #444,
+            #000,
+            #222);
+    background-size: 200% 200%;
+    animation: grisNegroAnimado 15s ease infinite;
+}
+
+@keyframes grisNegroAnimado {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.exclusiva-glow {
+    font-size: 3em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 30px rgba(255, 0, 0, 0.9);
+    animation: rainbow-neon-text 15s infinite linear;
+}
+
+@keyframes rainbow-neon-text {
+    0% {
+        color: red;
+        /* Rojo */
+        text-shadow: 0 0 30px rgba(255, 0, 0, 0.9);
+    }
+
+    16.66% {
+        color: orange;
+        /* Naranja */
+        text-shadow: 0 0 30px rgba(255, 165, 0, 0.9);
+    }
+
+    33.33% {
+        color: yellow;
+        /* Amarillo */
+        text-shadow: 0 0 30px rgba(255, 255, 0, 0.9);
+    }
+
+    50% {
+        color: green;
+        /* Verde */
+        text-shadow: 0 0 30px rgba(0, 255, 0, 0.9);
+    }
+
+    66.66% {
+        color: blue;
+        /* Azul */
+        text-shadow: 0 0 30px rgba(0, 0, 255, 0.9);
+    }
+
+    83.33% {
+        color: indigo;
+        /* Índigo */
+        text-shadow: 0 0 30px rgba(75, 0, 130, 0.9);
+    }
+
+    100% {
+        color: violet;
+        /* Violeta */
+        text-shadow: 0 0 30px rgba(238, 130, 238, 0.9);
+    }
+}
 
 .card_deckup>.imgcont>img {
     width: 100%;
@@ -307,6 +464,7 @@ img{
             animation-delay: .5s;
             overflow: hidden;
             opacity: 0;
+
             &>img {
                 border-radius: 7px;
                 width: 100%;
@@ -440,3 +598,13 @@ img{
         opacity: 0;
     }
 }
+.drkn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: brightness(.6);
+    z-index: -1;
+  }

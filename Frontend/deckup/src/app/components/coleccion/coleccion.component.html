@@ -1,8 +1,12 @@
-<div id="btns"></div>
+<div id="btns">
+    <div class="btn str skew {{section == 'cards' ?'bg-s z' : 'bg-p but'}}" (click)="section == 'cards' ? '' : goto('cards')">Colección</div>
+    <div class="btn str skew {{section == 'decks' ? 'bg-s z' : 'bg-p but'}}" (click)="section == 'decks' ? '' : goto('decks')">Mazos</div>
+    <div class="btn but skew bg-p str" *ngIf="section == 'cards'">filtros</div>
+</div>
 <div *ngIf="loaded" id="maincollection" class="bg-p btn">
     <div id="cards" *ngIf="section == 'cards'">
         <div *ngFor="let rareza of rarezas">
-            <div class="separator btn skew">{{rareza.nombre}}</div>
+            <div class="separator btn skew {{rareza.nombre == '???' ? 'idk' : rareza.nombre}} str">{{rareza.nombre}}</div>
             <div class="cards_cont">
                 <div *ngFor="let card of getCartasFromRareza(rareza.nombre)" class="carta"
                     (click)="isUnlocked(card) ? show(card) : notUnlocked($event, card)">
@@ -20,49 +24,132 @@
 </div>
 <div *ngIf="showing" id="bigcardcont">
     <div class="bigcardshadow" (click)="close()"></div>
-    <div class="btn bg-p">
+    <div class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} drkn">
         <div class="bigcard-img">
             <div class="str btn but bg-p ability" (click)="showhab()">{{showh ? "Ocultar" : "Mostrar"}} habilidad</div>
             <img src="{{resURL}}/Resources/img/cards/{{bigcard.imagen}}" alt="{{bigcard.nombre}}" (click)="showArt()">
         </div>
         <div class="bigcard-data">
-            <div>
+            <div class="btn skew {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}}">
                 <h4 class="str">Nombre: </h4>
                 <p class="str">{{bigcard.nombre}}</p>
             </div>
-            <div>
+            
+            <div class="btn skew {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}}">
                 <h4 class="str">Descripción: </h4>
                 <p class="str">{{bigcard.descripcion}}</p>
             </div>
-            <div>
-                <h4 class="str">Rareza: </h4>
-                <p class="str {{bigcard.rarezaDTO.nombre}}_txt">{{bigcard.rarezaDTO.nombre}}</p>
-            </div>
-            <div *ngIf="bigcard.paqueteDTO != null">
+            
+            <div *ngIf="bigcard.paqueteDTO != null" class="btn skew {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}}">
                 <h4 class="str">Paquete: </h4>
                 <p class="str">{{bigcard.paqueteDTO.nombre}}</p>
             </div>
-            <div>
-                <h4 class="str">Copias existentes en todo el mundo: </h4>
+            
+            <div class="btn skew {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}}">
+                <h4 class="str">Copias existentes: </h4>
                 <p class="str">{{bigcard.copias}}</p>
             </div>
-            <div *ngIf="bigcard.exclusive">
-                <h4>Exclusiva</h4>
+            <div>
+                <p class="str {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}}_txt" style="text-align: center; width: 100%;">{{bigcard.rarezaDTO.nombre}}</p>
+            </div>
+            <div class="exclusiva-glow str" *ngIf="bigcard.exclusive">
+                <h4 style="text-align: center; width: 100%;">Exclusiva</h4>
             </div>
         </div>
     </div>
-    <div id="hab" class="hab bg-p" *ngIf="showh">
-        <div>
+    <div id="hab" class="hab btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} drkn2" *ngIf="showh">
+        <div class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Nombre: </h4>
             <p class="str">{{bigcard.habilidadDTO.nombre}}</p>
         </div>
-        <div>
+        
+        <div class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Descripción: </h4>
             <p class="str">{{bigcard.habilidadDTO.descripcion}}</p>
         </div>
-        <div>
+        
+        <div *ngIf="bigcard.habilidadDTO.dmg" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Daño: </h4>
             <p class="str">{{bigcard.habilidadDTO.dmg}}</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.especial" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Especial: </h4>
+            <p class="str">{{bigcard.habilidadDTO.especial}}</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.heal" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Curación: </h4>
+            <p class="str">{{bigcard.habilidadDTO.heal}}</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.freeze" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Stun: </h4>
+            <p class="str">{{bigcard.habilidadDTO.freeze}} turnos</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.freezeName" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Tipo de stun: </h4>
+            <p class="str">{{bigcard.habilidadDTO.freezeName}}</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.burn" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Quemadura: </h4>
+            <p class="str">{{bigcard.habilidadDTO.burn}}/tick</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.poisn" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Veneno: </h4>
+            <p class="str">{{bigcard.habilidadDTO.poisn}}/tick</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.bleed" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Sangrado: </h4>
+            <p class="str">{{bigcard.habilidadDTO.bleed}} turnos</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.prcnt" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Daño de porcentaje (Sobre vida max): </h4>
+            <p class="str">{{bigcard.habilidadDTO.prcnt}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.entorno" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <div class="btn but str">Mostrar entorno</div>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.loadAtq" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Retraso de ataque: </h4>
+            <p class="str">{{bigcard.habilidadDTO.loadAtq}}</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.crit" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Crítico: </h4>
+            <p class="str">{{bigcard.habilidadDTO.crit}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.critMult" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Multiplicador de Crítico: </h4>
+            <p class="str">{{bigcard.habilidadDTO.critMult}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.leth" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Letalidad: </h4>
+            <p class="str">{{bigcard.habilidadDTO.leth}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.esq" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Evasión: </h4>
+            <p class="str">{{bigcard.habilidadDTO.esq}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.prcntUp" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Mejora de daño: </h4>
+            <p class="str">{{bigcard.habilidadDTO.prcntUp}}%</p>
+        </div>
+        
+        <div *ngIf="bigcard.habilidadDTO.prcntDwn" class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
+            <h4 class="str">Mejora de defensa: </h4>
+            <p class="str">{{bigcard.habilidadDTO.prcntDwn}}%</p>
         </div>
     </div>
 </div>

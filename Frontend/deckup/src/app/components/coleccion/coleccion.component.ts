@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 })
 export class ColeccionComponent extends environmentsURLs implements OnInit {
 
+
   allCards: any
   playerCards: any
   section: string = "cards"
@@ -39,7 +40,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       this.service.findRarezas(),
       this.service.findAllPlayerCards(),
       this.service.findPlayerDecks()
-    ]).subscribe(([data1,data2,data3,data4]) => {
+    ]).subscribe(([data1, data2, data3, data4]) => {
       this.allCards = data1;
       this.rarezas = data2;
       this.playerCards = data3;
@@ -57,6 +58,10 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       }
     })
     return itis;
+  }
+
+  goto(section: string) {
+    this.section = section
   }
 
   checkFilters(carta: any): boolean {
@@ -86,7 +91,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       return []
     }
   }
-  getCant(card: any):string{
+  getCant(card: any): string {
     let cant: string = ""
     if (this.allCards != undefined) {
       let allcards: any[] = this.playerCards
@@ -99,18 +104,18 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
     return cant
   }
 
-  notUnlocked(e: any, card: any){
-    ParticleComponent.minimalMsg(e, "No has desbloqueado a "+card.nombre)
+  notUnlocked(e: any, card: any) {
+    ParticleComponent.minimalMsg(e, "No has desbloqueado a " + card.nombre)
   }
 
-  show(card: any){
+  show(card: any) {
     if (!this.showcd) {
       this.showcd = true
       this.bigcard = card
       this.showing = true
     }
   }
-  close(){
+  close() {
     const cont = document.getElementById("bigcardcont") as HTMLElement
     cont.style.opacity = "0"
     cont.style.scale = "0"
@@ -121,10 +126,10 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       this.showcd = false
     }, 600);
   }
-  showArt(){
+  showArt() {
     this.showart = true
   }
-  closeArt(){
+  closeArt() {
     const cont = document.getElementById("art") as HTMLElement
     cont.style.opacity = "0"
     cont.style.scale = "0"
@@ -132,15 +137,15 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       this.showart = false
     }, 600);
   }
-  showhab(){
-    if (!this.showhcd){
+  showhab() {
+    if (!this.showhcd) {
       this.showhcd = true
       if (this.showh) {
         const hab = document.getElementById("hab") as HTMLElement
         hab.animate(
-          [ 
-            {height: '10dvh', opacity: 1},
-            {height: '0px', opacity: 0}
+          [
+            { height: '10dvh', opacity: 1 },
+            { height: '0px', opacity: 0 }
           ],
           {
             fill: "forwards",
@@ -164,23 +169,23 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
     const imagen = document.getElementById("art_img") as HTMLInputElement
     let mirandoAlCursor = false;
     let eventListener: ((evento: MouseEvent) => void) | null = null;
-  
+
     imagen.addEventListener('click', () => {
       mirandoAlCursor = !mirandoAlCursor;
-  
+
       if (mirandoAlCursor) {
         const eventListener = (evento: MouseEvent) => {
           const rect = imagen.getBoundingClientRect();
           const xCentroImagen = rect.left + rect.width / 2;
           const yCentroImagen = rect.top + rect.height / 2;
-  
+
           const diferenciaX = evento.clientX - xCentroImagen;
           const diferenciaY = evento.clientY - yCentroImagen;
-  
+
           // Calcula los ángulos de rotación en 3D
           const anguloX = diferenciaY * sensibilidad; // Rotación en el eje X (vertical)
           const anguloY = -diferenciaX * sensibilidad; // Rotación en el eje Y (horizontal)
-  
+
           imagen.style.transform = `perspective(500px) rotateX(${-anguloX}deg) rotateY(${-anguloY}deg)`;
         };
         document.body.addEventListener('mousemove', eventListener);

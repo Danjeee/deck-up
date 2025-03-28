@@ -1,12 +1,17 @@
 package com.javi.deckup.repository.entity;
 
 import java.util.List;
+
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,11 +36,44 @@ public class Habilidad {
 	
 	private String descripcion;
 	
-	private char tipo;
-	
 	private Integer dmg;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "habilidad")
-	@ToString.Exclude
-	private List<Carta> cartas;
+	private String especial;
+	
+    private Integer heal;
+    
+    private Integer freeze;
+    
+    private String freezeName;
+    
+    private Integer burn;
+    
+    private Integer poisn;
+    
+    private Integer bleed;
+    
+    private Double prcnt;
+    
+    @ManyToOne
+	@JoinColumn(name = "entorno")
+    private Entorno entorno;
+    
+    private Integer loadAtq;
+    
+    private Double crit;
+    
+    private Double critMult;
+    
+    private Double leth;
+    
+    private Double esq;
+    
+    private Double prcntUp;
+    
+    private Double prcntDwn;
+	
+    //Innecesario
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "habilidad")
+	//@ToString.Exclude
+	//private List<Carta> cartas;
 }
