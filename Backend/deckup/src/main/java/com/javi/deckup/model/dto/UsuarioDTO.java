@@ -2,6 +2,11 @@ package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,9 +47,17 @@ public class UsuarioDTO implements Serializable {
 	
 	private MazoDTO mazo;
 	
+	private Timestamp last_login;
+	
+	private Boolean currently_logged;
+	
 	// No pongo la lista de codigos y cartas porque es una carga innecesaria de datos en la aplicación
 	
 	public static UsuarioDTO convertToDTO(Usuario input) {
+		Boolean logged = false;
+		if (input.getLast_login() != null) {
+			logged = input.getLast_login().after(Timestamp.valueOf(LocalDateTime.now().minusMinutes(10)));
+		}
 		return UsuarioDTO.builder()
 						  .id(input.getId())
 						  .username(input.getUsername())
@@ -57,10 +70,16 @@ public class UsuarioDTO implements Serializable {
 						  .estado(input.isEstado())
 						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
 						  .mazo(MazoDTO.convertToDTO(input.getMazo()))
+						  .last_login(input.getLast_login())
+						  .currently_logged(logged)
 						  .build();
 	}
 	
 	public static UsuarioDTO convertToDTO(Usuario input, boolean wantPass) {
+		Boolean logged = false;
+		if (input.getLast_login() != null) {
+			logged = input.getLast_login().after(Timestamp.valueOf(LocalDateTime.now().minusHours(1)));
+		}
 		return UsuarioDTO.builder()
 						  .id(input.getId())
 						  .username(input.getUsername())
@@ -72,7 +91,9 @@ public class UsuarioDTO implements Serializable {
 						  .pfp(input.getPfp())
 						  .estado(input.isEstado())
 						  .mazo(MazoDTO.convertToDTO(input.getMazo()))
+						  .last_login(input.getLast_login())
 						  .rolesDTO(input.getRoles() == null ? null : input.getRoles().stream().map(r -> RolDTO.convertToDTO(r, input)).collect(Collectors.toList()))
+						  .currently_logged(logged)
 						  .build();
 	}
 	
@@ -88,6 +109,7 @@ public class UsuarioDTO implements Serializable {
 						  .currency(input.getCurrency())
 						  .nextPayment(input.getNextPayment())
 						  .mazo(MazoDTO.convertToEntity(input.getMazo()))
+						  .last_login(input.getLast_login())
 						  .roles(input.getRolesDTO() == null ? null : input.getRolesDTO().stream().map(r -> RolDTO.convertToEntity(r, input)).collect(Collectors.toList()))
 						  .build();
 	}

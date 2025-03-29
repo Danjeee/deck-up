@@ -67,6 +67,8 @@ public class Usuario {
 	@ToString.Exclude
 	private List<Rol> roles;
 	
+	private Timestamp last_login;
+	
 	@Nullable
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mazo")

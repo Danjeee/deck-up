@@ -10,6 +10,8 @@ import { filter, pairwise } from 'rxjs/operators';
 import { LoadComponent } from '../load/load.component';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { ParticleComponent } from '../particle/particle.component';
+import { ColeccionComponent } from "../coleccion/coleccion.component";
+import { FriendService } from '../../services/friend.service';
 
 @Component({
   selector: 'app-nav',
@@ -20,7 +22,7 @@ import { ParticleComponent } from '../particle/particle.component';
 export class NavComponent extends environmentsURLs implements AfterViewInit {
 
 
-  constructor(protected router: Router, private service: UserService, private alert: AlertService) {
+  constructor(protected router: Router, private service: UserService, private alert: AlertService, private friendservice: FriendService) {
     super()
   }
 
@@ -30,7 +32,17 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
 
   open: boolean = false
 
+  openFriendList: boolean = false
+
   cd: boolean = false
+
+  friendsloaded: boolean = false
+
+  friendsect: string = "a"
+
+  friends: any
+
+  requests: any
 
   registanim = [
     { transform: 'translate(-10vh, 110vw)' },
@@ -68,11 +80,21 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     easing: 'linear'
   } as KeyframeAnimationOptions
 
+  loadfriends(){
+    this.friendservice.getFriendList().subscribe({
+      next: (data) => {
+        this.friends = data.friends
+        this.requests = data.pending
+        this.friendsloaded = true
+      }
+    })
+  }
 
   ngAfterViewInit(): void {
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.user = UserSession.getUser()
+        this.loadfriends()
       }
     })
     setTimeout(() => {
@@ -99,6 +121,10 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   back() {
     this.router.navigate([LoadComponent.prev])
     //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
+  }
+
+  setfsect(sect: string){
+    this.friendsect = sect
   }
 
   togglelogin() {
@@ -154,10 +180,14 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         shadow.style.display = "flex"
       } else {
         mh.animate(this.closeanim, this.close)
-        shadow.animate(this.shadowvanish, this.close)
+        if (!this.openFriendList && this.open){
+          shadow.animate(this.shadowvanish, this.close)
+        }
         setTimeout(() => {
           mh.style.display = "none"
-          shadow.style.display = "none"
+          if (!this.openFriendList && !this.open){
+            shadow.style.display = "none"
+          }
         }, 390);
       }
       this.open = !this.open
@@ -166,6 +196,106 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }, 650);
     }
   }
+
+  friendtoggle() {
+    const fl = document.getElementById("friendlist") as HTMLElement
+    const shadow = document.getElementById("shadow") as HTMLElement
+    if (!this.cd) {
+      this.cd = true
+      if (!this.openFriendList) {
+        fl.style.display = "flex"
+        shadow.style.display = "flex"
+      } else {
+        fl.animate([
+          { transform: 'translate(0vh, -50%)' },
+          { transform: 'translate(-100vh, -50%)' },
+        ], this.close)
+        if (this.openFriendList && !this.open){
+          shadow.animate(this.shadowvanish, this.close)
+        }
+        setTimeout(() => {
+          fl.style.display = "none"
+          if (!this.openFriendList && !this.open){
+            shadow.style.display = "none"
+          }
+        }, 390);
+      }
+      this.openFriendList = !this.openFriendList
+      setTimeout(() => {
+        this.cd = false
+      }, 650);
+    }
+  }
+
+  closeAll(){
+    if (this.open && !this.openFriendList){
+      this.toggle()
+    }
+    if (this.openFriendList && !this.open){
+      this.friendtoggle()
+    }
+    if (this.open && this.openFriendList){
+      this.toggle()
+      setTimeout(() => {
+        this.friendtoggle()
+      }, 650);
+    }
+    
+  }
+
+  deletefriend(friend: any){
+    this.alert.confirm("¿Estas seguro?", `Vas a eliminar a ${friend.amigo.username} de tu lista de amigos`, ()=>{
+      this.friendservice.deletefriend(friend.amigo.id).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            this.loadfriends()
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
+    })
+  }
+
+  acceptreq(friend: any){
+      this.friendservice.acceptreq(friend.amigo.id).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            this.loadfriends()
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
+  }
+
+  declinereq(friend: any){
+      this.friendservice.declinereq(friend.amigo.id).subscribe({
+        next: (data) => {
+          if (data.status == 200) {
+            this.loadfriends()
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
+  }
+
+  sendreq(){
+    this.alert.ask("Añadir amigo", "Escribe el nombre de usuario de la persona a la que quieres mandar una solicitud", true, false).then((resp)=>{
+      const value = resp.value
+      if (value){
+        this.friendservice.sendreq(value).subscribe({
+          next: (data) => {
+            if (data.status != 200){
+              this.alert.error(data.tit, data.msg)
+            }
+          }
+        })
+      }
+    })
+  }
+
   codeinput() {
     this.alert.ask("Codigo promocional", "Inserta un codigo promocional", true, false).then((resp) => {
       const value = resp.value

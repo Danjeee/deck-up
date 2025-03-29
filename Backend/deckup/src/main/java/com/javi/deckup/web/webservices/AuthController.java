@@ -83,11 +83,13 @@ public class AuthController {
 	@PostMapping("/restore")
 	public Response restore(@ModelAttribute UsuarioDTO user) {
 		UsuarioDTO aux = us.findById(user.getId(), true);
-		System.out.println(user);
 		if (aux == null) {
 			return Response.builder().status(500).tit("Lo sentimos").msg("Ha habido un error en su sesión, vuelva a iniciar sesión").build();
 		}
 		if (aux.getAuth().equals(user.getAuth())) {
+			aux.setLast_login(Timestamp.from(Instant.now()));
+			us.save(aux);
+			aux = us.findById(user.getId(), true);
 			return Response.builder().status(200).user(aux).build();
 		} else {
 			return Response.builder().status(500).tit("Lo sentimos").msg("Ha habido un error en su sesión, vuelva a iniciar sesión").build();
@@ -132,7 +134,6 @@ public class AuthController {
 				us.save(aux);
 				aux = us.findByEmail(user.getEmail());
 				aux.setAuth(user.getAuth());
-				System.out.println(aux);
 				return Response.builder().status(200).tit("Cuenta creada").msg("Cuenta creada correctamente").user(aux).build();
 			} else {
 				return Response.builder().status(500).tit("Error").msg("Codigo incorrecto").build();

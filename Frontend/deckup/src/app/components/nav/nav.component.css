@@ -316,3 +316,134 @@
         opacity: .7;
     }
 }
+
+#friendlist{
+    position: fixed;
+    top: 50%;
+    left: 1vh;
+    transform: translateY(-50%);
+    z-index: 6;
+    height: 97vh;
+    width: calc(200px + 20vw);
+    background-color: #13253e;
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    gap: calc(20px + 1.5vh);
+    animation: appear_fl linear .35s forwards;
+    &>div:not(.fcont){
+        transform: skew(-10deg, 0deg);
+        font-size: 20px;
+        display: flex;
+        
+    }
+    &>#close{
+        left: auto;
+        right: 2vh;
+    }
+}
+@keyframes appear_fl {
+    from{
+        transform: translate(-100vh, -50%);
+    }
+    to{
+        transform: translate(0vh, -50%);
+    }
+}
+.btns{
+    position: absolute;
+    top: 10%;
+    transform: translate(0, -50%);
+    &>div{
+        position: relative;
+        padding: 20px;
+    }
+}
+.reqpending{
+    align-items: center;
+    padding: 5px;
+    justify-content: center;
+    display: flex;
+    color: black;
+    position: absolute;
+    right: -1dvh;
+    top: -1dvh;
+    background-color: #ffc107;
+    width: auto;
+    height: auto;
+    font-size: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #ffcc00;
+    animation: pulso 2s infinite ease-in-out;
+    z-index: 3;
+}
+
+@keyframes pulso {
+    0% {
+      box-shadow: 0 0 20px #ffcc00;
+    }
+    50% {
+      box-shadow: 0 0 40px #ffcc00;
+    }
+    100% {
+      box-shadow: 0 0 20px #ffcc00;
+    }
+  }
+.fcont{
+    align-items: center;
+    justify-content: start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transform: none;
+    position: absolute;
+    bottom: 10%;
+    width: 80%;
+    height: 70%;
+    scrollbar-color: #5898d8 rgba(0, 0, 0, 0);
+    &>*{
+        transform: none;
+    }
+}
+.friend{
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    width: 90%;
+    height: calc(50px+1dvh);
+    justify-content: space-between;
+    align-items: center;
+    &>img{
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+    }
+}
+.logged{
+    top: 0;
+    left: 0;
+    position: absolute;
+    border: #000 2px solid;
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+}
+.is{
+    background-color: #198754;
+}
+.isnot{
+    background-color: #808080;
+}
+.social{
+    padding: 7px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.deletefriend{
+    background-color: #b10303; 
+    
+}
+

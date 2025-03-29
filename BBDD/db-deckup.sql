@@ -16,6 +16,7 @@ CREATE TABLE `deckup`.`usuarios` (
   `auth` VARCHAR(255) NULL,
   `mazo` BIGINT NULL,
   `notis` TINYINT NOT NULL DEFAULT 1,
+  `last_login` TIMESTAMP NULL,
   PRIMARY KEY (`id`));
   
   CREATE TABLE `deckup`.`cartas` (
@@ -325,6 +326,26 @@ CREATE TABLE `deckup`.`mazos` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+/* Especial: Amigos*/
+    
+CREATE TABLE `deckup`.`amigos` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `usuario` BIGINT NOT NULL,
+  `amigo` BIGINT NOT NULL,
+  `accepted` TINYINT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  INDEX `fk_amigos_1_idx` (`usuario` ASC) VISIBLE,
+  INDEX `fk_amigos_2_idx` (`amigo` ASC) VISIBLE,
+  CONSTRAINT `fk_amigos_1`
+    FOREIGN KEY (`usuario`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_amigos_2`
+    FOREIGN KEY (`amigo`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
     
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
@@ -388,3 +409,8 @@ INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
 (2.99, 2000, "Caja de gemas", "caja_gem.png"),
 (5.99, 5000, "Baul de gemas", "baul_gem.png"),
 (9.99, 10000, "Cofre de gemas", "cofre_gem.png");
+
+/* Amigos */
+INSERT INTO amigos(usuario, amigo, accepted) VALUES
+(1,2,0),
+(2,1,0);
