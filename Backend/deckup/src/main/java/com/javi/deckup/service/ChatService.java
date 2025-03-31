@@ -10,4 +10,6 @@ public interface ChatService {
 	
 	List<MensajeDTO> obtenerMensajesPrivados(Long usuarioId1, Long usuarioId2);
 
+	List<MensajeDTO> findAllUnreadedFrom(Long uId, Long fId);
+
 }

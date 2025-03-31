@@ -27,4 +27,9 @@ public class ChatServiceImpl implements ChatService{
 		return mensajeRepository.findMensajesPrivados(usuarioId1, usuarioId2).stream().map(m -> MensajeDTO.convertToDTO(m)).collect(Collectors.toList());
 	}
 
+	@Override
+	public List<MensajeDTO> findAllUnreadedFrom(Long uId, Long fId) {
+		return mensajeRepository.findAllUnreadedFrom(uId, fId).stream().map(m -> MensajeDTO.convertToDTO(m)).collect(Collectors.toList());
+	}
+
 }

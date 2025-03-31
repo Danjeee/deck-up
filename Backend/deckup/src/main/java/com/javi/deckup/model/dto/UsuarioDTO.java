@@ -51,6 +51,8 @@ public class UsuarioDTO implements Serializable {
 	
 	private Boolean currently_logged;
 	
+	private List<MensajeDTO> noleidos; // Solo se llama cuando se necesita
+	
 	// No pongo la lista de codigos y cartas porque es una carga innecesaria de datos en la aplicación
 	
 	public static UsuarioDTO convertToDTO(Usuario input) {

@@ -48,17 +48,11 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 		Usuario user = ur.findByAuth(token).orElse(null);
 		Usuario newfriend = ur.findById(idUserToSend).orElse(null);
 		if (user != null && newfriend != null) {
-			SolicitudAmistad solicitud = SolicitudAmistad.builder()
-														 .usuario(user)
-														 .amigo(newfriend)
-														 .aceptada(false)
-														 .build();
 			SolicitudAmistad solicitud_rev = SolicitudAmistad.builder()
 					 									 .usuario(newfriend)
 					 									 .amigo(user)
 					 									 .aceptada(false)
 					 									 .build();
-			sr.save(solicitud);
 			sr.save(solicitud_rev);
 		}
 		
@@ -70,10 +64,9 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 		Usuario newfriend = ur.findById(idUserToSend).orElse(null);
 		if (user != null && newfriend != null) {
 			SolicitudAmistad s1 = sr.findByUserAndFriend(user.getId(), newfriend.getId()).orElse(null);
-			SolicitudAmistad s2 = sr.findByUserAndFriend(newfriend.getId(), user.getId()).orElse(null);
-			if (s1 != null && s2 != null) {
+			if (s1 != null) {
+				SolicitudAmistad s2 = SolicitudAmistad.builder().aceptada(true).usuario(s1.getAmigo()).amigo(s1.getUsuario()).build();
 				s1.setAceptada(true);
-				s2.setAceptada(true);
 				sr.save(s1);
 				sr.save(s2);
 			}

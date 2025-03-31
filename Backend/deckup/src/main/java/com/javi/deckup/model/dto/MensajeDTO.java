@@ -20,6 +20,7 @@ public class MensajeDTO {
     private String contenido;
     private Long usuarioId;
     private Long destinoId;
+    private Boolean leido;
     
     public static MensajeDTO convertToDTO(Mensaje input) {
     	return MensajeDTO.builder()
@@ -28,6 +29,7 @@ public class MensajeDTO {
     					 .contenido(input.getContenido())
     					 .usuarioId(input.getUsuario().getId())
     					 .destinoId(input.getDestino().getId())
+    					 .leido(input.getLeido())
     					 .build();
     }
     
@@ -38,6 +40,7 @@ public class MensajeDTO {
     					 .contenido(input.getContenido())
     					 .usuario(Usuario.builder().id(input.getUsuarioId()).build())
     					 .destino(Usuario.builder().id(input.getDestinoId()).build())
+    					 .leido(input.getLeido())
     					 .build();
     }
 }

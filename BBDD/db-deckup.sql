@@ -128,6 +128,7 @@ CREATE TABLE `deckup`.`mensajes` (
   `usuario` BIGINT NOT NULL,
   `destino` BIGINT NOT NULL,
   `fecha_envio` TIMESTAMP NOT NULL,
+  `leido` TINYINT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `fk_user_msgs_idx` (`usuario` ASC) VISIBLE,
   INDEX `fk_destino_msgs_idx` (`destino` ASC) VISIBLE,

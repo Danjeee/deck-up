@@ -15,7 +15,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -30,6 +29,7 @@ public class Mensaje {
     private String contenido;
     @Column(name = "fecha_envio")
     private Timestamp fechaEnvio;
+    private Boolean leido;
     @ManyToOne
     @JoinColumn(name = "usuario")
     private Usuario usuario;

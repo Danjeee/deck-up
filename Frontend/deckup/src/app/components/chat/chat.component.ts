@@ -35,6 +35,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
           next: (data) => {
             this.chatService.joinRoom(this.friend.id, data)
             this.listenerMessage()
+            this.chatService.read(this.friend.id).subscribe()
             this.loaded = true
           },
           error: (error) => {
@@ -63,7 +64,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
   listenerMessage(){
     this.chatService.getMessageSubject().subscribe((messages: any) => {
       this.messageList = messages
-      
+      this.chatService.read(this.friend.id).subscribe()
       setTimeout(() => {
         const msgcont = document.getElementById("msgcont") as HTMLElement
         msgcont.scrollTo({top: msgcont.scrollHeight})

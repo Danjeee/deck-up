@@ -37,7 +37,6 @@ export class ChatService extends environmentsURLs {
           const messageContent = JSON.parse(messages.body)
           const currentMessage = this.messageSubject.getValue()
           currentMessage.push(messageContent)
-          
           this.messageSubject.next(currentMessage)
         })
       })
@@ -72,5 +71,12 @@ export class ChatService extends environmentsURLs {
     this.stompClient.disconnect(()=>{
       console.log("Desconexión completada")
     })
+  }
+  read(friendid: any) : Observable<any>{
+    const data: FormData = new FormData();
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.apiURL}/chat/read/${friendid}`, data).pipe(
+      catchError(err => {throw err})
+    )
   }
 }

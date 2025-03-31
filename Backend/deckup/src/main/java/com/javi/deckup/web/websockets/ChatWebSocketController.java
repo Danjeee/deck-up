@@ -29,6 +29,7 @@ public class ChatWebSocketController {
                 .contenido(mensajeDTO.getContenido())
                 .usuarioId(mensajeDTO.getUsuarioId())
                 .destinoId(mensajeDTO.getDestinoId())
+                .leido(false)
                 .fechaEnvio(Timestamp.from(Instant.now()))
                 .build();
     	return cs.save(mensaje);
