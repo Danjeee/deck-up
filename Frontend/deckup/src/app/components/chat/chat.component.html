@@ -1,0 +1,25 @@
+<div class="chat_window" *ngIf="loaded">
+    <div class="top_menu">
+      <div class="title str">
+        <img src="{{resURL}}/Resources/img/users/{{friend.pfp}}" width="25px" height="25px">
+        {{friend.username}}
+      </div>
+    </div>
+    <ul id="msgcont" class="messages">
+      <li class="message {{msg.usuarioId != user.id ? 'left' : 'right'}}"  *ngFor="let msg of messageList">
+        <div class="avatar"><img src="{{resURL}}/Resources/img/users/{{msg.usuarioId != user.id ? friend.pfp : user.pfp }}" alt=""></div>
+        <div class="text_wrapper btn skew">
+          <div class="text str">{{msg.contenido}}</div>
+        </div>
+      </li>
+    </ul>
+    <div class="bottom_wrapper clearfix">
+      <div class="message_input_wrapper">
+        <input class="message_input" placeholder="Envia un mensaje..." [(ngModel)]="messageInput"/>
+      </div>
+      <div class="send_message skew btn but str" (click)="sendmessage()">
+        <div class="icon"></div>
+        <div class="text">Enviar</div>
+      </div>
+    </div>
+  </div>

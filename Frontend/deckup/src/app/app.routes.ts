@@ -6,6 +6,7 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { TiendaComponent } from './components/tienda/tienda.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 import { ColeccionComponent } from './components/coleccion/coleccion.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -16,4 +17,5 @@ export const routes: Routes = [
     {path: 'tienda/verify', component: PaymentsComponent},
     {path: 'tienda/cancel', component: PaymentsComponent},
     {path: 'coleccion', component: ColeccionComponent},
+    {path: 'chat/:username', component: ChatComponent}
 ];

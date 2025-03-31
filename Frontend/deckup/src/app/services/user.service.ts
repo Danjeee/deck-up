@@ -82,4 +82,8 @@ export class UserService extends environmentsURLs {
       catchError(err => {throw err})
     )
   }
+
+  getForChat(username: string): Observable<any>{
+    return this.http.get(`${this.apiURL}/users/getForChat/${username}`)
+  }
 }

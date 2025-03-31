@@ -6,7 +6,7 @@ import com.javi.deckup.model.dto.MensajeDTO;
 
 public interface ChatService {
 	
-	MensajeDTO guardarMensaje(MensajeDTO mensaje);
+	MensajeDTO save(MensajeDTO mensaje);
 	
 	List<MensajeDTO> obtenerMensajesPrivados(Long usuarioId1, Long usuarioId2);
 

@@ -121,6 +121,26 @@ CREATE TABLE `deckup`.`catalogo_gemas` (
   `nombre` VARCHAR(45) NOT NULL,
   `imagen` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`));
+  
+CREATE TABLE `deckup`.`mensajes` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `contenido` VARCHAR(255) NOT NULL,
+  `usuario` BIGINT NOT NULL,
+  `destino` BIGINT NOT NULL,
+  `fecha_envio` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_msgs_idx` (`usuario` ASC) VISIBLE,
+  INDEX `fk_destino_msgs_idx` (`destino` ASC) VISIBLE,
+  CONSTRAINT `fk_user_msgs`
+    FOREIGN KEY (`usuario`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_destino_msgs`
+    FOREIGN KEY (`destino`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
   
 /* Relaciones */

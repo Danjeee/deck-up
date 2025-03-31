@@ -17,7 +17,7 @@ public class ChatServiceImpl implements ChatService{
     private MensajeRepository mensajeRepository;
 
 	@Override
-	public MensajeDTO guardarMensaje(MensajeDTO mensaje) {
+	public MensajeDTO save(MensajeDTO mensaje) {
 		Mensaje mens = mensajeRepository.save(MensajeDTO.convertToEntity(mensaje));
 		return MensajeDTO.convertToDTO(mens);
 	}

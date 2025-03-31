@@ -47,4 +47,10 @@ public class UserController {
 		return us.findById(id);
 	}
 	
+	@GetMapping("/getForChat/{username}")
+	public UsuarioDTO getForChat(@PathVariable("username") String username) {
+		UsuarioDTO aux = us.findByUsername(username);
+		return UsuarioDTO.builder().id(aux.getId()).username(aux.getUsername()).pfp(aux.getPfp()).build();
+	}
+	
 }

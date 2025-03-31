@@ -89,7 +89,6 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }
     })
   }
-
   ngAfterViewInit(): void {
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
@@ -255,6 +254,11 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         }
       })
     })
+  }
+
+  gotoChat(friend: any){
+    this.router.navigate([`chat/${friend.amigo.username}`])
+    this.friendtoggle()
   }
 
   acceptreq(friend: any){
