@@ -73,5 +73,8 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
   }
   ngOnDestroy(): void {
       this.chatService.disconnect()
+      setTimeout(() => {
+        window.location.reload()
+      }, 100);
   }
 }
