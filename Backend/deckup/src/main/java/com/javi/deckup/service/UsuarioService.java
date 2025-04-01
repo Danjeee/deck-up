@@ -35,4 +35,6 @@ public interface UsuarioService {
 
 	void buy(UsuarioDTO user, Integer precio);
 	
+	String findUsername(Long id);
+	
 }

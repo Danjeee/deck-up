@@ -12,6 +12,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 import { ParticleComponent } from '../particle/particle.component';
 import { ColeccionComponent } from "../coleccion/coleccion.component";
 import { FriendService } from '../../services/friend.service';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
   selector: 'app-nav',
@@ -22,7 +23,7 @@ import { FriendService } from '../../services/friend.service';
 export class NavComponent extends environmentsURLs implements AfterViewInit {
 
 
-  constructor(protected router: Router, private service: UserService, private alert: AlertService, private friendservice: FriendService) {
+  constructor(protected router: Router, private service: UserService, private alert: AlertService, private friendservice: FriendService, private notifService: NotificacionService) {
     super()
   }
 
@@ -90,6 +91,10 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     })
   }
   ngAfterViewInit(): void {
+    this.notifService.joinListener()
+    this.notifService.getSolicitudesAmistad().subscribe(solicitud => {
+      console.log(solicitud)
+    })
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.user = UserSession.getUser()

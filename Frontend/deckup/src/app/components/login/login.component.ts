@@ -52,7 +52,7 @@ export class LoginComponent {
       this.service.login(formdata).subscribe({
         next: (data) => {
           if (data.status == 200) {
-            if (data.user.rolesDTO[0].nombre == "ROLE_ADMIN") {
+            if (data.user.rolesDTO[0].nombre == "ADMIN") {
               UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
               this.alert.success(data.tit, data.msg)
               this.router.navigate(['/home'])
@@ -65,6 +65,7 @@ export class LoginComponent {
                 this.router.navigate(['/home'])
               } else {
                 sessionStorage.setItem("aux_user", data.user.email)
+                sessionStorage.setItem("aux_pass", formdata.get("password") as string)
                 this.router.navigate(['/verify'])
               }
             }

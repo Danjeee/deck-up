@@ -38,4 +38,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query(value = "SELECT * FROM usuarios u JOIN usuarios_codigos c ON u.id = c.id_usuario WHERE c.id_codigo = ?1 ", nativeQuery = true)
 	List<Usuario> findByClaimedCode(Integer id);
 
+	@Query(value = "SELECT username FROM usuarios WHERE id = ?1", nativeQuery = true)
+	String findByUsername(Long id);
+
 }

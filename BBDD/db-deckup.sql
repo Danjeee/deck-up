@@ -375,8 +375,8 @@ INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, est
 ('javisores', 'javisores@gmail.com','$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'javi.jpg', 500 , now(), 1, null); # 2
 
 INSERT INTO roles(nombre, id_user)VALUES 
-('ROLE_ADMIN', 1),
-('ROLE_USER', 2);
+('ADMIN', 1),
+('USER', 2);
 
 /*Habilidades, rarezas, paquetes y cartas*/
 

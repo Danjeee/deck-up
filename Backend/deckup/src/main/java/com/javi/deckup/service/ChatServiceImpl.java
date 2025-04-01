@@ -9,9 +9,13 @@ import org.springframework.stereotype.Service;
 import com.javi.deckup.model.dto.MensajeDTO;
 import com.javi.deckup.repository.dao.MensajeRepository;
 import com.javi.deckup.repository.entity.Mensaje;
+import com.javi.deckup.web.websockets.NotifivacionWebSockerService;
 
 @Service
 public class ChatServiceImpl implements ChatService{
+	
+	@Autowired
+	NotifivacionWebSockerService ws;
 	
 	@Autowired
     private MensajeRepository mensajeRepository;
@@ -19,12 +23,16 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public MensajeDTO save(MensajeDTO mensaje) {
 		Mensaje mens = mensajeRepository.save(MensajeDTO.convertToEntity(mensaje));
+		if (!mensaje.getLeido()) {
+			ws.enviarMensaje(mensaje);	
+		}
 		return MensajeDTO.convertToDTO(mens);
 	}
 
 	@Override
 	public List<MensajeDTO> obtenerMensajesPrivados(Long usuarioId1, Long usuarioId2) {
 		return mensajeRepository.findMensajesPrivados(usuarioId1, usuarioId2).stream().map(m -> MensajeDTO.convertToDTO(m)).collect(Collectors.toList());
+		
 	}
 
 	@Override

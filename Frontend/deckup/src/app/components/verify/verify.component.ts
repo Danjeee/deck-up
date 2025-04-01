@@ -43,6 +43,7 @@ export class VerifyComponent implements OnInit {
     const data: FormData = new FormData()
     data.append("auth", input.value.toUpperCase())
     data.append("email", sessionStorage.getItem("aux_user") as string)
+    data.append("password", sessionStorage.getItem("aux_pass") as string)
     if (input.value != "" && input.value != null) {
       this.service.verify(data).subscribe({
         next: (data) => {
@@ -52,6 +53,7 @@ export class VerifyComponent implements OnInit {
               UserSession.addToPastUsers(sessionStorage.getItem("aux_user") as string)
             }
             sessionStorage.removeItem("aux_user")
+            sessionStorage.removeItem("aux_pass")
             sessionStorage.removeItem("saves")
             this.alert.success(data.tit, data.msg)
             .then((resp) => {

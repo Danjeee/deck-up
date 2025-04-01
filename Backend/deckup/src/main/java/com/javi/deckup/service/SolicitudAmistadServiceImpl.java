@@ -79,10 +79,8 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 		Usuario newfriend = ur.findById(idUserToSend).orElse(null);
 		if (user != null && newfriend != null) {
 			SolicitudAmistad s1 = sr.findByUserAndFriend(user.getId(), newfriend.getId()).orElse(null);
-			SolicitudAmistad s2 = sr.findByUserAndFriend(newfriend.getId(), user.getId()).orElse(null);
-			if (s1 != null && s2 != null) {
+			if (s1 != null) {
 				sr.deleteById(s1.getId());
-				sr.deleteById(s2.getId());
 			}
 		}
 	}

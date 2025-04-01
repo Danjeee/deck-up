@@ -201,5 +201,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		Usuario usuario = ur.findByAuth(auth).orElse(null);
 		return usuario == null ? null : UsuarioDTO.convertToDTO(usuario, wantPass);
 	}
+
+	@Override
+	public String findUsername(Long id) {
+		return ur.findByUsername(id);
+	}
 	
 }

@@ -27,6 +27,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
     super()
   }
   ngOnInit(): void {
+    this.user = UserSession.getUser()
     const username = this.router.url.split("/")[this.router.url.split("/").length-1]
     this.userService.getForChat(username).subscribe({
       next: (data)=>{

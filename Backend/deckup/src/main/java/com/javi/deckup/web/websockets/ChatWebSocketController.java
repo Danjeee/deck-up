@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import com.javi.deckup.model.dto.MensajeDTO;
 import com.javi.deckup.service.ChatService;
 import com.javi.deckup.service.UsuarioService;
+import com.javi.deckup.utils.Session;
 
 @Controller
 public class ChatWebSocketController {
@@ -32,6 +33,7 @@ public class ChatWebSocketController {
                 .leido(false)
                 .fechaEnvio(Timestamp.from(Instant.now()))
                 .build();
+    	System.out.println(Session.getUser());
     	return cs.save(mensaje);
     }
 }
