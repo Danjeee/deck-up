@@ -4,7 +4,7 @@ WORKDIR /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html/
 
-RUN chmod 664 /var/www/html/Resources/php/imagesend.php
+RUN chmod 664 /var/www/html/
 
 EXPOSE 9000
 

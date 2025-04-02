@@ -400,13 +400,29 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 ('Ignicion', 'Quema al rival', 0, null, null, null, 1), # 4
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
+INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
+('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,null),
+('Masacre sangrienta', 'Asesinato multiple', 2, 25, 350,0,null),
+('Maldición del rey', 'Domina a tus rivales', 5, 50, 50,null,5),
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 10, 999,null,null),
+('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3),
+('Arrebato de ira', 'Nada mal para un principiante', 2, 50, 200,null,null),
+('Big crush', 'El fin del universo', 10, 50, 50,2,5);
+
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
 ('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1), # 1
 ('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
 ('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
 ('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1), # 4
-('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0); # 5
+('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0), # 5
+('X-7P', 'El peor enemigo del rey titán', 'x7p.jpeg', 4000,4 ,1, 6, 0), # 6
+('Sheen', 'El fugaz asesino más brutal de los ultimos tiempos', 'sheen.jpeg', 2000,3 ,1,7, 0), # 7
+('Skano', 'El rey demonio, una fiera sin igual', 'skano.jpeg', 10000,5 ,1, 8, 0), # 8
+('Sekum', 'El menor de los dos, un principe demonio que no le teme a nada', 'sekum.jpeg', 4000,4 ,1, 9, 0), # 9
+('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.jpeg', 4000,4 ,1, 10, 0), # 10
+('Haruki', 'Un samurai recién iniciado', 'haruki.jpeg', 500,2 ,1, 11, 0), # 11
+('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.jpeg', 10000,5 ,1, 12, 0); # 12
 
 /* Codigos */
 
@@ -418,11 +434,21 @@ INSERT INTO codigos(codigo, currency, card, card_cant, uses_left, expiration_dat
 INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (1,1,20),
 (1,2,1),
+(1,3,1),
+(1,4,1),
+(1,5,1),
+(1,6,1),
+(1,7,1),
+(1,8,1),
+(1,9,1),
+(1,10,1),
+(1,11,1),
+(1,12,1),
 (2,2,1),
 (2,3,1);
 
 /*Tienda*/
-INSERT INTO tienda VALUES(1,2,2,5,3,3,1,2,3);
+INSERT INTO tienda VALUES(1,2,5,11,6,3,1,2,3);
 
 /* Gemas */
 INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
@@ -433,5 +459,4 @@ INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
 
 /* Amigos */
 INSERT INTO amigos(usuario, amigo, accepted) VALUES
-(1,2,0),
 (2,1,0);
