@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import com.javi.deckup.model.dto.MensajeDTO;
 import com.javi.deckup.repository.dao.MensajeRepository;
 import com.javi.deckup.repository.entity.Mensaje;
-import com.javi.deckup.web.websockets.NotifivacionWebSockerService;
+import com.javi.deckup.utils.Session;
+import com.javi.deckup.web.websockets.NotificacionWSC;
 
 @Service
 public class ChatServiceImpl implements ChatService{
 	
 	@Autowired
-	NotifivacionWebSockerService ws;
+	NotificacionWSC ws;
 	
 	@Autowired
     private MensajeRepository mensajeRepository;
@@ -24,7 +25,7 @@ public class ChatServiceImpl implements ChatService{
 	public MensajeDTO save(MensajeDTO mensaje) {
 		Mensaje mens = mensajeRepository.save(MensajeDTO.convertToEntity(mensaje));
 		if (!mensaje.getLeido()) {
-			ws.enviarMensaje(mensaje);	
+			ws.enviarMensaje(MensajeDTO.builder().contenido("Tienes un mensaje nuevo sin leer").destinoId(mensaje.getDestinoId()).build());	
 		}
 		return MensajeDTO.convertToDTO(mens);
 	}
@@ -38,6 +39,11 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public List<MensajeDTO> findAllUnreadedFrom(Long uId, Long fId) {
 		return mensajeRepository.findAllUnreadedFrom(uId, fId).stream().map(m -> MensajeDTO.convertToDTO(m)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<MensajeDTO> obtenerNoLeidos(Long usuarioId1) {
+		return mensajeRepository.findAllUnreadedFrom(usuarioId1).stream().map(m -> MensajeDTO.convertToDTO(m)).collect(Collectors.toList());
 	}
 
 }

@@ -12,4 +12,6 @@ public interface ChatService {
 
 	List<MensajeDTO> findAllUnreadedFrom(Long uId, Long fId);
 
+	List<MensajeDTO> obtenerNoLeidos(Long usuarioId1);
+
 }

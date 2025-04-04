@@ -3,6 +3,8 @@ package com.javi.deckup.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,8 +31,10 @@ public class AuthenticationService {
 			return UsuarioDTO.builder().id(null).build();
 		}
 
-		authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())));
+		SecurityContextHolder.setContext(sc);
 		return user;
 	}
 }

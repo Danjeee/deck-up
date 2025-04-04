@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { UserSession } from '../../utils/UserSession';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy{
+export class ChatComponent extends environmentsURLs implements OnDestroy,AfterViewInit {
 
   loaded: boolean = false
   user: User = UserSession.getUser()
@@ -26,7 +26,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
   constructor(private chatService: ChatService, private userService: UserService, private router: Router, private alert: AlertService){
     super()
   }
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.user = UserSession.getUser()
     const username = this.router.url.split("/")[this.router.url.split("/").length-1]
     this.userService.getForChat(username).subscribe({
@@ -53,7 +53,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
   }
   sendmessage(){
     if (this.messageInput.replace(/\s+/g, '') != ''){
-      this.chatService.sendmessage(this.friend.id, {
+      this.chatService.sendmessage({
         contenido: this.messageInput,
         usuarioId: UserSession.getId(),
         destinoId: this.friend.id
@@ -76,7 +76,7 @@ export class ChatComponent extends environmentsURLs implements OnInit, OnDestroy
   ngOnDestroy(): void {
       this.chatService.disconnect()
       setTimeout(() => {
-        window.location.reload()
+        //window.location.reload()
       }, 100);
   }
 }

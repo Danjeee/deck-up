@@ -30,6 +30,9 @@ export class LoadComponent implements OnInit {
       case "/home":
         this.toggleAccess(2)
         break;
+      case "/chat":
+        this.toggleAccess(2)
+        break;
       case "/admin":
         this.toggleAccess(3)
         break;
@@ -58,9 +61,10 @@ export class LoadComponent implements OnInit {
         break;
 
       case 3:
-        if (UserSession.getRole() != "ROLE_ADMIN") {
+        if (UserSession.getRole() != "ADMIN") {
           this.alert.error("Error", "No puedes acceder a este contenido")
-          this.router.navigate(["/home"])
+          //this.router.navigate(["/home"])
+          console.log(window.location.href)
         }
         break;
       default:

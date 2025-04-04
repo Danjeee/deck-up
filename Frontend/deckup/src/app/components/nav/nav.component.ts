@@ -13,6 +13,7 @@ import { ParticleComponent } from '../particle/particle.component';
 import { ColeccionComponent } from "../coleccion/coleccion.component";
 import { FriendService } from '../../services/friend.service';
 import { NotificacionService } from '../../services/notificacion.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-nav',
@@ -23,7 +24,7 @@ import { NotificacionService } from '../../services/notificacion.service';
 export class NavComponent extends environmentsURLs implements AfterViewInit {
 
 
-  constructor(protected router: Router, private service: UserService, private alert: AlertService, private friendservice: FriendService, private notifService: NotificacionService) {
+  constructor(protected router: Router, private service: UserService, private alert: AlertService, private friendservice: FriendService, private notifService: NotificacionService, private chatservice: ChatService) {
     super()
   }
 
@@ -38,6 +39,10 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   cd: boolean = false
 
   friendsloaded: boolean = false
+
+  unreadedmsgs: any
+
+  msgsload: boolean = false
 
   friendsect: string = "a"
 
@@ -81,7 +86,46 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     easing: 'linear'
   } as KeyframeAnimationOptions
 
-  loadfriends(){
+  loadmsgs(){
+    this.chatservice.loadMsgs().subscribe({
+      next: (data) => {
+        this.unreadedmsgs = data
+        this.msgsload = true
+      }
+    })
+  }
+
+  getCantNotif(friendid: number){
+    let cant = 0
+    Array.from(this.unreadedmsgs).forEach((e:any) => {
+      if (e.usuarioId == friendid){
+        cant++
+      }
+    })
+    return cant
+  }
+
+  listenerNotif() {
+
+    this.notifService.joinListener()
+
+    this.notifService.newMessage().subscribe((messages: any) => {
+      this.loadmsgs()
+      if (messages != ""){
+        console.log(messages)
+      }
+    })
+
+    this.notifService.newRequest().subscribe((messages: any) => {
+      this.friendsloaded = false
+      this.loadfriends()
+      if (messages != ""){
+        console.log(messages)
+      }
+    })
+  }
+
+  loadfriends() {
     this.friendservice.getFriendList().subscribe({
       next: (data) => {
         this.friends = data.friends
@@ -91,14 +135,11 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     })
   }
   ngAfterViewInit(): void {
-    this.notifService.joinListener()
-    this.notifService.getSolicitudesAmistad().subscribe(solicitud => {
-      console.log(solicitud)
-    })
+    this.listenerNotif()
+    this.friendsloaded = false
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.user = UserSession.getUser()
-        this.loadfriends()
       }
     })
     setTimeout(() => {
@@ -127,7 +168,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
   }
 
-  setfsect(sect: string){
+  setfsect(sect: string) {
     this.friendsect = sect
   }
 
@@ -184,12 +225,12 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         shadow.style.display = "flex"
       } else {
         mh.animate(this.closeanim, this.close)
-        if (!this.openFriendList && this.open){
+        if (!this.openFriendList && this.open) {
           shadow.animate(this.shadowvanish, this.close)
         }
         setTimeout(() => {
           mh.style.display = "none"
-          if (!this.openFriendList && !this.open){
+          if (!this.openFriendList && !this.open) {
             shadow.style.display = "none"
           }
         }, 390);
@@ -214,12 +255,12 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
           { transform: 'translate(0vh, -50%)' },
           { transform: 'translate(-100vh, -50%)' },
         ], this.close)
-        if (this.openFriendList && !this.open){
+        if (this.openFriendList && !this.open) {
           shadow.animate(this.shadowvanish, this.close)
         }
         setTimeout(() => {
           fl.style.display = "none"
-          if (!this.openFriendList && !this.open){
+          if (!this.openFriendList && !this.open) {
             shadow.style.display = "none"
           }
         }, 390);
@@ -231,24 +272,24 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     }
   }
 
-  closeAll(){
-    if (this.open && !this.openFriendList){
+  closeAll() {
+    if (this.open && !this.openFriendList) {
       this.toggle()
     }
-    if (this.openFriendList && !this.open){
+    if (this.openFriendList && !this.open) {
       this.friendtoggle()
     }
-    if (this.open && this.openFriendList){
+    if (this.open && this.openFriendList) {
       this.toggle()
       setTimeout(() => {
         this.friendtoggle()
       }, 650);
     }
-    
+
   }
 
-  deletefriend(friend: any){
-    this.alert.confirm("¿Estas seguro?", `Vas a eliminar a ${friend.amigo.username} de tu lista de amigos`, ()=>{
+  deletefriend(friend: any) {
+    this.alert.confirm("¿Estas seguro?", `Vas a eliminar a ${friend.amigo.username} de tu lista de amigos`, () => {
       this.friendservice.deletefriend(friend.amigo.id).subscribe({
         next: (data) => {
           if (data.status == 200) {
@@ -261,42 +302,42 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     })
   }
 
-  gotoChat(friend: any){
+  gotoChat(friend: any) {
     this.router.navigate([`chat/${friend.amigo.username}`])
     this.friendtoggle()
   }
 
-  acceptreq(friend: any){
-      this.friendservice.acceptreq(friend.amigo.id).subscribe({
-        next: (data) => {
-          if (data.status == 200) {
-            this.loadfriends()
-          } else {
-            this.alert.error(data.tit, data.msg)
-          }
+  acceptreq(friend: any) {
+    this.friendservice.acceptreq(friend.amigo.id).subscribe({
+      next: (data) => {
+        if (data.status == 200) {
+          this.loadfriends()
+        } else {
+          this.alert.error(data.tit, data.msg)
         }
-      })
+      }
+    })
   }
 
-  declinereq(friend: any){
-      this.friendservice.declinereq(friend.amigo.id).subscribe({
-        next: (data) => {
-          if (data.status == 200) {
-            this.loadfriends()
-          } else {
-            this.alert.error(data.tit, data.msg)
-          }
+  declinereq(friend: any) {
+    this.friendservice.declinereq(friend.amigo.id).subscribe({
+      next: (data) => {
+        if (data.status == 200) {
+          this.loadfriends()
+        } else {
+          this.alert.error(data.tit, data.msg)
         }
-      })
+      }
+    })
   }
 
-  sendreq(){
-    this.alert.ask("Añadir amigo", "Escribe el nombre de usuario de la persona a la que quieres mandar una solicitud", true, false).then((resp)=>{
+  sendreq() {
+    this.alert.ask("Añadir amigo", "Escribe el nombre de usuario de la persona a la que quieres mandar una solicitud", true, false).then((resp) => {
       const value = resp.value
-      if (value){
+      if (value) {
         this.friendservice.sendreq(value).subscribe({
           next: (data) => {
-            if (data.status != 200){
+            if (data.status != 200) {
               this.alert.error(data.tit, data.msg)
             }
           }
@@ -325,7 +366,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
                   currency.innerHTML = UserSession.getUser().currency
                 }, 2500);
               }
-              if (data.cartas != null){
+              if (data.cartas != null) {
                 this.alert.carta_recibida(data.cartas[0], data.msg)
                 ParticleComponent.getCard(data.cartas[0])
               }

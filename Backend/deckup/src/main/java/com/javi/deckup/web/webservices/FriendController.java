@@ -67,8 +67,12 @@ public class FriendController {
 	public Response add(@ModelAttribute UserAction data) {
 		try {
 			UsuarioDTO tosend = us.findByUsername(data.getCode());
-			ss.send(data.getUser_auth(), tosend.getId());
-			return Response.success("Amigo borrado correctamente");
+			if (ss.hasARequestFrom(data.getUser_auth(), tosend.getId())) {
+				ss.send(data.getUser_auth(), tosend.getId());
+				return Response.success("Amigo añadido correctamente");
+			} else {
+				return Response.error("No puedes mandar otra solicitud a este usuario");
+			}
 		} catch (Exception e){
 			return Response.error("El usuario no existe");
 		}

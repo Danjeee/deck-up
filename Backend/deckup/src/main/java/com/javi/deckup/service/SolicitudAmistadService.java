@@ -17,5 +17,7 @@ public interface SolicitudAmistadService {
 	void decline(String token, Long idUserToSend);
 
 	void delete(String user_auth, Long user_id);
+
+	boolean hasARequestFrom(String user_auth, Long user_id);
 	
 }

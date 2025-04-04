@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.javi.deckup.model.dto.MensajeDTO;
 import com.javi.deckup.repository.entity.Mensaje;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,7 @@ public interface MensajeRepository extends JpaRepository<Mensaje, Long> {
 
     @Query(value = "SELECT * FROM mensajes WHERE destino = ?1 AND usuario = ?2 AND leido != 1", nativeQuery = true)
 	List<Mensaje> findAllUnreadedFrom(Long uId, Long fId);
+
+    @Query(value = "SELECT * FROM mensajes WHERE destino = ?1 AND leido != 1", nativeQuery = true)
+	List<Mensaje> findAllUnreadedFrom(Long usuarioId1);
 }

@@ -10,7 +10,7 @@
         <p class="str">{{user.username}}</p>
     </div>
     <div class="btn but bg-p skew" id="friends" (click)="friendtoggle()">
-        <div *ngIf="friendsloaded && requests.length > 0" class="reqpending str">{{requests.length}}</div>
+        <div id="cantnotifcount" *ngIf="friendsloaded && msgsload && (requests.length > 0 || unreadedmsgs.length > 0)" class="reqpending str">{{requests.length + unreadedmsgs.length}}</div>
         <i class="bi bi-person-lines-fill"></i>
         <p class="str">Amigos</p>
     </div>
@@ -51,7 +51,10 @@
             <h4 class="str">{{friend.amigo.username}}</h4>
             <div class="logged {{friend.amigo.currently_logged ? 'is' : 'isnot'}}"></div>
             <div class="social">
-                <div class="bg-s btn but" (click)="gotoChat(friend)"><i class="bi bi-chat"></i></div>
+                <div class="bg-s btn but" (click)="gotoChat(friend)">
+                    <div id="cantnotifcount" *ngIf="msgsload && unreadedmsgs.length > 0" class="reqpending str">{{getCantNotif(friend.amigo.id)}}</div>
+                    <i class="bi bi-chat"></i>
+                </div>
                 <div class="deletefriend btn but" (click)="deletefriend(friend)"><i class="bi bi-trash"></i></div>
             </div>
         </div>

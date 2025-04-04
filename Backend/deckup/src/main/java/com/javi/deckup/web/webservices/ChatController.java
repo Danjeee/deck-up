@@ -22,24 +22,35 @@ import java.util.List;
 public class ChatController {
 
 	@Autowired
-    private ChatService chatService;
-	
-	@Autowired
-    private UsuarioService us;
+	private ChatService chatService;
 
-    @GetMapping("/getMsgs/{usuarioId1}-{usuarioId2}")
-    public List<MensajeDTO> obtenerMensajesPrivados(@PathVariable Long usuarioId1, @PathVariable Long usuarioId2) {
-        return chatService.obtenerMensajesPrivados(usuarioId1, usuarioId2);
-    }
-    @PostMapping("/read/{friendId}")
-    public Response read(@ModelAttribute UserAction data, @PathVariable("friendId") Long fId) {
-    	UsuarioDTO user = us.findByToken(data.getUser_auth());
-    	for (MensajeDTO i : chatService.findAllUnreadedFrom(user.getId(),fId)) {
+	@Autowired
+	private UsuarioService us;
+
+	@PostMapping("/getAllUnreaded")
+	public List<MensajeDTO> obtenerNoLeidos(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		} else {
+			return chatService.obtenerNoLeidos(user.getId());
+		}
+	}
+
+	@GetMapping("/getMsgs/{usuarioId1}-{usuarioId2}")
+	public List<MensajeDTO> obtenerMensajesPrivados(@PathVariable Long usuarioId1, @PathVariable Long usuarioId2) {
+		return chatService.obtenerMensajesPrivados(usuarioId1, usuarioId2);
+	}
+
+	@PostMapping("/read/{friendId}")
+	public Response read(@ModelAttribute UserAction data, @PathVariable("friendId") Long fId) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		for (MensajeDTO i : chatService.findAllUnreadedFrom(user.getId(), fId)) {
 			i.setLeido(true);
 			System.out.println(i.getContenido());
 			chatService.save(i);
 		}
-    	return Response.success("");
-    }
-    
-} 
+		return Response.success("");
+	}
+
+}

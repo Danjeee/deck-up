@@ -12,6 +12,8 @@ import { HttpClient } from '@angular/common/http';
 export class ChatService extends environmentsURLs {
 
   chatURL = `${this.apiURL}/ws`
+
+  roomid = ""
   
   private stompClient: any;
 
@@ -19,21 +21,21 @@ export class ChatService extends environmentsURLs {
 
   constructor(private http: HttpClient) {
     super()
-    this.initConectionSocket()
   }
 
   initConectionSocket(){
     const socket = new SockJS(this.chatURL)
     this.stompClient = Stomp.over(socket)
+    //this.stompClient.debug = ()=>{}
   }
 
   joinRoom(roomid: any, prevmsgs: any[]){
+    this.initConectionSocket()
     this.messageSubject = new BehaviorSubject<any[]>(prevmsgs);
-    
-    ((UserSession.getId() as number) < (roomid as number)) ? roomid = (UserSession.getId()+"-"+roomid) : roomid = (roomid+"-"+UserSession.getId())
+    ((UserSession.getId() as number) < (roomid as number)) ? this.roomid = (UserSession.getId()+"-"+roomid) : this.roomid = (roomid+"-"+UserSession.getId())
     try {
       this.stompClient.connect({}, () => {
-        this.stompClient.subscribe(`/chat/${roomid}`, (messages: any) => {
+        this.stompClient.subscribe(`/chat/${this.roomid}`, (messages: any) => {
           const messageContent = JSON.parse(messages.body)
           const currentMessage = this.messageSubject.getValue()
           currentMessage.push(messageContent)
@@ -41,19 +43,21 @@ export class ChatService extends environmentsURLs {
         })
       })
     } catch (error) {
+      console.log(error)
       this.stompClient.disconnect()
     }
   }
 
-  sendmessage(roomid: any, message: any){
-    ((UserSession.getId() as number) < (roomid as number)) ? roomid = (UserSession.getId()+"-"+roomid) : roomid = (roomid+"-"+UserSession.getId())
+  sendmessage(message: any){
+    console.log(this.roomid)
     try{
-      this.stompClient.send(`/app/chat/${roomid}`, {}, JSON.stringify(message))
-    } catch {
+      this.stompClient.send(`/app/chat/${this.roomid}`, {}, JSON.stringify(message))
+    } catch (e) {
+      console.log(e)
       this.stompClient.disconnect()
       setTimeout(() => {
-        this.joinRoom(roomid, this.messageSubject.value)
-        this.stompClient.send(`/app/chat/${roomid}`, {}, JSON.stringify(message))
+        this.joinRoom(this.roomid, this.messageSubject.value)
+        this.stompClient.send(`/app/chat/${this.roomid}`, {}, JSON.stringify(message))
       }, 100);
     }
   }
@@ -76,6 +80,13 @@ export class ChatService extends environmentsURLs {
     const data: FormData = new FormData();
     data.append("user_auth", UserSession.getUser().auth)
     return this.http.post(`${this.apiURL}/chat/read/${friendid}`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+  loadMsgs(){
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.apiURL}/chat/getAllUnreaded`, data).pipe(
       catchError(err => {throw err})
     )
   }
