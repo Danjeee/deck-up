@@ -8,6 +8,7 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 import { environmentsURLs } from '../../utils/environmentsURls';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,7 +16,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent extends environmentsURLs implements OnDestroy,AfterViewInit {
+export class ChatComponent extends environmentsURLs implements AfterViewInit, OnDestroy {
 
   loaded: boolean = false
   user: User = UserSession.getUser()
@@ -23,7 +24,7 @@ export class ChatComponent extends environmentsURLs implements OnDestroy,AfterVi
   messageInput: string = ''
   messageList: any[] = [];
 
-  constructor(private chatService: ChatService, private userService: UserService, private router: Router, private alert: AlertService){
+  constructor(private chatService: ChatService, private userService: UserService, private router: Router, private alert: AlertService, private notif: NotificacionService){
     super()
   }
   ngAfterViewInit(): void {
@@ -73,10 +74,8 @@ export class ChatComponent extends environmentsURLs implements OnDestroy,AfterVi
 
     })
   }
+
   ngOnDestroy(): void {
       this.chatService.disconnect()
-      setTimeout(() => {
-        //window.location.reload()
-      }, 100);
   }
 }

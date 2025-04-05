@@ -26,7 +26,7 @@ export class ChatService extends environmentsURLs {
   initConectionSocket(){
     const socket = new SockJS(this.chatURL)
     this.stompClient = Stomp.over(socket)
-    //this.stompClient.debug = ()=>{}
+    this.stompClient.debug = ()=>{}
   }
 
   joinRoom(roomid: any, prevmsgs: any[]){
@@ -49,7 +49,6 @@ export class ChatService extends environmentsURLs {
   }
 
   sendmessage(message: any){
-    console.log(this.roomid)
     try{
       this.stompClient.send(`/app/chat/${this.roomid}`, {}, JSON.stringify(message))
     } catch (e) {

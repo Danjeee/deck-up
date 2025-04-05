@@ -1,0 +1,40 @@
+<div class="deckbuilder btn bg-p">
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+    <div class="bg-s btn but">
+        <img src="" alt="">
+        <i class="bi bi-plus"></i>
+    </div>
+</div>
+
+<div class="modal-deck deckbuilder btn bg-p">
+    <div *ngFor="let card of playerCards" class="but">
+        <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="{{card.carta.nombre}}">
+    </div>
+</div>

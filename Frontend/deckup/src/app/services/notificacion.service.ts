@@ -14,9 +14,7 @@ export class NotificacionService extends environmentsURLs {
 
   private stompClient: any;
 
-  private requests: BehaviorSubject<any> = new BehaviorSubject<any>("")
-
-  private unreaded: BehaviorSubject<any> = new BehaviorSubject<any>("")
+  private notifications: BehaviorSubject<any> = new BehaviorSubject<any>("")
 
   constructor(private http: HttpClient) {
     super()
@@ -31,13 +29,9 @@ export class NotificacionService extends environmentsURLs {
   joinListener() {
     try {
       this.stompClient.connect({}, () => {
-        this.stompClient.subscribe(`/topic/requests/${UserSession.getId()}`, (messages: any) => {
-          const request = messages.body
-          this.requests.next(request)
-        });
-        this.stompClient.subscribe(`/topic/unreaded/${UserSession.getId()}`, (messages: any) => {
+        this.stompClient.subscribe(`/topic/notifications/${UserSession.getId()}`, (messages: any) => {
           const ur = messages.body
-          this.unreaded.next(ur)
+          this.notifications.next(ur)
         });
       })
     } catch (error) {
@@ -45,11 +39,7 @@ export class NotificacionService extends environmentsURLs {
     }
   }
 
-  newRequest() {
-    return this.requests.asObservable();
-  }
-
-  newMessage() {
-    return this.unreaded.asObservable();
+  getnotifications() {
+    return this.notifications.asObservable();
   }
 }

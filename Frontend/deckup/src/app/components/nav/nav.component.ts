@@ -30,6 +30,8 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
 
   cooldown = false;
 
+  totalnotif: number = 0
+
   user: User | any = UserSession.getUser()
 
   open: boolean = false
@@ -91,6 +93,9 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       next: (data) => {
         this.unreadedmsgs = data
         this.msgsload = true
+        if (this.router.url.includes("/chat")){
+          this.unreadedmsgs = Array.from(this.unreadedmsgs).splice(0,Array.from(this.unreadedmsgs).length-2)
+      }
       }
     })
   }
@@ -105,22 +110,38 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     return cant
   }
 
+  popupMsg(msg: string){
+    const cont = document.getElementById("notifications") as HTMLElement
+    const notif = document.createElement("div")
+    notif.id = "notif"+this.totalnotif
+    this.totalnotif++
+    notif.className = "btn skew bg-s str"
+    notif.innerHTML = msg
+    cont.appendChild(notif)
+    notif.animate([
+      {opacity: 1},
+      {opacity: 0}
+    ],
+    {
+      duration: 2000,
+      easing: 'linear',
+    })
+    setTimeout(() => {
+      cont.removeChild(notif)
+    }, 2001);
+  }
+
   listenerNotif() {
 
     this.notifService.joinListener()
 
-    this.notifService.newMessage().subscribe((messages: any) => {
+    this.notifService.getnotifications().subscribe((messages: any) => {
       this.loadmsgs()
-      if (messages != ""){
-        console.log(messages)
-      }
-    })
-
-    this.notifService.newRequest().subscribe((messages: any) => {
-      this.friendsloaded = false
       this.loadfriends()
       if (messages != ""){
-        console.log(messages)
+        if (!this.router.url.includes("/chat") && !this.router.url.includes("/game")){
+          this.popupMsg(messages)
+        }
       }
     })
   }
@@ -140,6 +161,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.user = UserSession.getUser()
+        this.loadmsgs()
       }
     })
     setTimeout(() => {

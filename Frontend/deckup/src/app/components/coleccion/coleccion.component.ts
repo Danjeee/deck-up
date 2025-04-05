@@ -4,6 +4,7 @@ import { ColeccionService } from '../../services/coleccion.service';
 import { ParticleComponent } from '../particle/particle.component';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-coleccion',
@@ -12,7 +13,6 @@ import { forkJoin } from 'rxjs';
   styleUrl: './coleccion.component.css'
 })
 export class ColeccionComponent extends environmentsURLs implements OnInit {
-
 
   allCards: any
   playerCards: any
@@ -29,10 +29,13 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
   showart: boolean = false
   showhcd: boolean = false
 
-  constructor(private service: ColeccionService) {
+  constructor(private service: ColeccionService, private router: Router) {
     super()
   }
 
+  route(whete: string) {
+    this.router.navigate([whete])
+  }
 
   ngOnInit(): void {
     forkJoin([

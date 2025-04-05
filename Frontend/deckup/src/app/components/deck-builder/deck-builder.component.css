@@ -1,0 +1,34 @@
+.deckbuilder{
+    display: flex;
+    width: 70dvw;
+    height: 70dvh;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    gap: 35px;
+    justify-content: center;
+     &>div{
+        position: relative;
+        max-width: 220px;
+        max-height: 330px;
+        width: calc(12.5dvw - 10px);
+        height: calc(20dvw - 20px);
+        font-size: 80px;
+        border-radius: 7px;
+        overflow: hidden;
+        &>img{
+            border-radius: 7px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+     }
+}

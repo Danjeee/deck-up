@@ -58,7 +58,7 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 					 									 .amigo(user)
 					 									 .aceptada(false)
 					 									 .build();
-			ws.enviarSolicitudAmistad(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Tienes una nueva solicitud de amistad").build());
+			ws.enviarMensaje(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Tienes una nueva solicitud de amistad").build());
 			sr.save(solicitud_rev);
 		}
 		
@@ -72,7 +72,7 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 			SolicitudAmistad s1 = sr.findByUserAndFriend(user.getId(), newfriend.getId()).orElse(null);
 			if (s1 != null) {
 				SolicitudAmistad s2 = SolicitudAmistad.builder().aceptada(true).usuario(s1.getAmigo()).amigo(s1.getUsuario()).build();
-				ws.enviarSolicitudAmistad(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Han aceptado tu solicitud de amistad").build());
+				ws.enviarMensaje(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Han aceptado tu solicitud de amistad").build());
 				s1.setAceptada(true);
 				sr.save(s1);
 				sr.save(s2);
@@ -87,7 +87,7 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 		if (user != null && newfriend != null) {
 			SolicitudAmistad s1 = sr.findByUserAndFriend(user.getId(), newfriend.getId()).orElse(null);
 			if (s1 != null) {
-				ws.enviarSolicitudAmistad(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Han rechazado tu solicitud de amistad").build());
+				ws.enviarMensaje(MensajeDTO.builder().destinoId(newfriend.getId()).contenido("Han rechazado tu solicitud de amistad").build());
 				sr.deleteById(s1.getId());
 			}
 		}
@@ -101,7 +101,7 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 			SolicitudAmistad s1 = sr.findByUserAndFriend(user.getId(), newfriend.getId()).orElse(null);
 			SolicitudAmistad s2 = sr.findByUserAndFriend(newfriend.getId(), user.getId()).orElse(null);
 			if (s1 != null && s2 != null) {
-				ws.enviarSolicitudAmistad(MensajeDTO.builder().destinoId(user_id).contenido("Te ha eliminado uno de tus amigos").build());
+				ws.enviarMensaje(MensajeDTO.builder().destinoId(user_id).contenido("Te ha eliminado uno de tus amigos").build());
 				sr.deleteById(s1.getId());
 				sr.deleteById(s2.getId());
 			}

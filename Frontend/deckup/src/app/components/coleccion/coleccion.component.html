@@ -20,7 +20,12 @@
             </div>
         </div>
     </div>
-    <div id="decks" *ngIf="section == 'decks'"></div>
+    <div id="decks" *ngIf="section == 'decks'">
+        <div class="deckcont btn bg-s">
+            <div *ngFor="let deck of allDecks" class="deck btn bg-p"></div>
+            <div class="deck btn but bg-p" (click)="route('/deck-builder')"><i class="bi bi-plus"></i></div>
+        </div>
+    </div>
 </div>
 <div *ngIf="showing" id="bigcardcont">
     <div class="bigcardshadow" (click)="close()"></div>

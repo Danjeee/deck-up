@@ -22,15 +22,9 @@ public class NotificacionWSC {
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void enviarSolicitudAmistad(MensajeDTO solicitud) {
-        messagingTemplate.convertAndSend(
-                "/topic/requests/" + solicitud.getDestinoId(),
-                solicitud.getContenido());
-    }
-
     public void enviarMensaje(MensajeDTO mensaje) {
         messagingTemplate.convertAndSend(
-                "/topic/unreaded/" + mensaje.getDestinoId(),
+                "/topic/notifications/" + mensaje.getDestinoId(),
                 mensaje.getContenido());
     }
 

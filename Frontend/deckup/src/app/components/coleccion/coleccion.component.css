@@ -314,3 +314,17 @@
 .z {
     z-index: 3;
 }
+.deckcont{
+    justify-content: start;
+    height: 95%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 30px;
+}
+.deck{
+    width: 100%;
+    font-size: 30px;
+    padding: 30px;
+}
