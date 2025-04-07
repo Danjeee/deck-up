@@ -322,9 +322,51 @@
     padding-left: 80px;
     padding-right: 80px;
     padding-top: 30px;
+    gap: 15px;
 }
 .deck{
+    position: relative;
     width: 100%;
     font-size: 30px;
     padding: 30px;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    justify-content: space-between;
+    transition: scale .5s;
+    &>img{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        filter: brightness(.5);
+        object-fit: cover;
+    }
+    &>div{
+        width: auto;
+        display: flex;
+        gap: 10px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &>h4{
+        font-size: 60px;
+        margin: 0;
+    }
+    &:hover{
+        scale: 1.01;
+    }
+}
+.deckadd{
+    position: relative;
+    width: 100%;
+    font-size: 30px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

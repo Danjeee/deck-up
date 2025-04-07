@@ -1,40 +1,16 @@
-<div class="deckbuilder btn bg-p">
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
-        <i class="bi bi-plus"></i>
-    </div>
-    <div class="bg-s btn but">
-        <img src="" alt="">
+<div class="deckbuilder btn bg-p" *ngIf="loaded">
+    <div class="save btn bg-g {{finishedDeck()? 'but' : 'drk'}}" (click)="finishedDeck()? saveDeck() : ''"><i class="bi bi-floppy-fill"></i></div>
+    <div class="close btn but bg-r" (click)="gback()"><i class="bi bi-x"></i></div>
+    <input type="text" class="str" id="title" value="{{title != null ? title : ''}}" placeholder="Nuevo mazo... (Pulsa para editar)">
+    <div id="{{deck.indexOf(card)}}" *ngFor="let card of deck" class="bg-s btn but" (click)="modalToggle(deck.indexOf(card))">
+        <img src="{{card.id != null ? `${resURL}/Resources/img/cards/${card.imagen}` : ''}}" alt="">
         <i class="bi bi-plus"></i>
     </div>
 </div>
 
-<div class="modal-deck deckbuilder btn bg-p">
-    <div *ngFor="let card of playerCards" class="but">
-        <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="{{card.carta.nombre}}">
+<div id="modal" class="modal-deck deckbuilder btn bg-p" *ngIf="modalOpen">
+    <div *ngFor="let card of playerCards" (click)="add(card.carta)" class="but {{card == null ? 'none' : ''}}">
+        <img src="{{card != null ? `${resURL}/Resources/img/cards/${card.carta.imagen}` : ''}}" alt="{{card != null ? `${resURL}/Resources/img/cards/${card.carta.nombre}` : ''}}">
     </div>
 </div>
+<div id="shadow" *ngIf="modalOpen" (click)="modalToggle(1)"></div>

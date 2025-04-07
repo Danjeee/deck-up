@@ -84,6 +84,10 @@ public class CartaDTO implements Serializable {
 	// Habrá que buscar todas estas listas si queremos EDITAR una carta (cosa que seguramente no se pueda)
 	// A la hora de guardar una nueva simplemente seteamos codigos y usuarios a null
 	public static Carta convertToEntity(CartaDTO input, Habilidad habilidad, List<Carta> cartasrareza, List<PlayerCards> usuarios, List<Codigo> cartascodigo) {
+		Paquete paquete = null;
+		if (input.getPaqueteDTO() != null) {
+			paquete = Paquete.builder().id(input.getPaqueteDTO().getId()).build();
+		}
 		return Carta.builder()
 						.id(input.getId())
 						.nombre(input.getNombre())
@@ -93,7 +97,7 @@ public class CartaDTO implements Serializable {
 						.exclusive(input.isExclusive())
 						.rareza(RarezaDTO.convertToEntity(input.getRarezaDTO(), cartasrareza))
 						.habilidad(habilidad)
-						.paquete(Paquete.builder().id(input.getPaqueteDTO().getId()).build())
+						.paquete(paquete)
 						.usuarios(usuarios)
 						.codigos(cartascodigo)
 						.build();

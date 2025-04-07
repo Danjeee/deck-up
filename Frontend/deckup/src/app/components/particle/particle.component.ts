@@ -140,7 +140,7 @@ export class ParticleComponent extends environmentsURLs {
       div.style.top = `${mouseY - div.offsetHeight - 70}px`;
       document.body.appendChild(div)
       setTimeout(() => {
-        div.style.width = '200px';
+        div.style.width = '260px';
       }, 100);
       setTimeout(() => {
         this.mouseCd = false

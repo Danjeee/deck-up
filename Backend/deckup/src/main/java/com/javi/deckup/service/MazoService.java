@@ -9,5 +9,11 @@ public interface MazoService {
 	List<MazoDTO> findAllByUser(Long id);
 	
 	void save(MazoDTO mazo);
+
+	Long count();
+
+	MazoDTO findById(Long id);
+
+	void deleteById(Long id);
 	
 }

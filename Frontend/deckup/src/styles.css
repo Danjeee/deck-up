@@ -608,3 +608,11 @@ img {
     backdrop-filter: brightness(.6);
     z-index: -1;
   }
+
+.bg-r{
+    background-color: #ff5757;
+    color: #b10303;
+}
+.bg-g{
+    background-color: #198754;
+}

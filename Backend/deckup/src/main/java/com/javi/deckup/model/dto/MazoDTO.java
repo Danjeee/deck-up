@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class MazoDTO {
 
 	private Long id;
+	private String nombre;
 	
 	private CartaDTO carta1;
 	private CartaDTO carta2;
@@ -38,6 +39,7 @@ public class MazoDTO {
 					  .carta6(CartaDTO.convertToDTO(input.getCarta6()))
 					  .carta7(CartaDTO.convertToDTO(input.getCarta7()))
 					  .carta8(CartaDTO.convertToDTO(input.getCarta8()))
+					  .nombre(input.getNombre())
 					  .usuario(UsuarioDTO.convertToDTO(input.getUsuario()))
 					  .build();
 	}
@@ -54,6 +56,7 @@ public class MazoDTO {
 					  .carta6(CartaDTO.convertToEntity(input.getCarta6(), null, null, null, null))
 					  .carta7(CartaDTO.convertToEntity(input.getCarta7(), null, null, null, null))
 					  .carta8(CartaDTO.convertToEntity(input.getCarta8(), null, null, null, null))
+					  .nombre(input.getNombre())
 					  .usuario(UsuarioDTO.convertToEntity(input.getUsuario()))
 					  .build();
 	}

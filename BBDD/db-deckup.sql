@@ -282,6 +282,7 @@ CREATE TABLE `deckup`.`payments` (
 
 CREATE TABLE `deckup`.`mazos` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) NOT NULL,
   `carta1` INT NOT NULL,
   `carta2` INT NOT NULL,
   `carta3` INT NOT NULL,

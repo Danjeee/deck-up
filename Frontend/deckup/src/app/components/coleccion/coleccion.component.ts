@@ -5,6 +5,7 @@ import { ParticleComponent } from '../particle/particle.component';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-coleccion',
@@ -29,7 +30,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
   showart: boolean = false
   showhcd: boolean = false
 
-  constructor(private service: ColeccionService, private router: Router) {
+  constructor(private service: ColeccionService, private router: Router, private alert: AlertService) {
     super()
   }
 
@@ -65,6 +66,9 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
 
   goto(section: string) {
     this.section = section
+  }
+  notenoughcards(e: any){
+    ParticleComponent.minimalMsg(e, "Necesitas 8 cartas para poder acceder")
   }
 
   checkFilters(carta: any): boolean {
@@ -200,5 +204,32 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
         imagen.style.transform = 'perspective(500px) rotateX(0deg) rotateY(0deg)';
       }
     });
+  }
+  editDeck(id: any){
+    sessionStorage.setItem("deck-id", id)
+    this.router.navigate(['/deck-builder'])
+  }
+  deleteDeck(mazo: any){
+    this.alert.confirm(`¿Estás seguro?`, `¿Quieres borrar ${mazo.nombre}?`,()=>{
+      this.service.deleteDeck(mazo.id).subscribe({
+        next: (data) =>{
+          if (data.status == 200){
+            this.alert.success(data.tit, data.msg).then((resp)=>{
+              this.loadDecks()
+            })
+          } else {
+            this.alert.error(data.tit, data.msg)
+          }
+        }
+      })
+    })
+  }
+  loadDecks(){
+    this.service.findPlayerDecks().subscribe({
+      next: (data) => {
+        this.deck = data.current
+        this.allDecks = data.all
+      }
+    })
   }
 }

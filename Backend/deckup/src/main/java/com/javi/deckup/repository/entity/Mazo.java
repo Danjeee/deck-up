@@ -24,6 +24,8 @@ public class Mazo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String nombre;
+	
 	@ManyToOne
 	@JoinColumn(name = "carta1")
 	private Carta carta1;

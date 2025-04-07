@@ -1,6 +1,6 @@
 .deckbuilder{
     display: flex;
-    width: 70dvw;
+    width: 60dvw;
     height: 70dvh;
     position: absolute;
     top: 55%;
@@ -13,12 +13,13 @@
     padding-bottom: 30px;
     gap: 35px;
     justify-content: center;
-     &>div{
+    z-index: 2;
+     &>div:not(.save,.close){
         position: relative;
         max-width: 220px;
         max-height: 330px;
-        width: calc(12.5dvw - 10px);
-        height: calc(20dvw - 20px);
+        width: calc(10dvw - 10px);
+        height: calc(15dvw - 20px);
         font-size: 80px;
         border-radius: 7px;
         overflow: hidden;
@@ -31,4 +32,52 @@
             height: 100%;
         }
      }
+}
+.modal-deck{
+    position: fixed;
+    left: 50%;
+    top: 55%;
+    z-index: 3;
+    scale: 0;
+    transition: scale .5s;
+    overflow-y: auto;
+    scrollbar-color: #5898d8 rgba(0, 0, 0, 0);
+}
+#shadow{
+    width: 100dvw;
+    height: 100dvh;
+    position: fixed;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    background-color: #13253e;
+    z-index: 1;
+    transition: opacity .5s;
+}
+.none{
+    display: none;
+}
+.save,.close{
+    position: absolute;
+    top: 0;
+    font-size: 50px;
+}
+.save{
+    right: 0;
+}
+.drk{
+    filter: brightness(.4);
+}
+.close{
+    left: 0;
+}
+#title{
+    position: absolute;
+    top: -10dvh;
+    padding: 7px;
+    font-size: 40px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+    border-bottom: #13253e 2px solid;
+    color: #13253e;
 }
