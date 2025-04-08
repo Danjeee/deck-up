@@ -369,6 +369,105 @@ CREATE TABLE `deckup`.`amigos` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
     
+/*GAME (tela)*/
+
+CREATE TABLE `deckup`.`games` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `status` VARCHAR(45) NULL,
+  `player1` BIGINT NULL,
+  `player2` BIGINT NULL,
+  `turno` INT NULL,
+  `L1_1` BIGINT NULL,
+  `L1_2` BIGINT NULL,
+  `L1_3` BIGINT NULL,
+  `L1_4` BIGINT NULL,
+  `L1_5` BIGINT NULL,
+  `L2_1` BIGINT NULL,
+  `L2_2` BIGINT NULL,
+  `L2_3` BIGINT NULL,
+  `L2_4` BIGINT NULL,
+  `L2_5` BIGINT NULL,
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE `deckup`.`lineas` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `carta` INT NOT NULL,
+  `vida` INT NOT NULL,
+  `stun` INT NULL,
+  `stun_name` VARCHAR(60) NULL,
+  `turn_dmg` INT NULL,
+  `turn_dmg_left` INT NULL,
+  `turn_dmg_name` VARCHAR(45) NULL,
+  `game` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_lineas_games_idx` (`game` ASC) VISIBLE,
+  CONSTRAINT `fk_lineas_games`
+    FOREIGN KEY (`game`)
+    REFERENCES `deckup`.`games` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE ,
+    INDEX `fk_lineas_card_idx` (`carta` ASC) VISIBLE,
+  CONSTRAINT `fk_lineas_card`
+    FOREIGN KEY (`carta`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
+CREATE TABLE `deckup`.`player_status` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `usuario` BIGINT NOT NULL,
+  `game` BIGINT NOT NULL,
+  `vida` INT NOT NULL,
+  `mana` INT NOT NULL,
+  `carta1` INT NULL,
+  `carta2` INT NULL,
+  `carta3` INT NULL,
+  `carta4` INT NULL,
+  `carta5` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_game_status_idx` (`game` ASC) VISIBLE,
+  INDEX `fk_card1_status_idx` (`carta1` ASC) VISIBLE,
+  INDEX `fk_card2_status_idx` (`carta2` ASC) VISIBLE,
+  INDEX `fk_card3_status_idx` (`carta3` ASC) VISIBLE,
+  INDEX `fk_card4_status_idx` (`carta4` ASC) VISIBLE,
+  INDEX `fk_card5_status_idx` (`carta5` ASC) VISIBLE,
+  CONSTRAINT `fk_user_status`
+    FOREIGN KEY (`usuario`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_game_status`
+    FOREIGN KEY (`game`)
+    REFERENCES `deckup`.`games` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card1_status`
+    FOREIGN KEY (`carta1`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card2_status`
+    FOREIGN KEY (`carta2`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card3_status`
+    FOREIGN KEY (`carta3`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card4_status`
+    FOREIGN KEY (`carta4`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card5_status`
+    FOREIGN KEY (`carta5`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
+    
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
 INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado, auth)VALUES 
@@ -446,7 +545,16 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (1,11,1),
 (1,12,1),
 (2,2,1),
-(2,3,1);
+(2,3,1),
+(2,4,1),
+(2,5,1),
+(2,6,1),
+(2,7,1),
+(2,8,1),
+(2,9,1),
+(2,10,1),
+(2,11,1),
+(2,12,1);
 
 /*Tienda*/
 INSERT INTO tienda VALUES(1,2,5,11,6,3,1,2,3);

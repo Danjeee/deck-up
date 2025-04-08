@@ -29,7 +29,7 @@
                 <img src="{{resURL}}/Resources/img/cards/{{deck.carta1.imagen}}" alt="{{deck.carta1.nombre}}">
                 <h4>{{deck.nombre}}</h4>
                 <div>
-                    <div class="deck str btn but bg-p" (click)="editDeck(deck.id)"><i class="bi bi-app"></i></div>
+                    <div class="deck str btn but {{isselected(deck.id) ? 'bg-g' : 'bg-p' }}" (click)="isselected(deck.id) ? '' : select(deck.id)"><i class="bi {{isselected(deck.id) ? 'bi-check' : 'bi-app'}}"></i></div>
                     <div class="deck str btn but bg-p" (click)="editDeck(deck.id)"><i class="bi bi-pen"></i></div>
                     <div class="deck str btn but bg-r" (click)="deleteDeck(deck)"><i class="bi bi-trash"></i></div>
                 </div>

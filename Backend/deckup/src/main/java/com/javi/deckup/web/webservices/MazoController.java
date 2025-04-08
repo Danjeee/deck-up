@@ -74,5 +74,22 @@ public class MazoController {
 	}
 	
 	
+	@PostMapping("/select")
+	public Response select(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user != null) {
+			MazoDTO mazo = ms.findById(data.getUser_id());
+			if (mazo == null) {
+				return Response.error("El mazo no existe");
+			}
+			if (mazo.getUsuario().getId() != user.getId()) {
+				return Response.error("El mazo no te pertenece");
+			}
+			ms.select(mazo);
+			return Response.success("Mazo cambiado correctamente");
+		}
+		return Response.error("Ha habido un error en la sesión, intentalo de nuevo");
+	}
+	
 	
 }

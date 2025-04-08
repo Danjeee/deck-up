@@ -8,13 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.javi.deckup.model.dto.MazoDTO;
 import com.javi.deckup.repository.dao.MazoRepository;
+import com.javi.deckup.repository.dao.UsuarioRepository;
 import com.javi.deckup.repository.entity.Mazo;
+import com.javi.deckup.repository.entity.Usuario;
 
 @Service
 public class MazoServiceImpl implements MazoService{
 
 	@Autowired
 	MazoRepository mr;
+	
+	@Autowired
+	UsuarioRepository ur;
 	
 	@Override
 	public List<MazoDTO> findAllByUser(Long id) {
@@ -41,6 +46,15 @@ public class MazoServiceImpl implements MazoService{
 	@Override
 	public void deleteById(Long id) {
 		mr.deleteById(id);
+	}
+
+	@Override
+	public void select(MazoDTO mazo) {
+		Usuario usuario = ur.findById(mazo.getUsuario().getId()).orElse(null);
+		if (usuario != null) {
+			usuario.setMazo(MazoDTO.convertToEntity(mazo));
+			ur.save(usuario);
+		}
 	}
 
 }

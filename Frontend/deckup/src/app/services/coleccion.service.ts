@@ -91,4 +91,13 @@ export class ColeccionService extends environmentsURLs {
       catchError(err => {throw err})
     )
   }
+
+  select(id: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_id", id)
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.deckUrl}/select`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
 }

@@ -27,5 +27,12 @@ public class NotificacionWSC {
                 "/topic/notifications/" + mensaje.getDestinoId(),
                 mensaje.getContenido());
     }
+    
+    public void norificarMatch(MensajeDTO mensaje) {
+    	System.out.println(mensaje.getDestinoId());
+        messagingTemplate.convertAndSend(
+                "/matchmaking/" + mensaje.getDestinoId(),
+                mensaje.getContenido());
+    }
 
 }

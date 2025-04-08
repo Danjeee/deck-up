@@ -8,6 +8,8 @@ import { PaymentsComponent } from './components/payments/payments.component';
 import { ColeccionComponent } from './components/coleccion/coleccion.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { DeckBuilderComponent } from './components/deck-builder/deck-builder.component';
+import { MatchmakingComponent } from './components/matchmaking/matchmaking.component';
+import { GameComponent } from './components/game/game.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -20,4 +22,6 @@ export const routes: Routes = [
     {path: 'coleccion', component: ColeccionComponent},
     {path: 'chat/:username', component: ChatComponent},
     {path: 'deck-builder', component: DeckBuilderComponent},
+    {path: 'matchmaking', component: MatchmakingComponent},
+    {path: 'game', component: GameComponent},
 ];

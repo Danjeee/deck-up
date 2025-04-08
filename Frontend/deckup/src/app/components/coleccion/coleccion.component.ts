@@ -18,7 +18,7 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
   allCards: any
   playerCards: any
   section: string = "cards"
-  deck: any
+  deck: any = {id: 0}
   allDecks: any
   filters: string[] = []
   rarezas: any
@@ -48,7 +48,9 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
       this.allCards = data1;
       this.rarezas = data2;
       this.playerCards = data3;
-      this.deck = data4.current;
+      if (data4.current != null) {
+        this.deck = data4.current;
+      }
       this.allDecks = data4.all;
       this.loaded = true;
     })
@@ -227,9 +229,28 @@ export class ColeccionComponent extends environmentsURLs implements OnInit {
   loadDecks(){
     this.service.findPlayerDecks().subscribe({
       next: (data) => {
-        this.deck = data.current
+        if (data.current != null){
+          this.deck = data.current
+        }
         this.allDecks = data.all
       }
     })
+  }
+
+  select(id: any){
+    this.service.select(id).subscribe({
+      next: (data) => {
+        if (data.status == 200) {
+          this.loadDecks()
+          ParticleComponent.popupMsg(data.msg)
+        } else {
+          this.alert.error(data.tit, data.msg)
+        }
+      }
+    })
+  }
+
+  isselected(id: any): boolean{
+    return (id == this.deck.id)
   }
 }

@@ -98,4 +98,20 @@ export class HomeComponent implements OnInit {
     }, 1000);
   }
 
+  play(e: any){
+    this.service.findById(UserSession.getId()).subscribe({
+      next: (data) =>{
+        if (data != null) {
+          if (data.mazo != null) {
+            this.router.navigate(['/matchmaking'])
+          } else {
+            ParticleComponent.minimalMsg(e, "Necesitas seleccionar un mazo para jugar")
+          }
+        } else {
+          this.alert.error(data.tit, data.msg)
+        }
+      }
+    })
+  }
+
 }

@@ -15,5 +15,7 @@ public interface MazoService {
 	MazoDTO findById(Long id);
 
 	void deleteById(Long id);
+
+	void select(MazoDTO mazo);
 	
 }

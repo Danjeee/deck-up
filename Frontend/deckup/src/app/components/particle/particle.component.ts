@@ -9,6 +9,8 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 })
 export class ParticleComponent extends environmentsURLs {
 
+  static totalnotif: number = 0
+
   constructor() {
     super()
   }
@@ -153,5 +155,26 @@ export class ParticleComponent extends environmentsURLs {
         document.body.removeChild(div)
       }, time ? (time * 2000) : 1500);
     }
+  }
+
+  public static popupMsg(msg: string){
+    const cont = document.getElementById("notifications") as HTMLElement
+    const notif = document.createElement("div")
+    notif.id = "notiff"+this.totalnotif
+    this.totalnotif++
+    notif.className = "btn skew bg-p str"
+    notif.innerHTML = msg
+    cont.appendChild(notif)
+    notif.animate([
+      {opacity: 1},
+      {opacity: 0}
+    ],
+    {
+      duration: 2000,
+      easing: 'linear',
+    })
+    setTimeout(() => {
+      cont.removeChild(notif)
+    }, 2001);
   }
 }
