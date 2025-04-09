@@ -60,6 +60,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             this.router.navigate(["/home"])
           }
           this.loaded = true
+          sessionStorage.removeItem("game")
         }
       })
     }
@@ -80,9 +81,9 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     } else {
       if (game.player1.carta1 != null){count.push(0)}
       if (game.player2.carta2 != null){count.push(0)}
-      if (game.player3.carta3 != null){count.push(0)}
-      if (game.player4.carta4 != null){count.push(0)}
-      if (game.player5.carta5 != null){count.push(0)}
+      if (game.player2.carta3 != null){count.push(0)}
+      if (game.player2.carta4 != null){count.push(0)}
+      if (game.player2.carta5 != null){count.push(0)}
     }
     return count
   }
