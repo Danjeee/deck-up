@@ -1,5 +1,6 @@
 package com.javi.deckup.repository.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class PlayerStatus {
 		@JoinColumn(name = "usuario")
 	    private Usuario usuario;
 	 	
-	 	@ManyToOne(fetch = FetchType.LAZY)
+	 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	    @JoinColumn(name = "game")
 	    @ToString.Exclude
 	    private Game game;

@@ -30,44 +30,54 @@ public class Game {
 
     private String status;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "player1")
     private PlayerStatus player1;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "player2")
     private PlayerStatus player2;
     
     private Integer turno;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L1_1")
     private Linea L1_1;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L1_2")
     private Linea L1_2;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L1_3")
     private Linea L1_3;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L1_4")
     private Linea L1_4;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L1_5")
     private Linea L1_5;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L2_1")
     private Linea L2_1;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L2_2")
     private Linea L2_2;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L2_3")
     private Linea L2_3;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L2_4")
     private Linea L2_4;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "game")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "L2_5")
     private Linea L2_5;
 
 }

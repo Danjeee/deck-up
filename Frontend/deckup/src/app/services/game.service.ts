@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environmentsURLs } from '../utils/environmentsURls';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { UserSession } from '../utils/UserSession';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -11,40 +11,50 @@ import { Stomp } from '@stomp/stompjs';
 })
 export class GameService extends environmentsURLs {
 
-  chatURL = `${this.apiURL}/ws`
-  
-    private stompClient: any;
-  
-    private notifications: BehaviorSubject<any> = new BehaviorSubject<any>("")
-  
-    constructor(private http: HttpClient) {
-      super()
-      this.initConectionSocket()
-    }
-    initConectionSocket() {
-      const socket = new SockJS(this.chatURL)
-      this.stompClient = Stomp.over(socket)
-      this.stompClient.debug = ()=>{}
-    }
-  
-    joinListener() {
-      try {
-        this.stompClient.connect({}, () => {
-          this.stompClient.subscribe(`/matchmaking/${UserSession.getId()}`, (messages: any) => {
-            const ur = messages.body
-            this.notifications.next(ur)
-          });
-        })
-      } catch (error) {
-        this.stompClient.disconnect()
-      }
-    }
-  
-    getnotifications() {
-      return this.notifications.asObservable();
-    }
+  websocketURL = `${this.apiURL}/ws`
 
-    disconnect(){
+  gameURL = `${this.apiURL}/game`
+
+  private stompClient: any;
+
+  private status: BehaviorSubject<any> = new BehaviorSubject<any>("")
+
+  constructor(private http: HttpClient) {
+    super()
+  }
+  initConectionSocket() {
+    const socket = new SockJS(this.websocketURL)
+    this.stompClient = Stomp.over(socket)
+    // this.stompClient.debug = () => { }
+  }
+
+  joinListener(game: any) {
+    this.initConectionSocket()
+    try {
+      this.stompClient.connect({}, () => {
+        this.stompClient.subscribe(`/game/${game}`, (messages: any) => {
+          const ur = messages.body
+          this.status.next(ur)
+        });
+      })
+    } catch (error) {
       this.stompClient.disconnect()
     }
+  }
+
+  getstatus() {
+    return this.status.asObservable();
+  }
+
+  disconnect() {
+    this.stompClient.disconnect()
+  }
+
+  getGame(id: any): Observable<any> {
+    const data: FormData = new FormData()
+    data.append("id", id)
+    return this.http.post(`${this.gameURL}/get`, data).pipe(
+      catchError(err => { throw err })
+    )
+  }
 }

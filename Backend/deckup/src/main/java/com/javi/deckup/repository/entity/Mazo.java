@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -60,5 +61,6 @@ public class Mazo {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
+	@ToString.Exclude
 	private Usuario usuario;
 }

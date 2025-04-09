@@ -48,17 +48,22 @@ public class PlayerStatusDTO {
 		if (input == null) {
 			return null;
 		}
+		Carta carta1 = (input.getCarta1() == null ? null : Carta.builder().id(input.getCarta1().getId()).build());
+		Carta carta2 = (input.getCarta2() == null ? null : Carta.builder().id(input.getCarta2().getId()).build());
+		Carta carta3 = (input.getCarta3() == null ? null : Carta.builder().id(input.getCarta3().getId()).build());
+		Carta carta4 = (input.getCarta4() == null ? null : Carta.builder().id(input.getCarta4().getId()).build());
+		Carta carta5 = (input.getCarta5() == null ? null : Carta.builder().id(input.getCarta5().getId()).build());
 		return PlayerStatus.builder()
 				  .id(input.getId())
 				  .usuario(UsuarioDTO.convertToEntity(input.getUsuario()))
 				  .game(Game.builder().id(input.getGame().getId()).build())
 				  .vida(input.getVida())
 				  .mana(input.getMana())
-				  .carta1(Carta.builder().id(input.getCarta1().getId()).build())
-				  .carta2(Carta.builder().id(input.getCarta2().getId()).build())
-				  .carta3(Carta.builder().id(input.getCarta3().getId()).build())
-				  .carta4(Carta.builder().id(input.getCarta4().getId()).build())
-				  .carta5(Carta.builder().id(input.getCarta5().getId()).build())
+				  .carta1(carta1)
+				  .carta2(carta2)
+				  .carta3(carta3)
+				  .carta4(carta4)
+				  .carta5(carta5)
 				  .build();
 	}
 }

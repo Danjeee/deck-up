@@ -10,15 +10,18 @@ import { ParticleComponent } from '../particle/particle.component';
 })
 export class PackComponent extends environmentsURLs {
 
+
   constructor() {
     super()
   }
 
   public static showRecivedCards(pack: any, cards: any[]) {
 
+    let cd: boolean = false
+
     let cards_left = pack.cant;
 
-    
+
     const shadow = document.createElement("div")
     shadow.id = "card_open_shadow"
     document.body.appendChild(shadow)
@@ -78,17 +81,23 @@ export class PackComponent extends environmentsURLs {
       document.body.appendChild(card_div)
 
       card_div.addEventListener("click", () => {
-        card_div.style.animation = "bounceOutUp 1s forwards"
-        setTimeout(() => {
-          cards_left--
-          document.body.removeChild(card_div)
-          if (cards_left != 0) {
-            const nextcard = document.getElementById(`element_card${cards_left}`) as HTMLElement
-            nextcard.style.display = "flex"
-          } else {
-            document.body.removeChild(document.getElementById("card_open_shadow") as HTMLElement)
-          }
-        }, 1000);
+        if (!cd) {
+          cd = true
+          card_div.style.animation = "bounceOutUp 1s forwards"
+          setTimeout(() => {
+            cd = false
+          }, 500);
+          setTimeout(() => {
+            cards_left--
+            document.body.removeChild(card_div)
+            if (cards_left != 0) {
+              const nextcard = document.getElementById(`element_card${cards_left}`) as HTMLElement
+              nextcard.style.display = "flex"
+            } else {
+              document.body.removeChild(document.getElementById("card_open_shadow") as HTMLElement)
+            }
+          }, 1000);
+        }
       })
     });
 

@@ -1,5 +1,6 @@
 package com.javi.deckup.repository.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,7 +39,7 @@ public class Linea {
 	    private Integer turn_dmg_left;
 	    private String turn_dmg_name;
 
-	    @OneToOne(fetch = FetchType.LAZY, optional = false)
+	    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	    @JoinColumn(name = "game")
 	    @ToString.Exclude
 	    private Game game;

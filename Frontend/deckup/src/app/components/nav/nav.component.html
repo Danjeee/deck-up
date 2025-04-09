@@ -4,7 +4,7 @@
         <div id="logbut" class="">Login</div>
     </div>
 </div>
-<div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
+<div id="nav" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/' && this.router.url != '/game'">
     <div class="btn but bg-p skew" id="perfil">
         <img src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">
         <p class="str">{{user.username}}</p>
@@ -26,7 +26,7 @@
         <p class="str" id="currency_txt">{{user.currency}}</p>
     </div>
 </div>
-<div id="menuHamb" class="btn skew" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/'">
+<div id="menuHamb" class="btn skew" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/' && this.router.url != '/game'">
     <h1 class="str">Menú</h1>
     <div class="btn but str conf">Configuración</div>
     <div class="btn but str conf">Partidas recientes</div>
@@ -35,7 +35,7 @@
     <div class="btn but str logout" (click)="logout()">Cerrar sesión</div>
     <div class="btn but str logout" id="close" (click)="toggle()">X</div>
 </div>
-<div id="friendlist" class="btn skew" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/' && friendsloaded">
+<div id="friendlist" class="btn skew" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/' && this.router.url != '/game' && friendsloaded">
     <div class="btn but str logout" id="close" (click)="friendtoggle()">X</div>
     <div class="btns">
         <div class="btn but str {{friendsect == 'a' ? 'bg-s' : 'bg-p'}}" (click)="setfsect('a')">Amigos</div>
@@ -72,6 +72,6 @@
     </div>
 </div>
 <div id="notifications"></div>
-<div id="shadow" (click)="closeAll()" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify'">
+<div id="shadow" (click)="closeAll()" *ngIf="this.router.url != '/login' && this.router.url != '/register' && this.router.url != '/verify' && this.router.url != '/game'">
 
 </div>

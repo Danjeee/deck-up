@@ -25,22 +25,13 @@ export class MatchmakingService extends environmentsURLs {
   initConectionSocket() {
     const socket = new SockJS(this.matchURL)
     this.stompClient = Stomp.over(socket)
-    //this.stompClient.debug = () => { }
+    this.stompClient.debug = () => { }
   }
 
   startMatch(): Observable<any>{
     const data: FormData = new FormData()
     data.append("auth", UserSession.getUser().auth)
     return this.http.post(`${this.matchRestURL}`, data).pipe(
-      catchError(err => {throw err})
-    )
-  }
-
-  cancel(){
-    this.stompClient.disconnect()
-    const data: FormData = new FormData()
-    data.append("auth", UserSession.getUser().auth)
-    this.http.post(`${this.matchRestURL}/cancel`, data).pipe(
       catchError(err => {throw err})
     )
   }
@@ -52,7 +43,6 @@ export class MatchmakingService extends environmentsURLs {
         this.stompClient.subscribe(`/matchmaking/${UserSession.getId()}`, (messages: any) => {
           const ur = messages.body
           this.status.next(ur)
-          console.log(this.status)
         });
       })
     } catch (error) {
@@ -67,5 +57,13 @@ export class MatchmakingService extends environmentsURLs {
   disconnect() {
     this.stompClient.disconnect()
     this.status = new BehaviorSubject<any>("");
+  }
+
+  cancel(): Observable<any>{
+    const data: FormData = new FormData;
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.matchRestURL}/cancel`, data).pipe(
+      catchError(err => {throw err})
+    )
   }
 }

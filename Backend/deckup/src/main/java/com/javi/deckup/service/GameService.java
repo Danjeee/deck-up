@@ -14,5 +14,11 @@ public interface GameService {
 	List<GameDTO> findAll();
 	
 	GameDTO findById(Long id);
+
+	GameDTO findByPlayer1(Long id, Boolean unstarted);
+	
+	void deleteById(Long id);
+
+	void delete(GameDTO game);
 	
 }
