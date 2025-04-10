@@ -25,7 +25,70 @@
 </div>
 
 <div id="mycards" class="cardcont" *ngIf="loaded">
-    <div *ngFor="let card of cards">
+    <div class="card" *ngFor="let card of cards">
         <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="carta_oponente">
     </div>
+</div>
+<div id="map" *ngIf="loaded">
+    <div class="line" id="l1">
+        <div>
+            <div class="troop" *ngIf="oponentlines[0] != null">
+                
+            </div>
+        </div>
+        <div class="{{yourlines[0] == null ? 'able' : ''}}">
+            <div class="troop" *ngIf="yourlines[0] != null">
+
+            </div>
+        </div>
+    </div>
+    <div class="line" id="l2">
+        <div>
+            <div class="troop" *ngIf="oponentlines[1] != null">
+                
+            </div>
+        </div>
+        <div class="{{yourlines[1] == null ? 'able' : ''}}">
+            <div class="troop" *ngIf="yourlines[1] != null">
+
+            </div>
+        </div>
+    </div>
+    <div class="line" id="l3">
+        <div>
+            <div class="troop" *ngIf="oponentlines[2] != null">
+                
+            </div>
+        </div>
+        <div class="{{yourlines[2] == null ? 'able' : ''}}">
+            <div class="troop" *ngIf="yourlines[2] != null">
+
+            </div>
+        </div>
+    </div>
+    <div class="line" id="l4">
+        <div>
+            <div class="troop" *ngIf="oponentlines[3] != null">
+                
+            </div>
+        </div>
+        <div class="{{yourlines[3] == null ? 'able' : ''}}">
+            <div class="troop" *ngIf="yourlines[3] != null">
+
+            </div>
+        </div>
+    </div>
+    <div class="line" id="l5">
+        <div>
+            <div class="troop" *ngIf="oponentlines[4] != null">
+                
+            </div>
+        </div>
+        <div class="{{yourlines[4] == null ? 'able' : ''}}">
+            <div class="troop" *ngIf="yourlines[4] != null">
+
+            </div>
+        </div>
+    </div>
+
 </div>
