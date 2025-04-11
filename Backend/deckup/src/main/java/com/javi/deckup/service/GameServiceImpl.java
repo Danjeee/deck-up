@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javi.deckup.model.dto.GameDTO;
+import com.javi.deckup.model.dto.LineaDTO;
 import com.javi.deckup.model.dto.MensajeDTO;
+import com.javi.deckup.model.dto.PlayerStatusDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.CartaRepository;
 import com.javi.deckup.repository.dao.GameRepository;
@@ -81,6 +83,7 @@ public class GameServiceImpl implements GameService {
 			game.getPlayer1().setCarta3(cr.findById(ge.drawCard(game.getPlayer1().getUsuario().getId(), "Id")).get());
 			game.getPlayer1().setCarta4(cr.findById(ge.drawCard(game.getPlayer1().getUsuario().getId(), "Id")).get());
 			game.getPlayer1().setCarta5(cr.findById(ge.drawCard(game.getPlayer1().getUsuario().getId(), "Id")).get());
+			game.setTurno(1);
 			ws.norificarMatch(MensajeDTO.builder().destinoId(game.getPlayer1().getUsuario().getId()).contenido(game.getId().toString()).build());
 			ws.norificarMatch(MensajeDTO.builder().destinoId(usuario.getId()).contenido(game.getId().toString()).build());
 		}
@@ -121,6 +124,25 @@ public class GameServiceImpl implements GameService {
 		Game game_aux = gr.findById(game.getId()).get();
 		ps.delete(game_aux.getPlayer1());
 		gr.delete(game_aux);
+	}
+
+	@Override
+	public void save(GameDTO game, boolean notify) {
+		if (notify) {
+			ws.gameStatusChange(MensajeDTO.builder().contenido(gr.save(GameDTO.convertToEntity(game)).getTurno().toString()).destinoId(game.getId()).build());
+		} else {
+			gr.save(GameDTO.convertToEntity(game));
+		}
+	}
+
+	@Override
+	public LineaDTO save(LineaDTO nuevaLinea) {
+		return LineaDTO.convertToDTO(lr.save(LineaDTO.convertToEntity(nuevaLinea)));
+	}
+
+	@Override
+	public PlayerStatusDTO save(PlayerStatusDTO player1) {
+		return PlayerStatusDTO.convertToDTO(ps.save(PlayerStatusDTO.convertToEntity(player1)));
 	}
 	
 

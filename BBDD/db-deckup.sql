@@ -23,6 +23,8 @@ CREATE TABLE `deckup`.`usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
+  `vida` INT NOT NULL,
+  `mana` INT NOT NULL,
   `imagen` VARCHAR(100) NOT NULL,
   `precio` INT NOT NULL,
   `habilidad` INT NOT NULL DEFAULT 1,
@@ -510,19 +512,19 @@ INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) 
 ('Big crush', 'El fin del universo', 10, 50, 50,2,5);
 
 
-INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive) VALUES
-('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1), # 1
-('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0), # 2
-('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0), # 3
-('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1), # 4
-('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0), # 5
-('X-7P', 'El peor enemigo del rey titán', 'x7p.jpeg', 4000,4 ,1, 6, 0), # 6
-('Sheen', 'El fugaz asesino más brutal de los ultimos tiempos', 'sheen.jpeg', 2000,3 ,1,7, 0), # 7
-('Skano', 'El rey demonio, una fiera sin igual', 'skano.jpeg', 10000,5 ,1, 8, 0), # 8
-('Sekum', 'El menor de los dos, un principe demonio que no le teme a nada', 'sekum.jpeg', 4000,4 ,1, 9, 0), # 9
-('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.jpeg', 4000,4 ,1, 10, 0), # 10
-('Haruki', 'Un samurai recién iniciado', 'haruki.jpeg', 500,2 ,1, 11, 0), # 11
-('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.jpeg', 10000,5 ,1, 12, 0); # 12
+INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, vida, mana) VALUES
+('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1, 999, 0), # 1
+('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0, 1, 1), # 2
+('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0, 5, 5), # 3
+('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1, 4, 2), # 4
+('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0, 4, 3), # 5
+('X-7P', 'El peor enemigo del rey titán', 'x7p.jpeg', 4000,4 ,1, 6, 0, 7, 6), # 6
+('Sheen', 'El fugaz asesino más brutal de los ultimos tiempos', 'sheen.jpeg', 2000,3 ,1,7, 0, 3, 3), # 7
+('Skano', 'El rey demonio, una fiera sin igual', 'skano.jpeg', 10000,5 ,1, 8, 0, 5, 4), # 8
+('Sekum', 'El menor de los dos, un principe demonio que no le teme a nada', 'sekum.jpeg', 4000,4 ,1, 9, 0, 4, 4), # 9
+('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.jpeg', 4000,4 ,1, 10, 0, 4, 4), # 10
+('Haruki', 'Un samurai recién iniciado', 'haruki.jpeg', 500,2 ,1, 11, 0, 3, 4), # 11
+('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.jpeg', 10000,5 ,1, 12, 0, 5, 5); # 12
 
 /* Codigos */
 

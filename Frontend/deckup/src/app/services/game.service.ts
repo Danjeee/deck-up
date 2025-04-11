@@ -57,4 +57,24 @@ export class GameService extends environmentsURLs {
       catchError(err => { throw err })
     )
   }
+
+  put(linea: any, card: any, game: any, player: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("game_id", game)
+    data.append("card_id", card)
+    data.append("player", player)
+    data.append("linea", linea)
+    return this.http.post(`${this.gameURL}/put`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  switchturn(game: any){
+    const data: FormData = new FormData()
+    data.append("game_id", game)
+    return this.http.post(`${this.gameURL}/switch`, data).pipe(
+      
+      catchError(err => {throw err})
+    )
+  }
 }

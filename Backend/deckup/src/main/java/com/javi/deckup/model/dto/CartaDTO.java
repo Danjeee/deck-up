@@ -33,6 +33,10 @@ public class CartaDTO implements Serializable {
 	
 	private Integer precio;
 	
+	private Integer mana;
+	
+	private Integer vida;
+	
 	private boolean exclusive;
 	
 	private Long copias;
@@ -55,6 +59,8 @@ public class CartaDTO implements Serializable {
 						.descripcion(input.getDescripcion())
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
+						.mana(input.getMana())
+						.vida(input.getVida())
 						.exclusive(input.isExclusive())
 						.copias(null)
 						.rarezaDTO(RarezaDTO.convertToDTO(input.getRareza()))
@@ -72,6 +78,8 @@ public class CartaDTO implements Serializable {
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
 						.exclusive(input.isExclusive())
+						.mana(input.getMana())
+						.vida(input.getVida())
 						.copias(getCopies ? calculateCopias(input.getUsuarios()) : null)
 						.rarezaDTO(RarezaDTO.convertToDTO(input.getRareza()))
 						.habilidadDTO(HabilidadDTO.convertToDTO(input.getHabilidad()))
@@ -95,6 +103,8 @@ public class CartaDTO implements Serializable {
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
 						.exclusive(input.isExclusive())
+						.mana(input.getMana())
+						.vida(input.getVida())
 						.rareza(RarezaDTO.convertToEntity(input.getRarezaDTO(), cartasrareza))
 						.habilidad(habilidad)
 						.paquete(paquete)

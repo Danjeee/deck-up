@@ -22,6 +22,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   oponentcards: any
   yourlines: any
   oponentlines: any
+  yourturn: boolean = false
 
   constructor(private alert: AlertService, private router: Router, private service: GameService) {
     super()
@@ -29,11 +30,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   joinlistener(id: any) {
     this.service.joinListener(id)
-
+    this.loaded = false;
     this.service.getstatus().subscribe((status: any) => {
       if (status != "" && status != null) {
-        this.gameStatus = status;
-        this.gameActual = [...this.gameStatus]
+        this.service.getGame(this.gameStatus.id).subscribe({
+          next: (data) => {
+            this.gameStatus = data;
+            this.gameActual = this.gameStatus
+            this.rendergame(data)
+          }
+        })
       }
     })
   }
@@ -46,32 +52,41 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
           console.log(data)
-          this.gameStatus = data
-          this.oponentcards = this.oponentCards(data)
-          this.yourlines = this.setLines(data)[0]
-          this.oponentlines = this.setLines(data)[1]
-          if (data.player1.usuario.id == UserSession.getId()) {
-            this.cards = [data.player1.carta1, data.player1.carta2, data.player1.carta3, data.player1.carta4, data.player1.carta5]
-          } else {
-            this.cards = [data.player2.carta1, data.player2.carta2, data.player2.carta3, data.player2.carta4, data.player2.carta5]
-          }
-          if (data == null) {
-            this.router.navigate(["/home"])
-          }
-          if (data.player1.usuario.id != UserSession.getId() && data.player2.usuario.id != UserSession.getId()) {
-            this.router.navigate(["/home"])
-          }
-          if (data.status != "activo") {
-            this.router.navigate(["/home"])
-          }
+          this.rendergame(data)
           this.loaded = true
-          //sessionStorage.removeItem("game")
-          setTimeout(() => {
-            this.animatecards(document.querySelectorAll('.card'))
-          }, 100);
         }
       })
     }
+  }
+
+  rendergame(data: any) {
+    this.gameStatus = data
+    this.oponentcards = this.oponentCards(data)
+    this.yourlines = this.setLines(data)[0]
+    this.oponentlines = this.setLines(data)[1]
+    this.cards = this.mycards(data)
+    if (data == null) {
+      this.router.navigate(["/home"])
+    }
+    if (data.player1.usuario.id != UserSession.getId() && data.player2.usuario.id != UserSession.getId()) {
+      this.router.navigate(["/home"])
+    }
+    if (data.status != "activo") {
+      this.router.navigate(["/home"])
+    }
+    this.yourturn = false
+    if (data.turno == 1 && this.isYou(data.player1)) {
+      this.yourturn = true
+    }
+    if (data.turno == 2 && this.isYou(data.player2)) {
+      this.yourturn = true
+    }
+    //sessionStorage.removeItem("game")
+    setTimeout(() => {
+      if (this.yourturn) {
+        this.animatecards(document.querySelectorAll('.card'))
+      }
+    }, 100);
   }
 
   animatecards(cards: any) {
@@ -97,7 +112,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             const dx = rect.left + rect.width / 2 - (dragRect.left + dragRect.width / 2);
             const dy = rect.top + rect.height / 2 - (dragRect.top + dragRect.height / 2);
             const dist = Math.hypot(dx, dy);
-           
+
 
             if (dist < minDist) {
               minDist = dist;
@@ -107,7 +122,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
           if (minDist < DRAG_THRESHOLD) {
             if (currentTarget !== closest) {
-              if (ghost) {this.removeghost(currentTarget, ghost.id)};
+              if (ghost) { this.removeghost(currentTarget, ghost.id) };
               ghost = card.cloneNode(true);
               ghost.classList.add("ghost");
               ghost.id = "ghost"
@@ -133,9 +148,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         },
         onRelease: (e) => {
           if (ghost && currentTarget) {
-            ghost.class = "tmp_troop"
-            ghost.style.opacity = 1;
-            currentTarget.classList.remove("able")
+            this.removeghost(currentTarget, ghost.id)
+            this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+              next: (data) =>{console.log(data)}
+            })
             ghost = null;
             currentTarget = null;
           } else if (ghost) {
@@ -147,7 +163,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             card.style.transition = "transform .5s ease-in-out"
             setTimeout(() => {
               card.style.transform = ""
-              draggable.reset() 
+              draggable.reset()
             }, 10);
           }, 20);
         }
@@ -155,8 +171,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     });
   }
 
-  removeghost(parent: Node, id: any){
-      parent.removeChild(document.getElementById(id) as Node)
+  removeghost(parent: Node, id: any) {
+    parent.removeChild(document.getElementById(id) as Node)
   }
 
   isYou(player: any): boolean {
@@ -165,7 +181,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   oponentCards(game: any = this.gameStatus): number[] {
     let count: number[] = []
-    if (this.isYou(this.gameStatus.player1)) {
+    if (this.isYou(this.gameStatus.player2)) {
       if (game.player1.carta1 != null) { count.push(0) }
       if (game.player1.carta2 != null) { count.push(0) }
       if (game.player1.carta3 != null) { count.push(0) }
@@ -177,6 +193,24 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (game.player2.carta3 != null) { count.push(0) }
       if (game.player2.carta4 != null) { count.push(0) }
       if (game.player2.carta5 != null) { count.push(0) }
+    }
+    return count
+  }
+
+  mycards(game: any = this.gameStatus): any[] {
+    let count: any[] = []
+    if (this.isYou(this.gameStatus.player1)) {
+      if (game.player1.carta1 != null) { count.push(game.player1.carta1) } // Mete el null por alguna razon
+      if (game.player1.carta2 != null) { count.push(game.player1.carta2) }
+      if (game.player1.carta3 != null) { count.push(game.player1.carta3) }
+      if (game.player1.carta4 != null) { count.push(game.player1.carta4) }
+      if (game.player1.carta5 != null) { count.push(game.player1.carta5) }
+    } else {
+      if (game.player1.carta1 != null) { count.push(game.player2.carta1) }
+      if (game.player2.carta2 != null) { count.push(game.player2.carta2) }
+      if (game.player2.carta3 != null) { count.push(game.player2.carta3) }
+      if (game.player2.carta4 != null) { count.push(game.player2.carta4) }
+      if (game.player2.carta5 != null) { count.push(game.player2.carta5) }
     }
     return count
   }
@@ -208,6 +242,12 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       count.push(game.l2_5)
     }
     return [count, count2]
+  }
+
+  switchTurn(){
+    this.service.switchturn(this.gameStatus.id).subscribe({
+      next: (data) => {console.log(data)}
+    })
   }
 
   ngOnDestroy(): void {

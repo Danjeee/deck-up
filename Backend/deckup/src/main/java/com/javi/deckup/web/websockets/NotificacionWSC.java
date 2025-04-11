@@ -29,10 +29,15 @@ public class NotificacionWSC {
     }
     
     public void norificarMatch(MensajeDTO mensaje) {
-    	System.out.println(mensaje.getDestinoId());
         messagingTemplate.convertAndSend(
                 "/matchmaking/" + mensaje.getDestinoId(),
                 mensaje.getContenido());
     }
+
+	public void gameStatusChange(MensajeDTO game) {
+		 messagingTemplate.convertAndSend(
+	                "/game/" + game.getDestinoId(),
+	                game.getContenido());
+	}
 
 }

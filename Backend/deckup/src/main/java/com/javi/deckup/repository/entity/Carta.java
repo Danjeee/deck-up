@@ -41,6 +41,10 @@ public class Carta {
 	private String imagen;
 	
 	private Integer precio;
+
+	private Integer vida;
+	
+	private Integer mana;
 	
 	private boolean exclusive;
 	

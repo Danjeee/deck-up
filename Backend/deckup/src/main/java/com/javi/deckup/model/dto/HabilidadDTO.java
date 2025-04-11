@@ -63,6 +63,9 @@ public class HabilidadDTO implements Serializable {
 	// No incluyo la lista de cartas porque es innecesaria
 	
 	public static HabilidadDTO convertToDTO(Habilidad input) {
+		if (input == null) {
+			return null;
+		}
 		return HabilidadDTO.builder()
 		        .id(input.getId())
 		        .nombre(input.getNombre())

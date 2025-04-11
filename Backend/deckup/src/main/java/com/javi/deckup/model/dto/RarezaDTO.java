@@ -28,6 +28,9 @@ public class RarezaDTO implements Serializable {
 	// No añado la lista de cartas porque es innecesaria
 	
 	public static RarezaDTO convertToDTO(Rareza input) {
+		if (input == null) {
+			return null;
+		}
 		return RarezaDTO.builder()
 						 .id(input.getId())
 						 .nombre(input.getNombre())
