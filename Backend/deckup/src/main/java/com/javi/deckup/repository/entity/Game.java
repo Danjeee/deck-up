@@ -30,6 +30,9 @@ public class Game {
 
     private String status;
     
+    private Boolean p1_c;
+    private Boolean p2_c;
+    
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "player1")
     private PlayerStatus player1;

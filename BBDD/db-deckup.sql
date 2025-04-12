@@ -389,6 +389,8 @@ CREATE TABLE `deckup`.`games` (
   `L2_3` BIGINT NULL,
   `L2_4` BIGINT NULL,
   `L2_5` BIGINT NULL,
+  `p1_c` TINYINT NULL,
+  `p2_c` TINYINT NULL,
   PRIMARY KEY (`id`));
   
 CREATE TABLE `deckup`.`lineas` (

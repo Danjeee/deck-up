@@ -69,9 +69,10 @@ export class GameService extends environmentsURLs {
     )
   }
 
-  switchturn(game: any){
+  switchturn(game: any, player :any): Observable<any>{
     const data: FormData = new FormData()
     data.append("game_id", game)
+    data.append("player", player)
     return this.http.post(`${this.gameURL}/switch`, data).pipe(
       
       catchError(err => {throw err})
