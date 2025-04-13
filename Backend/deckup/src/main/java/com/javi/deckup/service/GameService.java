@@ -28,5 +28,7 @@ public interface GameService {
 	LineaDTO save(LineaDTO nuevaLinea);
 
 	PlayerStatusDTO save(PlayerStatusDTO player1);
+
+	void deleteLinea(LineaDTO linea);
 	
 }

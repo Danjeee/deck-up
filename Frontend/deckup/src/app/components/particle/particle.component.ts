@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
+import { animate, stagger } from 'animejs';
 
 @Component({
   selector: 'app-particle',
@@ -157,24 +158,73 @@ export class ParticleComponent extends environmentsURLs {
     }
   }
 
-  public static popupMsg(msg: string){
+  public static popupMsg(msg: string) {
     const cont = document.getElementById("notifications") as HTMLElement
     const notif = document.createElement("div")
-    notif.id = "notiff"+this.totalnotif
+    notif.id = "notiff" + this.totalnotif
     this.totalnotif++
     notif.className = "btn skew bg-p str"
     notif.innerHTML = msg
     cont.appendChild(notif)
     notif.animate([
-      {opacity: 1},
-      {opacity: 0}
+      { opacity: 1 },
+      { opacity: 0 }
     ],
-    {
-      duration: 2000,
-      easing: 'linear',
-    })
+      {
+        duration: 2000,
+        easing: 'linear',
+      })
     setTimeout(() => {
       cont.removeChild(notif)
     }, 2001);
   }
+
+
+  public static animejs_explosion(x: any, y: any, time: any = 500) {
+    const cont = document.createElement('div')
+    cont.id = Math.floor(Math.random() * 9999) + "expcont"
+    cont.style.position = "fixed"
+    
+    cont.style.zIndex = "5"
+    cont.style.display = "flex"
+    cont.style.flexWrap = "wrap"
+    cont.style.width = "200px"
+    const animated: any[] = []
+    for (let i = 0; i < 25; i++) {
+      const part = document.createElement("div")
+      part.className = "exp_part"
+      part.style.width = "40px"
+      part.style.height = "40px"
+      part.style.backdropFilter = "blur(10px);"    
+      part.style.backgroundColor = "rgba(0,0,0,.5)"  
+      cont.appendChild(part)
+      animated.push(part)
+    }
+    document.body.appendChild(cont)
+    cont.style.left = x - 100 + "px"
+    cont.style.top = y - cont.getBoundingClientRect().height/1.5 + "px"
+    this.animateGrid(animated, cont)
+
+  }
+
+  private static animateGrid($squares: any,cont: any) {
+    animate($squares, {
+      scale: [
+        { to: [0, 1.25] },
+        { to: 0 }
+      ],
+      boxShadow: [
+        { to: '0 0 1rem 0 currentColor' },
+        { to: '0 0 0rem 0 currentColor' }
+      ],
+      delay: stagger(100, {
+        grid: [5, 5],
+        from: 'center'
+      }),
+    }).then(()=>{
+      document.body.removeChild(cont)
+    })
+  }
 }
+
+

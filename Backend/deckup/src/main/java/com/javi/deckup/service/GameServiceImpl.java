@@ -144,6 +144,11 @@ public class GameServiceImpl implements GameService {
 	public PlayerStatusDTO save(PlayerStatusDTO player1) {
 		return PlayerStatusDTO.convertToDTO(ps.save(PlayerStatusDTO.convertToEntity(player1)));
 	}
+
+	@Override
+	public void deleteLinea(LineaDTO linea) {
+		lr.delete(LineaDTO.convertToEntity(linea));
+	}
 	
 
 }

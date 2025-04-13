@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { UserSession } from '../../utils/UserSession';
 import { CommonModule } from '@angular/common';
-import { animate, createDraggable, createSpring } from 'animejs';
+import { animate, createDraggable, createSpring, stagger } from 'animejs';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-game',
@@ -90,7 +91,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     if (data.turno == 3) {
       this.turn3(data)
     }
-    //sessionStorage.removeItem("game")
     setTimeout(() => {
       if (this.yourturn) {
         this.animatecards(document.querySelectorAll('.card'), this.mana)
@@ -300,7 +300,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 1:
         if (game.l1_1 != null) {
           if (game.l2_1 != null) {
-            game.l2_1.vida -= game.l1_1.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l1') : this.shoot("me_c", 'l1') ;
+            setTimeout(() => {
+              game.l2_1.vida -= game.l1_1.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player2.vida -= game.l1_1.carta.habilidadDTO.dmg
           }
@@ -310,7 +313,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 2:
         if (game.l1_2 != null) {
           if (game.l2_2 != null) {
-            game.l2_2.vida -= game.l1_2.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l2') : this.shoot("me_c", 'l2') ;
+            setTimeout(() => {
+              game.l2_2.vida -= game.l1_2.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player2.vida -= game.l1_2.carta.habilidadDTO.dmg
           }
@@ -321,7 +327,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 3:
         if (game.l1_3 != null) {
           if (game.l2_3 != null) {
-            game.l2_3.vida -= game.l1_3.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l3') : this.shoot("me_c", 'l3') ;
+            setTimeout(() => {
+              game.l2_3.vida -= game.l1_3.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player2.vida -= game.l1_3.carta.habilidadDTO.dmg
           }
@@ -332,7 +341,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 4:
         if (game.l1_4 != null) {
           if (game.l2_4 != null) {
-            game.l2_4.vida -= game.l1_4.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l4') : this.shoot("me_c", 'l4') ;
+            setTimeout(() => {
+              game.l2_4.vida -= game.l1_4.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player2.vida -= game.l1_4.carta.habilidadDTO.dmg
           }
@@ -343,7 +355,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 5:
         if (game.l1_5 != null) {
           if (game.l2_5 != null) {
-            game.l2_5.vida -= game.l1_5.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l5') : this.shoot("me_c", 'l5') ;
+            setTimeout(() => {
+              game.l2_5.vida -= game.l1_5.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player2.vida -= game.l1_5.carta.habilidadDTO.dmg
           }
@@ -354,7 +369,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 6:
         if (game.l2_1 != null) {
           if (game.l1_1 != null) {
-            game.l1_1.vida -= game.l2_1.carta.habilidadDTO.dmg
+            setTimeout(() => {
+              game.l1_1.vida -= game.l2_1.carta.habilidadDTO.dmg
+            }, 500);
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l1') : this.shoot("oponent_c", 'l1') ;
           } else {
             game.player1.vida -= game.l2_1.carta.habilidadDTO.dmg
           }
@@ -363,7 +381,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 7:
         if (game.l2_2 != null) {
           if (game.l1_2 != null) {
-            game.l1_2.vida -= game.l2_2.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l2') : this.shoot("oponent_c", 'l2') ;
+            setTimeout(() => {
+              game.l1_2.vida -= game.l2_2.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player1.vida -= game.l2_2.carta.habilidadDTO.dmg
           }
@@ -372,7 +393,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 8:
         if (game.l2_3 != null) {
           if (game.l1_3 != null) {
-            game.l1_3.vida -= game.l2_3.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l3') : this.shoot("oponent_c", 'l3') ;
+            setTimeout(() => {
+              game.l1_3.vida -= game.l2_3.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player1.vida -= game.l2_3.carta.habilidadDTO.dmg
           }
@@ -381,7 +405,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 9:
         if (game.l2_4 != null) {
           if (game.l1_4 != null) {
-            game.l1_4.vida -= game.l2_4.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l4') : this.shoot("oponent_c", 'l4') ;
+            setTimeout(() => {
+              game.l1_4.vida -= game.l2_4.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player1.vida -= game.l2_4.carta.habilidadDTO.dmg
           }
@@ -390,7 +417,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 10:
         if (game.l2_5 != null) {
           if (game.l1_5 != null) {
-            game.l1_5.vida -= game.l2_5.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l5') : this.shoot("oponent_c", 'l5') ;
+            setTimeout(() => {
+              game.l1_5.vida -= game.l2_5.carta.habilidadDTO.dmg
+            }, 500);
           } else {
             game.player1.vida -= game.l2_5.carta.habilidadDTO.dmg
           }
@@ -430,6 +460,90 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   turn3(game: any = this.gameStatus) {
     this.fightLoop(1, game)
+  }
+  shoot(where: any, line: any) {
+    const linea = document.getElementById(line) as HTMLElement
+    const shoot = document.createElement("div")
+    const id = (Math.round(Math.random() * 99999)) + "shot"
+    shoot.id = id
+    shoot.className = id
+    shoot.style.width = linea.getBoundingClientRect().width/4 + "px"
+    shoot.style.height =  linea.getBoundingClientRect().height + "px"
+    shoot.style.position = "fixed"
+    //shoot.style.display = "flex"
+    // shoot.style.alignItems = "center"
+    //shoot.style.flexDirection = "column"
+    // shoot.style.overflow = "hidden"
+    shoot.style.zIndex = "2"
+    document.body.appendChild(shoot)
+    let x
+    let y
+    const animated: any[] = []
+    for (let i = 0; i < Math.floor((shoot.getBoundingClientRect().height/shoot.getBoundingClientRect().width)); i++) {
+      const part = document.createElement("div")
+      part.className = "exp_part"
+      const tmn = shoot.getBoundingClientRect().width
+      part.style.width = tmn +"px"
+      part.style.height = tmn + "px"
+      part.style.backdropFilter = "blur(10px);"    
+      part.style.backgroundColor = "rgba(0,0,0,.5)"  
+      shoot.appendChild(part)
+      animated.push(part)
+    }
+    switch (where) {
+      case 'me_c':
+        y = linea.getBoundingClientRect().top
+        // finalY = linea.getBoundingClientRect().bottom/1.5
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width/2
+        shoot.style.top = y + "px"
+        shoot.style.left = x + "px"
+        this.animateShot(animated, shoot, false)
+        setTimeout(() => {
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().bottom)
+        }, 450);
+        // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
+        //   document.body.removeChild(shoot)
+        //   
+        // })
+        break;
+      case 'oponent_c':
+        y = linea.getBoundingClientRect().top
+        // finalY = -linea.getBoundingClientRect().top*3
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width/2
+        shoot.style.top = y + "px"
+        shoot.style.left = x + "px"
+        this.animateShot(animated, shoot, true)
+        setTimeout(() => {
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().top*1.5)
+        }, 450);
+        // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
+        //   document.body.removeChild(shoot)
+        //   ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().top*1.5)
+        // })
+        break;
+      case 'oponent':
+        break;
+      case 'me':
+        break;
+    }
+  }
+
+  animateShot($squares: any,cont: any, your: boolean) {
+    animate($squares, {
+      scale: [
+        { to: [0, 1.25] },
+        { to: 0 }
+      ],
+      boxShadow: [
+        { to: '0 0 1rem 0 currentColor' },
+        { to: '0 0 0rem 0 currentColor' }
+      ],
+      delay: stagger(30, {
+        from: (!your ? 'first' : 'last')
+      }),
+    }).then(()=>{
+      document.body.removeChild(cont)
+    })
   }
 
   ngOnDestroy(): void {

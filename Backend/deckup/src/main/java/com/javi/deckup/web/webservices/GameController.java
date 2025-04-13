@@ -151,13 +151,25 @@ public class GameController {
 	}
 	
 	private GameDTO fight(GameDTO game) {
+		GameDTO game_aux = GameDTO.builder()
+								  .l1_1(game.getL1_1())
+								  .l1_2(game.getL1_2())
+								  .l1_3(game.getL1_3())
+								  .l1_4(game.getL1_4())
+								  .l1_5(game.getL1_5())
+								  .l2_1(game.getL2_1())
+								  .l2_2(game.getL2_2())
+								  .l2_3(game.getL2_3())
+								  .l2_4(game.getL2_4())
+								  .l2_5(game.getL2_5())
+								  .build();
 		LineaDTO linea = null;
 		LineaDTO linea_own = null;
 		PlayerStatusDTO player1 = game.getPlayer1();
 		PlayerStatusDTO player2 = game.getPlayer2();
 		// Linea 1
-		if (game.getL1_1() != null) {
-			linea_own = game.getL1_1();
+		if (game_aux.getL1_1() != null) {
+			linea_own = game_aux.getL1_1();
 			if (game.getL2_1() != null) {
 				linea = game.getL2_1();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -172,9 +184,9 @@ public class GameController {
 		}
 		
 		// Linea 2
-		if (game.getL1_2() != null) {
+		if (game_aux.getL1_2() != null) {
 
-			linea_own = game.getL1_2();
+			linea_own = game_aux.getL1_2();
 			if (game.getL2_2() != null) {
 				linea = game.getL2_2();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -189,8 +201,8 @@ public class GameController {
 		}
 		
 		// Linea 3
-		if (game.getL1_3() != null) {
-			linea_own = game.getL1_3();
+		if (game_aux.getL1_3() != null) {
+			linea_own = game_aux.getL1_3();
 			if (game.getL2_3() != null) {
 				linea = game.getL2_3();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -205,13 +217,21 @@ public class GameController {
 		}
 		
 		//Linea 4
-		if (game.getL1_4() != null) {
-			linea_own = game.getL1_4();
+		if (game_aux.getL1_4() != null) {
+			linea_own = game_aux.getL1_4();
 			if (game.getL2_4() != null) {
 				linea = game.getL2_4();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
 				if (linea.getVida() <= 0) {
+					System.out.println(game.getL1_4());
+					System.out.println(game_aux.getL1_4());
+					System.out.println(game.getL2_4());
+					System.out.println(game_aux.getL2_4());
 					game.setL2_4(null);
+					System.out.println(game.getL1_4());
+					System.out.println(game_aux.getL1_4());
+					System.out.println(game.getL2_4());
+					System.out.println(game_aux.getL2_4());
 				} else {
 					gs.save(linea);
 				}
@@ -221,8 +241,8 @@ public class GameController {
 		}
 		
 		//Linea 5
-		if (game.getL1_5() != null) {
-			linea_own = game.getL1_5();
+		if (game_aux.getL1_5() != null) {
+			linea_own = game_aux.getL1_5();
 			if (game.getL2_5() != null) {
 				linea = game.getL2_5();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -237,8 +257,8 @@ public class GameController {
 		}
 		
 		//Linea 2-1
-		if (game.getL2_1() != null) {
-			linea_own = game.getL2_1();
+		if (game_aux.getL2_1() != null) {
+			linea_own = game_aux.getL2_1();
 			if (game.getL1_1() != null) {
 				linea = game.getL1_1();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -253,8 +273,8 @@ public class GameController {
 		}
 		
 		//Linea 2-2
-		if (game.getL2_2() != null) {
-			linea_own = game.getL2_2();
+		if (game_aux.getL2_2() != null) {
+			linea_own = game_aux.getL2_2();
 			if (game.getL1_2() != null) {
 				linea = game.getL1_2();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -269,8 +289,8 @@ public class GameController {
 		}
 		
 		//Linea 2-3
-		if (game.getL2_3() != null) {
-			linea_own = game.getL2_3();
+		if (game_aux.getL2_3() != null) {
+			linea_own = game_aux.getL2_3();
 			if (game.getL1_3() != null) {
 				linea = game.getL1_3();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -285,14 +305,16 @@ public class GameController {
 		}
 		
 		//Linea 2-4
-		if (game.getL2_4() != null) {
-			linea_own = game.getL2_4();
+		if (game_aux.getL2_4() != null) {
+			linea_own = game_aux.getL2_4();
 			if (game.getL1_4() != null) {
 				linea = game.getL1_4();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
 				if (linea.getVida() <= 0) {
+					System.out.println("muere");
 					game.setL1_4(null);
 				} else {
+					System.out.println("vive");
 					gs.save(linea);
 				}
 			} else {
@@ -301,8 +323,8 @@ public class GameController {
 		}
 		
 		//Linea 2-5
-		if (game.getL2_5() != null) {
-			linea_own = game.getL2_5();
+		if (game_aux.getL2_5() != null) {
+			linea_own = game_aux.getL2_5();
 			if (game.getL1_5() != null) {
 				linea = game.getL1_5();
 				linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
@@ -315,6 +337,7 @@ public class GameController {
 				player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
 			}
 		}
+		
 		return game;
 	}
 	
