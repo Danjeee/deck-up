@@ -39,7 +39,7 @@ public class Linea {
 	    private Integer turn_dmg_left;
 	    private String turn_dmg_name;
 
-	    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "game")
 	    @ToString.Exclude
 	    private Game game;

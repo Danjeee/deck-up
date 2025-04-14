@@ -4,7 +4,8 @@
         <h3>{{gameStatus.player1.usuario.username}}</h3>
     </div>
     <div>
-        <p>{{gameStatus.player1.vida}}/40</p>
+        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.png" alt="vida">
+        <p class="hp">{{gameStatus.player1.vida}}</p>
     </div>
 </div>
 
@@ -14,7 +15,8 @@
         <h3>{{gameStatus.player2.usuario.username}}</h3>
     </div>
     <div>
-        <p>{{gameStatus.player2.vida}}/40</p>
+        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.png" alt="vida">
+        <p class="hp">{{gameStatus.player2.vida}}</p>
     </div>
 </div>
 
@@ -184,3 +186,6 @@
 </div>
 <div *ngIf="yourturn && loaded" id="switch" class="btn but str bg-g" (click)="switchTurn()">Acabar turno</div>
 <div *ngIf="loaded" id="mana" class="str">{{isYou(gameStatus.player1) ? gameStatus.player1.mana : gameStatus.player2.mana }}</div>
+<div class="victory-cont" id="v">
+    <h1 id="victory" class="str btn bg-t">¡Victoria!</h1>
+</div>

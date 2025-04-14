@@ -149,6 +149,12 @@ public class GameServiceImpl implements GameService {
 	public void deleteLinea(LineaDTO linea) {
 		lr.delete(LineaDTO.convertToEntity(linea));
 	}
+
+	@Override
+	public void deleteLineaById(LineaDTO linea) {
+		lr.deleteById(linea.getId());
+		
+	}
 	
 
 }

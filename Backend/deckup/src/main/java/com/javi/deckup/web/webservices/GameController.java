@@ -129,17 +129,19 @@ public class GameController {
 			if (game.getP1_c() != null && game.getP2_c() != null) {
 				if (game.getP1_c() && game.getP2_c()) {
 					game = fight(game);
-					PlayerStatusDTO p1 = game.getPlayer1();
-					p1.setMana(p1.getMana()+1);
-					PlayerStatusDTO p2 = game.getPlayer2();
-					p2.setMana(p2.getMana()+1);
-					p1 = GameAction.drawCard(p1);
-					p2 = GameAction.drawCard(p2);
-					gs.save(p1);
-					gs.save(p2);
-					game.setTurno(1);
-					game.setP1_c(null);
-					game.setP2_c(null);
+					if (game.getStatus().equals("activo")) {
+						PlayerStatusDTO p1 = game.getPlayer1();
+						p1.setMana(p1.getMana()+1);
+						PlayerStatusDTO p2 = game.getPlayer2();
+						p2.setMana(p2.getMana()+1);
+						p1 = GameAction.drawCard(p1);
+						p2 = GameAction.drawCard(p2);
+						gs.save(p1);
+						gs.save(p2);
+						game.setTurno(1);
+						game.setP1_c(null);
+						game.setP2_c(null);
+					}
 					gs.save(game, true);
 				}
 			}
@@ -152,17 +154,68 @@ public class GameController {
 	
 	private GameDTO fight(GameDTO game) {
 		GameDTO game_aux = GameDTO.builder()
-								  .l1_1(game.getL1_1())
-								  .l1_2(game.getL1_2())
-								  .l1_3(game.getL1_3())
-								  .l1_4(game.getL1_4())
-								  .l1_5(game.getL1_5())
-								  .l2_1(game.getL2_1())
-								  .l2_2(game.getL2_2())
-								  .l2_3(game.getL2_3())
-								  .l2_4(game.getL2_4())
-								  .l2_5(game.getL2_5())
-								  .build();
+				  .l1_1(game.getL1_1())
+				  .l1_2(game.getL1_2())
+				  .l1_3(game.getL1_3())
+				  .l1_4(game.getL1_4())
+				  .l1_5(game.getL1_5())
+				  .l2_1(game.getL2_1())
+				  .l2_2(game.getL2_2())
+				  .l2_3(game.getL2_3())
+				  .l2_4(game.getL2_4())
+				  .l2_5(game.getL2_5())
+				  .build();
+		if (game.getPlayer1().getVida() <= 0) {
+			game.setStatus("winner: " + game.getPlayer2().getUsuario().getUsername());
+			game.setL1_1(null);
+			game.setL1_2(null);
+			game.setL1_3(null);
+			game.setL1_4(null);
+			game.setL1_5(null);
+			game.setL2_1(null);
+			game.setL2_2(null);
+			game.setL2_3(null);
+			game.setL2_4(null);
+			game.setL2_5(null);
+			gs.save(game);
+			if (game_aux.getL1_1() != null) {gs.deleteLinea(game_aux.getL1_1());}
+			if (game_aux.getL1_2() != null) {gs.deleteLinea(game_aux.getL1_2());}
+			if (game_aux.getL1_3() != null) {gs.deleteLinea(game_aux.getL1_3());}
+			if (game_aux.getL1_4() != null) {gs.deleteLinea(game_aux.getL1_4());}
+			if (game_aux.getL1_5() != null) {gs.deleteLinea(game_aux.getL1_5());}
+			if (game_aux.getL2_1() != null) {gs.deleteLinea(game_aux.getL2_1());}
+			if (game_aux.getL2_2() != null) {gs.deleteLinea(game_aux.getL2_2());}
+			if (game_aux.getL2_3() != null) {gs.deleteLinea(game_aux.getL2_3());}
+			if (game_aux.getL2_4() != null) {gs.deleteLinea(game_aux.getL2_4());}
+			if (game_aux.getL2_5() != null) {gs.deleteLinea(game_aux.getL2_5());}
+			return game;
+		}
+		if (game.getPlayer2().getVida() <= 0) {
+			game.setStatus("winner: " + game.getPlayer1().getUsuario().getUsername());
+			game.setL1_1(null);
+			game.setL1_2(null);
+			game.setL1_3(null);
+			game.setL1_4(null);
+			game.setL1_5(null);
+			game.setL2_1(null);
+			game.setL2_2(null);
+			game.setL2_3(null);
+			game.setL2_4(null);
+			game.setL2_5(null);
+			gs.save(game);
+			if (game_aux.getL1_1() != null) {gs.deleteLineaById(game_aux.getL1_1());}
+			if (game_aux.getL1_2() != null) {gs.deleteLineaById(game_aux.getL1_2());}
+			if (game_aux.getL1_3() != null) {gs.deleteLineaById(game_aux.getL1_3());}
+			if (game_aux.getL1_4() != null) {gs.deleteLineaById(game_aux.getL1_4());}
+			if (game_aux.getL1_5() != null) {gs.deleteLineaById(game_aux.getL1_5());}
+			if (game_aux.getL2_1() != null) {gs.deleteLineaById(game_aux.getL2_1());}
+			if (game_aux.getL2_2() != null) {gs.deleteLineaById(game_aux.getL2_2());}
+			if (game_aux.getL2_3() != null) {gs.deleteLineaById(game_aux.getL2_3());}
+			if (game_aux.getL2_4() != null) {gs.deleteLineaById(game_aux.getL2_4());}
+			if (game_aux.getL2_5() != null) {gs.deleteLineaById(game_aux.getL2_5());}
+			return game;
+			
+		}
 		LineaDTO linea = null;
 		LineaDTO linea_own = null;
 		PlayerStatusDTO player1 = game.getPlayer1();

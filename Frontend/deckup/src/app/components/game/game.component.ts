@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { UserSession } from '../../utils/UserSession';
 import { CommonModule } from '@angular/common';
-import { animate, createDraggable, createSpring, stagger } from 'animejs';
+import { animate, createDraggable, createSpring, stagger, utils } from 'animejs';
 import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
@@ -62,6 +62,11 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
 
   rendergame(data: any) {
+    if (data.status != 'activo') {
+      if (String(data.status).startsWith("winner: ")){
+        this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
+      }
+    }
     this.gameStatus = data
     this.oponentcards = this.oponentCards(data)
     this.yourlines = this.setLines(data)[0]
@@ -73,29 +78,31 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     if (data.player1.usuario.id != UserSession.getId() && data.player2.usuario.id != UserSession.getId()) {
       this.router.navigate(["/home"])
     }
-    if (data.status != "activo") {
+    if (data.status != "activo" && !String(data.status).startsWith("winner:")) {
       this.router.navigate(["/home"])
     }
     this.yourturn = false
-    if (data.turno == 1 && this.isYou(data.player1)) {
-      this.yourturn = true
-    }
-    if (data.turno == 2 && this.isYou(data.player2)) {
-      this.yourturn = true
-    }
-    if (this.isYou(data.player1)) {
-      this.mana = data.player1.mana
-    } else {
-      this.mana = data.player2.mana
-    }
-    if (data.turno == 3) {
-      this.turn3(data)
-    }
-    setTimeout(() => {
-      if (this.yourturn) {
-        this.animatecards(document.querySelectorAll('.card'), this.mana)
+    if (data.status  == "activo"){
+      if (data.turno == 1 && this.isYou(data.player1)) {
+        this.yourturn = true
       }
-    }, 100);
+      if (data.turno == 2 && this.isYou(data.player2)) {
+        this.yourturn = true
+      }
+      if (this.isYou(data.player1)) {
+        this.mana = data.player1.mana
+      } else {
+        this.mana = data.player2.mana
+      }
+      if (data.turno == 3) {
+        this.turn3(data)
+      }
+      setTimeout(() => {
+        if (this.yourturn) {
+          this.animatecards(document.querySelectorAll('.card'), this.mana)
+        }
+      }, 100);
+    }
   }
 
   animatecards(cards: any, mana: any) {
@@ -300,12 +307,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 1:
         if (game.l1_1 != null) {
           if (game.l2_1 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l1') : this.shoot("me_c", 'l1') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l1') : this.shoot("me_c", 'l1');
             setTimeout(() => {
               game.l2_1.vida -= game.l1_1.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player2.vida -= game.l1_1.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l1') : this.shoot("me", 'l1');
+            setTimeout(() => {
+              game.player2.vida -= game.l1_1.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l1") as HTMLElement).className = "line selectedline";
@@ -313,12 +323,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 2:
         if (game.l1_2 != null) {
           if (game.l2_2 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l2') : this.shoot("me_c", 'l2') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l2') : this.shoot("me_c", 'l2');
             setTimeout(() => {
               game.l2_2.vida -= game.l1_2.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player2.vida -= game.l1_2.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l2') : this.shoot("me", 'l2');
+            setTimeout(() => {
+              game.player2.vida -= game.l1_2.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l2") as HTMLElement).className = "line selectedline";
@@ -327,12 +340,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 3:
         if (game.l1_3 != null) {
           if (game.l2_3 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l3') : this.shoot("me_c", 'l3') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l3') : this.shoot("me_c", 'l3');
             setTimeout(() => {
               game.l2_3.vida -= game.l1_3.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player2.vida -= game.l1_3.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l3') : this.shoot("me", 'l3');
+            setTimeout(() => {
+              game.player2.vida -= game.l1_3.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l3") as HTMLElement).className = "line selectedline";
@@ -341,12 +357,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 4:
         if (game.l1_4 != null) {
           if (game.l2_4 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l4') : this.shoot("me_c", 'l4') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l4') : this.shoot("me_c", 'l4');
             setTimeout(() => {
               game.l2_4.vida -= game.l1_4.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player2.vida -= game.l1_4.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l4') : this.shoot("me", 'l4');
+            setTimeout(() => {
+              game.player2.vida -= game.l1_4.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l4") as HTMLElement).className = "line selectedline";
@@ -355,12 +374,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 5:
         if (game.l1_5 != null) {
           if (game.l2_5 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l5') : this.shoot("me_c", 'l5') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l5') : this.shoot("me_c", 'l5');
             setTimeout(() => {
               game.l2_5.vida -= game.l1_5.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player2.vida -= game.l1_5.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l5') : this.shoot("me", 'l5');
+            setTimeout(() => {
+              game.player2.vida -= game.l1_5.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l5") as HTMLElement).className = "line selectedline";
@@ -372,57 +394,72 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             setTimeout(() => {
               game.l1_1.vida -= game.l2_1.carta.habilidadDTO.dmg
             }, 500);
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l1') : this.shoot("oponent_c", 'l1') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l1') : this.shoot("oponent_c", 'l1');
           } else {
-            game.player1.vida -= game.l2_1.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l1') : this.shoot("oponent", 'l1');
+            setTimeout(() => {
+              game.player1.vida -= game.l2_1.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         return 2;
       case 7:
         if (game.l2_2 != null) {
           if (game.l1_2 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l2') : this.shoot("oponent_c", 'l2') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l2') : this.shoot("oponent_c", 'l2');
             setTimeout(() => {
               game.l1_2.vida -= game.l2_2.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player1.vida -= game.l2_2.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l2') : this.shoot("oponent", 'l2');
+            setTimeout(() => {
+              game.player1.vida -= game.l2_2.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         return 3;
       case 8:
         if (game.l2_3 != null) {
           if (game.l1_3 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l3') : this.shoot("oponent_c", 'l3') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l3') : this.shoot("oponent_c", 'l3');
             setTimeout(() => {
               game.l1_3.vida -= game.l2_3.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player1.vida -= game.l2_3.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l3') : this.shoot("oponent", 'l3');
+            setTimeout(() => {
+              game.player1.vida -= game.l2_3.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         return 4;
       case 9:
         if (game.l2_4 != null) {
           if (game.l1_4 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l4') : this.shoot("oponent_c", 'l4') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l4') : this.shoot("oponent_c", 'l4');
             setTimeout(() => {
               game.l1_4.vida -= game.l2_4.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player1.vida -= game.l2_4.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l4') : this.shoot("oponent", 'l4');
+            setTimeout(() => {
+              game.player1.vida -= game.l2_4.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         return 5;
       case 10:
         if (game.l2_5 != null) {
           if (game.l1_5 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l5') : this.shoot("oponent_c", 'l5') ;
+            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l5') : this.shoot("oponent_c", 'l5');
             setTimeout(() => {
               game.l1_5.vida -= game.l2_5.carta.habilidadDTO.dmg
             }, 500);
           } else {
-            game.player1.vida -= game.l2_5.carta.habilidadDTO.dmg
+            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l5') : this.shoot("oponent", 'l5');
+            setTimeout(() => {
+              game.player1.vida -= game.l2_5.carta.habilidadDTO.dmg
+            }, 500);
           }
         }
         (document.getElementById("l5") as HTMLElement).className = "line";
@@ -462,13 +499,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     this.fightLoop(1, game)
   }
   shoot(where: any, line: any) {
+    const me = document.getElementsByClassName("you")[0] as HTMLElement
+    console.log(me.id)
+    const enemy = document.getElementById(me.id == "palyer1" ? "player2" : "player1") as HTMLElement
     const linea = document.getElementById(line) as HTMLElement
     const shoot = document.createElement("div")
     const id = (Math.round(Math.random() * 99999)) + "shot"
     shoot.id = id
     shoot.className = id
-    shoot.style.width = linea.getBoundingClientRect().width/4 + "px"
-    shoot.style.height =  linea.getBoundingClientRect().height + "px"
+    shoot.style.width = linea.getBoundingClientRect().width / 4 + "px"
+    shoot.style.height = linea.getBoundingClientRect().height + "px"
     shoot.style.position = "fixed"
     //shoot.style.display = "flex"
     // shoot.style.alignItems = "center"
@@ -479,14 +519,14 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     let x
     let y
     const animated: any[] = []
-    for (let i = 0; i < Math.floor((shoot.getBoundingClientRect().height/shoot.getBoundingClientRect().width)); i++) {
+    for (let i = 0; i < Math.floor((shoot.getBoundingClientRect().height / shoot.getBoundingClientRect().width)); i++) {
       const part = document.createElement("div")
       part.className = "exp_part"
       const tmn = shoot.getBoundingClientRect().width
-      part.style.width = tmn +"px"
+      part.style.width = tmn + "px"
       part.style.height = tmn + "px"
-      part.style.backdropFilter = "blur(10px);"    
-      part.style.backgroundColor = "rgba(0,0,0,.5)"  
+      part.style.backdropFilter = "blur(10px);"
+      part.style.backgroundColor = "rgba(0,0,0,.5)"
       shoot.appendChild(part)
       animated.push(part)
     }
@@ -494,12 +534,12 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 'me_c':
         y = linea.getBoundingClientRect().top
         // finalY = linea.getBoundingClientRect().bottom/1.5
-        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width/2
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width / 2
         shoot.style.top = y + "px"
         shoot.style.left = x + "px"
         this.animateShot(animated, shoot, false)
         setTimeout(() => {
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().bottom)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom)
         }, 450);
         // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
         //   document.body.removeChild(shoot)
@@ -509,12 +549,12 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 'oponent_c':
         y = linea.getBoundingClientRect().top
         // finalY = -linea.getBoundingClientRect().top*3
-        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width/2
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width / 2
         shoot.style.top = y + "px"
         shoot.style.left = x + "px"
         this.animateShot(animated, shoot, true)
         setTimeout(() => {
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().top*1.5)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5)
         }, 450);
         // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
         //   document.body.removeChild(shoot)
@@ -522,13 +562,42 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         // })
         break;
       case 'oponent':
+        y = linea.getBoundingClientRect().top - 50
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width / 2
+        shoot.style.top = y + "px"
+        shoot.style.left = x + "px"
+        this.animateShot(animated, shoot, true)
+        setTimeout(() => {
+          enemy.style.animation = "hit .3s linear"
+          enemy.style.backgroundColor = "#d33"
+          setTimeout(() => {
+            enemy.style.animation = ""
+            enemy.style.backgroundColor = "#fff"
+          }, 301);
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5 - 50)
+        }, 450);
         break;
       case 'me':
+        y = linea.getBoundingClientRect().top + 50
+        x = linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 - shoot.getBoundingClientRect().width / 2
+        shoot.style.top = y + "px"
+        shoot.style.left = x + "px"
+        this.animateShot(animated, shoot, false)
+        setTimeout(() => {
+          me.style.animation = "hit .3s linear"
+          me.style.backgroundColor = "#d33"
+          setTimeout(() => {
+            me.style.animation = ""
+            me.style.backgroundColor = "#fff"
+          }, 301);
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom + 50)
+        }, 450);
+
         break;
     }
   }
 
-  animateShot($squares: any,cont: any, your: boolean) {
+  animateShot($squares: any, cont: any, your: boolean) {
     animate($squares, {
       scale: [
         { to: [0, 1.25] },
@@ -541,8 +610,50 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       delay: stagger(30, {
         from: (!your ? 'first' : 'last')
       }),
-    }).then(()=>{
+    }).then(() => {
       document.body.removeChild(cont)
+    })
+  }
+
+  victoria(player: string){
+    sessionStorage.removeItem("game")
+    const v = document.getElementById('v') as HTMLElement
+    const title = document.getElementById('victory') as HTMLElement
+    title.innerHTML = "Ganador: "+player
+    v.style.display = "flex"
+
+    // Animar título
+    animate(title, {
+      opacity: [0, 1],
+      scale: [0.8, 1],
+      easing: 'easeOutExpo',
+      duration: 1000,
+      delay: 300
+    })
+
+    const total: any[] = []
+    for (let i = 0; i<100; i++){
+      const sq = document.createElement("div")
+      sq.style.width = "10dvw"
+      sq.style.height = "10dvh"
+      v.appendChild(sq)
+      total.push(sq)
+    }
+    animate(total, {
+      scale: [
+        { to: [0, 1.25] },
+        { to: 0 }
+      ],
+      boxShadow: [
+        { to: '0 0 1rem 0 currentColor' },
+        { to: '0 0 0rem 0 currentColor' }
+      ],
+      delay: stagger(500, {
+        grid: [10, 10],
+        from: 'center'
+      }),
+    }).then(()=>{
+      this.router.navigate(['/home'])
     })
   }
 
