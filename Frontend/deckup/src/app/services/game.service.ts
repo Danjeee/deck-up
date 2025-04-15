@@ -30,6 +30,7 @@ export class GameService extends environmentsURLs {
 
   joinListener(game: any) {
     this.initConectionSocket()
+    this.status = new BehaviorSubject<any>("")
     try {
       this.stompClient.connect({}, () => {
         this.stompClient.subscribe(`/game/${game}`, (messages: any) => {
@@ -74,6 +75,16 @@ export class GameService extends environmentsURLs {
     data.append("game_id", game)
     data.append("player", player)
     return this.http.post(`${this.gameURL}/switch`, data).pipe(
+      
+      catchError(err => {throw err})
+    )
+  }
+
+  lose(game: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_id", game)
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.gameURL}/disconnect`, data).pipe(
       
       catchError(err => {throw err})
     )

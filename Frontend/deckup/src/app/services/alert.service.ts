@@ -10,10 +10,10 @@ export class AlertService {
   constructor() { }
 
 
-  pago_recibido(amount: number){
+  pago_recibido(amount: number, tit?: any, msg?: any){
     return Swal.fire({
-      title: "¡Enhorabuena!",
-      text: "¡Has recibido "+amount +" gemas!",
+      title: tit ? tit : "¡Enhorabuena!",
+      text: msg ? msg : "¡Has recibido "+amount +" gemas!",
       showCloseButton: true,
       iconHtml: '<i class="bi bi-gem swal-gm"></i>',
       customClass: {

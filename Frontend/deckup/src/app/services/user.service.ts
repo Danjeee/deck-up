@@ -86,4 +86,14 @@ export class UserService extends environmentsURLs {
   getForChat(username: string): Observable<any>{
     return this.http.get(`${this.apiURL}/users/getForChat/${username}`)
   }
+
+  losegame(game: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_id", game)
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.apiURL}/game/disconnect`, data).pipe(
+      
+      catchError(err => {throw err})
+    )
+  }
 }

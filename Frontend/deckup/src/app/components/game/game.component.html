@@ -1,4 +1,4 @@
-<div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you' : ''}}" *ngIf="loaded">
+<div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you' : 'enemy'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player1.usuario.pfp}}">
         <h3>{{gameStatus.player1.usuario.username}}</h3>
@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div id="player2" class="player btn skew str {{isYou(gameStatus.player2) ? 'you' : ''}}" *ngIf="loaded">
+<div id="player2" class="player btn skew str {{isYou(gameStatus.player2) ? 'you' : 'enemy'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player2.usuario.pfp}}">
         <h3>{{gameStatus.player2.usuario.username}}</h3>

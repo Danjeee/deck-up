@@ -27,4 +27,8 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 	@Query(value = "SELECT g.* FROM games g, player_status u WHERE g.player1 = u.id AND u.usuario = ?1 AND g.player2 IS null LIMIT 1", nativeQuery = true)
 	Optional<Game> findUnstartedByPlayer1(Long id);
 
+	@Modifying
+	@Query(value = "DELETE FROM lineas WHERE game = ?1", nativeQuery = true)
+	void deleteAllLines(Long id);
+
 }

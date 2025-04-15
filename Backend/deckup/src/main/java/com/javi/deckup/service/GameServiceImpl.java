@@ -155,6 +155,11 @@ public class GameServiceImpl implements GameService {
 		lr.deleteById(linea.getId());
 		
 	}
+
+	@Override
+	public void deleteAllLines(Long id) {
+		gr.deleteAllLines(id);
+	}
 	
 
 }

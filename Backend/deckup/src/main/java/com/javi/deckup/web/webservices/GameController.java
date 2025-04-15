@@ -11,6 +11,7 @@ import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.entity.PlayerStatus;
 import com.javi.deckup.service.CartaService;
 import com.javi.deckup.service.GameService;
+import com.javi.deckup.service.NotificationService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.GameAction;
 import com.javi.deckup.utils.Response;
@@ -35,6 +36,9 @@ public class GameController {
 	
 	@Autowired
 	CartaService cs;
+	
+	@Autowired
+	NotificationService ns;
 	
 	@PostMapping("/matchmaking")
 	public Response joinqueue(@ModelAttribute UsuarioDTO user) {
@@ -112,6 +116,22 @@ public class GameController {
 		return Response.success("donete");
 	}
 	
+	@PostMapping("/disconnect")
+	public Response dc(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		GameDTO game = gs.findById(data.getUser_id());
+		if (game.getStatus().equals("activo")) {
+			if (game.getPlayer1().getUsuario().getId() == user.getId()) {
+				game.getPlayer1().setVida(0);
+			} else {
+				game.getPlayer2().setVida(0);
+			}
+			game = fight(game);
+			gs.save(game, true);
+		}
+		return Response.success("donete");
+	}
+	
 	@PostMapping("/switch")
 	public Response switchturn(@ModelAttribute GameAction data) {
 		GameDTO game = gs.findById(data.getGame_id());
@@ -129,6 +149,12 @@ public class GameController {
 			if (game.getP1_c() != null && game.getP2_c() != null) {
 				if (game.getP1_c() && game.getP2_c()) {
 					game = fight(game);
+					if (game.getPlayer1().getVida() <= 0) {
+						game = fight(game);
+					}
+					if (game.getPlayer2().getVida() <= 0) {
+						game = fight(game);
+					}
 					if (game.getStatus().equals("activo")) {
 						PlayerStatusDTO p1 = game.getPlayer1();
 						p1.setMana(p1.getMana()+1);
@@ -178,16 +204,8 @@ public class GameController {
 			game.setL2_4(null);
 			game.setL2_5(null);
 			gs.save(game);
-			if (game_aux.getL1_1() != null) {gs.deleteLinea(game_aux.getL1_1());}
-			if (game_aux.getL1_2() != null) {gs.deleteLinea(game_aux.getL1_2());}
-			if (game_aux.getL1_3() != null) {gs.deleteLinea(game_aux.getL1_3());}
-			if (game_aux.getL1_4() != null) {gs.deleteLinea(game_aux.getL1_4());}
-			if (game_aux.getL1_5() != null) {gs.deleteLinea(game_aux.getL1_5());}
-			if (game_aux.getL2_1() != null) {gs.deleteLinea(game_aux.getL2_1());}
-			if (game_aux.getL2_2() != null) {gs.deleteLinea(game_aux.getL2_2());}
-			if (game_aux.getL2_3() != null) {gs.deleteLinea(game_aux.getL2_3());}
-			if (game_aux.getL2_4() != null) {gs.deleteLinea(game_aux.getL2_4());}
-			if (game_aux.getL2_5() != null) {gs.deleteLinea(game_aux.getL2_5());}
+			gs.deleteAllLines(game.getId());
+			ns.win(game.getPlayer2().getUsuario());
 			return game;
 		}
 		if (game.getPlayer2().getVida() <= 0) {
@@ -203,18 +221,9 @@ public class GameController {
 			game.setL2_4(null);
 			game.setL2_5(null);
 			gs.save(game);
-			if (game_aux.getL1_1() != null) {gs.deleteLineaById(game_aux.getL1_1());}
-			if (game_aux.getL1_2() != null) {gs.deleteLineaById(game_aux.getL1_2());}
-			if (game_aux.getL1_3() != null) {gs.deleteLineaById(game_aux.getL1_3());}
-			if (game_aux.getL1_4() != null) {gs.deleteLineaById(game_aux.getL1_4());}
-			if (game_aux.getL1_5() != null) {gs.deleteLineaById(game_aux.getL1_5());}
-			if (game_aux.getL2_1() != null) {gs.deleteLineaById(game_aux.getL2_1());}
-			if (game_aux.getL2_2() != null) {gs.deleteLineaById(game_aux.getL2_2());}
-			if (game_aux.getL2_3() != null) {gs.deleteLineaById(game_aux.getL2_3());}
-			if (game_aux.getL2_4() != null) {gs.deleteLineaById(game_aux.getL2_4());}
-			if (game_aux.getL2_5() != null) {gs.deleteLineaById(game_aux.getL2_5());}
+			gs.deleteAllLines(game.getId());
+			ns.win(game.getPlayer1().getUsuario());
 			return game;
-			
 		}
 		LineaDTO linea = null;
 		LineaDTO linea_own = null;

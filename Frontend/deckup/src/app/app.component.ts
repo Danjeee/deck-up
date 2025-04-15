@@ -25,6 +25,9 @@ export class AppComponent implements OnInit {
             this.service.restoreUser(UserSession.getId(), UserSession.getUser().auth).subscribe({
               next: (data) => {
                 if (data.status == 200) {
+                  if (sessionStorage.getItem("game") != null && sessionStorage.getItem("game") != "" && this.router.url != "/game"){
+                    this.service.losegame(sessionStorage.getItem("game")).subscribe({next:(data)=>{console.log(this.router.url)}})
+                  }
                   UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
                 } else {
                   this.service.logout()

@@ -7,6 +7,7 @@ import { User } from '../../utils/User';
 import { NavComponent } from '../nav/nav.component';
 import { ParticleComponent } from '../particle/particle.component';
 import { Router } from '@angular/router';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +18,22 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
 
-  constructor(private service: UserService, private alert: AlertService, private router: Router){}
+  constructor(private service: UserService, private alert: AlertService, private router: Router, private notif: NotificacionService){}
 
   ngOnInit(): void {
     setTimeout(() => {
+      this.notif.claimAll().subscribe({
+        next: (data) => {
+          this.notif.readAll().subscribe({next: (data) => {}})
+          Array.from(data).forEach((e:any) => {
+            if (e.currency != null) {
+              this.pay_anim()
+              UserSession.get_paid(e.currency)
+              this.alert.pago_recibido(e.currency, e.tit, e.msg)
+            }
+          });
+        }
+      })
       const user_np = new Date(UserSession.getUser().pay)
       if (user_np < new Date()) {
         this.can_pay = true

@@ -21,6 +21,7 @@ import com.javi.deckup.configuration.JwtService;
 import com.javi.deckup.model.dto.RolDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.AuthenticationService;
+import com.javi.deckup.service.GameService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.CodeGenerator;
 import com.javi.deckup.utils.EmailService;

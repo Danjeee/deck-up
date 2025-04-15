@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { environmentsURLs } from '../utils/environmentsURls';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -11,6 +11,7 @@ import { UserSession } from '../utils/UserSession';
 })
 export class NotificacionService extends environmentsURLs {
   chatURL = `${this.apiURL}/ws`
+  notifURL = `${this.apiURL}/notifs`
 
   private stompClient: any;
 
@@ -41,5 +42,21 @@ export class NotificacionService extends environmentsURLs {
 
   getnotifications() {
     return this.notifications.asObservable();
+  }
+
+  claimAll(): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.notifURL}/getUnreaded`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  readAll(): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.notifURL}/readAll`, data).pipe(
+      catchError(err => {throw err})
+    )
   }
 }

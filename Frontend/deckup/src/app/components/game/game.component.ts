@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
@@ -17,8 +17,8 @@ import { ParticleComponent } from '../particle/particle.component';
 export class GameComponent extends environmentsURLs implements AfterViewInit, OnDestroy {
 
   loaded: boolean = false
-  gameStatus: any
-  gameActual: any
+  gameStatus: any = null
+  gameActual: any = null
   cards: any
   oponentcards: any
   yourlines: any
@@ -35,7 +35,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     this.loaded = false;
     this.service.getstatus().subscribe((status: any) => {
       if (status != "" && status != null) {
-        this.service.getGame(this.gameStatus.id).subscribe({
+        this.service.getGame(id).subscribe({
           next: (data) => {
             this.gameStatus = data;
             this.gameActual = this.gameStatus
@@ -47,15 +47,18 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
 
   ngAfterViewInit(): void {
+    this.gameStatus = null
     if (sessionStorage.getItem("game") == null || sessionStorage.getItem("game") == "") {
       this.router.navigate(["/home"])
     } else {
       this.joinlistener(sessionStorage.getItem("game"))
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
-          console.log(data)
-          this.rendergame(data)
-          this.loaded = true
+          if (data.id == sessionStorage.getItem("game")){
+            console.log(data.id + " " + sessionStorage.getItem("game"))
+            this.rendergame(data)
+            this.loaded = true
+          }
         }
       })
     }
@@ -500,8 +503,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
   shoot(where: any, line: any) {
     const me = document.getElementsByClassName("you")[0] as HTMLElement
-    console.log(me.id)
-    const enemy = document.getElementById(me.id == "palyer1" ? "player2" : "player1") as HTMLElement
+    const enemy = document.getElementsByClassName("enemy")[0] as HTMLElement
     const linea = document.getElementById(line) as HTMLElement
     const shoot = document.createElement("div")
     const id = (Math.round(Math.random() * 99999)) + "shot"
@@ -617,6 +619,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   victoria(player: string){
     sessionStorage.removeItem("game")
+    this.service.disconnect()
     const v = document.getElementById('v') as HTMLElement
     const title = document.getElementById('victory') as HTMLElement
     title.innerHTML = "Ganador: "+player
@@ -657,8 +660,25 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  instantlose($event: BeforeUnloadEvent){
+    sessionStorage.removeItem("game")
+    this.service.lose(this.gameStatus.id).subscribe({
+      next: (data) => {
+        console.log(data)
+      }
+    })
+  }
+
   ngOnDestroy(): void {
     this.service.disconnect()
+      if (this.router.url != "/game") {
+        this.service.lose(this.gameStatus.id).subscribe({
+          next: (data) => {
+            console.log(data)
+          }
+        })
+      }
   }
 
 }

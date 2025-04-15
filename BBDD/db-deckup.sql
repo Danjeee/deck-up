@@ -471,6 +471,30 @@ CREATE TABLE `deckup`.`player_status` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
     
+    /* Notif */
+    CREATE TABLE `deckup`.`notifications` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `user` BIGINT NOT NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `msg` VARCHAR(255) NOT NULL,
+  `currency` INT NULL,
+  `card` INT NULL,
+  `card_cant` INT NULL,
+  `claimed` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_notif_idx` (`user` ASC) VISIBLE,
+  INDEX `fk_card_notif_idx` (`card` ASC) VISIBLE,
+  CONSTRAINT `fk_user_notif`
+    FOREIGN KEY (`user`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_card_notif`
+    FOREIGN KEY (`card`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+    
     
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/

@@ -31,5 +31,7 @@ public interface GameService {
 
 	void deleteLinea(LineaDTO linea);
 	void deleteLineaById(LineaDTO linea);
+
+	void deleteAllLines(Long id);
 	
 }

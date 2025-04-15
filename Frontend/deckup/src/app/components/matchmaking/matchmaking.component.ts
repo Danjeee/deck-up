@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatchmakingService } from '../../services/matchmaking.service';
 import { ParticleComponent } from '../particle/particle.component';
 import { Router } from '@angular/router';
@@ -18,9 +18,9 @@ export class MatchmakingComponent implements AfterViewInit, OnDestroy {
   constructor(private service: MatchmakingService, private router: Router) { }
 
   ngAfterViewInit(): void {
-    
-    this.listener() 
-    
+
+    this.listener()
+
     setTimeout(() => { // Evitar errores y mejorar matchmaking ademas de dar tiempo a cancelar
       if (this.router.url == "/matchmaking") {
         this.service.startMatch().subscribe()
@@ -42,16 +42,26 @@ export class MatchmakingComponent implements AfterViewInit, OnDestroy {
     })
   }
 
-  ngOnDestroy(): void {
+  @HostListener('window:beforeunload', ['$event'])
+  instantlose($event: BeforeUnloadEvent) {
     this.service.disconnect()
-    if (this.router.url != "/game"){
+    if (this.router.url != "/game") {
       this.service.cancel().subscribe({
-        next: (data) => {console.log(data)}
+        next: (data) => { console.log(data) }
       })
     }
   }
 
-  back(){
+  ngOnDestroy(): void {
+    this.service.disconnect()
+    if (this.router.url != "/game") {
+      this.service.cancel().subscribe({
+        next: (data) => { console.log(data) }
+      })
+    }
+  }
+
+  back() {
     this.router.navigate(["/home"])
   }
 }
