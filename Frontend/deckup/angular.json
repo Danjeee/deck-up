@@ -23,7 +23,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets"
               }
             ],
             "styles": [
@@ -45,6 +45,11 @@
                   "maximumError": "8kB"
                 }
               ],
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
               "outputHashing": "all"
             },
             "development": {
@@ -57,10 +62,8 @@
         },
         "serve": {
           "options": {
-            "ssl": true,
-            "sslKey": "./https/deckup.key",
-            "sslCert": "./https/deckup.crt",
-            "port": 443
+            "ssl": false,
+            "port": 4200
           },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {

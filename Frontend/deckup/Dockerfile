@@ -1,13 +1,19 @@
-FROM node:alpine
+# Etapa de build
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-WORKDIR /web
-
+# Copiamos los archivos necesarios
+COPY package*.json ./
+COPY angular.json ./
+COPY tsconfig*.json ./
 COPY . .
 
-RUN npm i -g @angular/cli@19
+# Instalamos dependencias y construimos
+RUN npm install && npm run build -- --configuration=production
 
-RUN npm i
+# Etapa de producción con Nginx
+FROM nginx
+COPY --from=builder /app/dist/deckup /app/dist/deckup
 
-EXPOSE 443
-
-ENTRYPOINT ["ng", "serve", "--ssl", "--host", "0.0.0.0"]
+# Copiamos configuración custom de nginx si tienes
+# COPY nginx.conf /etc/nginx/nginx.conf

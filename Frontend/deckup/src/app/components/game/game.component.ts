@@ -55,7 +55,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
           if (data.id == sessionStorage.getItem("game")){
-            console.log(data.id + " " + sessionStorage.getItem("game"))
             this.rendergame(data)
             this.loaded = true
           }
