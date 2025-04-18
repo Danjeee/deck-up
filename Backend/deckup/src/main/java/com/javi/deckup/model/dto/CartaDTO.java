@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CartaDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3L;
 
 	private Integer id;
 	
@@ -47,6 +47,8 @@ public class CartaDTO implements Serializable {
 	
 	private PaqueteDTO paqueteDTO;
 	
+	private String tipo;
+	
 	// No añado la lista de codigos y usuarios porque es una carga de datos innecesaria
 	
 	public static CartaDTO convertToDTO(Carta input) { // Convert a DTO sin hacer el proceso de conseguir las copias
@@ -62,6 +64,7 @@ public class CartaDTO implements Serializable {
 						.mana(input.getMana())
 						.vida(input.getVida())
 						.exclusive(input.isExclusive())
+						.tipo(input.getTipo())
 						.copias(null)
 						.rarezaDTO(RarezaDTO.convertToDTO(input.getRareza()))
 						.habilidadDTO(HabilidadDTO.convertToDTO(input.getHabilidad()))
@@ -75,6 +78,7 @@ public class CartaDTO implements Serializable {
 						.id(input.getId())
 						.nombre(input.getNombre())
 						.descripcion(input.getDescripcion())
+						.tipo(input.getTipo())
 						.imagen(input.getImagen())
 						.precio(input.getPrecio())
 						.exclusive(input.isExclusive())
@@ -101,6 +105,7 @@ public class CartaDTO implements Serializable {
 						.nombre(input.getNombre())
 						.descripcion(input.getDescripcion())
 						.imagen(input.getImagen())
+						.tipo(input.getTipo())
 						.precio(input.getPrecio())
 						.exclusive(input.isExclusive())
 						.mana(input.getMana())

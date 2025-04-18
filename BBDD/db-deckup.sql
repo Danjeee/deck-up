@@ -23,10 +23,11 @@ CREATE TABLE `deckup`.`usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
-  `vida` INT NOT NULL,
+  `vida` INT NULL,
   `mana` INT NOT NULL,
   `imagen` VARCHAR(100) NOT NULL,
   `precio` INT NOT NULL,
+  `tipo` VARCHAR(1) NOT NULL DEFAULT 'C',
   `habilidad` INT NOT NULL DEFAULT 1,
   `exclusive` TINYINT DEFAULT 0,
   PRIMARY KEY (`id`));
@@ -525,7 +526,7 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 ('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null), # 1
 ('Golpe', 'Golpea al rival', 1, null, null, null, null), # 2
 ('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 1, 'Noqueado', null), # 3
-('Ignicion', 'Quema al rival', 0, null, null, null, 1), # 4
+('Ignicion', 'Quema al rival', 1, null, null, null, 1), # 4
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
@@ -536,6 +537,12 @@ INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) 
 ('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3),
 ('Arrebato de ira', 'Nada mal para un principiante', 2, 50, 200,null,null),
 ('Big crush', 'El fin del universo', 10, 50, 50,2,5);
+
+INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, especial, bleed) VALUES
+("Golpe mágico", "Acabas de ser golpeado mágicamente", 3, null, null, null, null, null), #13
+("Cero", "brr brr que frio hace por aqui", null, 1, "congelado", null, null, 1), #14
+("Curación inesperada", "¡HP UP!", null, null, null, 2, null, null), #15
+("Desvanecimiento", "Desaparezco", null, null, null, null, "D", null); #16
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, vida, mana) VALUES
@@ -551,6 +558,13 @@ INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilid
 ('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.jpeg', 4000,4 ,1, 10, 0, 4, 4), # 10
 ('Haruki', 'Un samurai recién iniciado', 'haruki.jpeg', 500,2 ,1, 11, 0, 3, 4), # 11
 ('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.jpeg', 10000,5 ,1, 12, 0, 5, 5); # 12
+
+/* Hechizos */
+INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, mana, tipo) VALUES
+('Misil magico', 'Un golpe duro que combina magia con impacto', 'misil_magico.jpeg', 200,1 ,1, 13, 0, 2, 'H'), #13
+('Punto cero', 'Tan frio como el universo mismo', 'punto_cero.jpeg', 2000,3 ,1, 14, 0, 3, 'H'), #14
+('Curacion inesperada', 'No es mucho pero oye, es barato', 'curacion_inesperada.jpeg', 500,2 ,1, 15, 0, 1, 'H'), #15
+('Evaporación', 'Eliminalos', 'evaporacion.jpeg', 200,1 ,1, 16, 0, 5, 'H'); #16
 
 /* Codigos */
 

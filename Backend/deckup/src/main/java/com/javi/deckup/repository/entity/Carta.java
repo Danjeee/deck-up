@@ -46,6 +46,8 @@ public class Carta {
 	
 	private Integer mana;
 	
+	private String tipo;
+	
 	private boolean exclusive;
 	
 	@ManyToOne
