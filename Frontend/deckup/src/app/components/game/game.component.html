@@ -1,4 +1,4 @@
-<div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you' : 'enemy'}}" *ngIf="loaded">
+<div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you yourself' : 'enemy oponent_a'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player1.usuario.pfp}}">
         <h3>{{gameStatus.player1.usuario.username}}</h3>
@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div id="player2" class="player btn skew str {{isYou(gameStatus.player2) ? 'you' : 'enemy'}}" *ngIf="loaded">
+<div id="player2" class="player btn skew str {{isYou(gameStatus.player2) ? 'you yourself' : 'enemy oponent_a'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player2.usuario.pfp}}">
         <h3>{{gameStatus.player2.usuario.username}}</h3>
@@ -27,7 +27,7 @@
 </div>
 
 <div id="mycards" class="cardcont" *ngIf="loaded">
-    <div class="card {{yourturn ? '' : 'disabled' }}" *ngFor="let card of cards" id="{{card.id}}">
+    <div *ngFor="let card of cards" class="{{card.tipo}} {{yourturn ? '' : 'disabled' }}"  id="{{card.id}}">
         <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="carta_oponente">
         <p class="mana str">{{card.mana}}</p>
     </div>
@@ -35,7 +35,7 @@
 <div id="map" *ngIf="loaded">
     <div class="line" id="l1">
         <div>
-            <div class="troop oponent" *ngIf="oponentlines[0] != null">
+            <div class="troop oponent oponent_a" *ngIf="oponentlines[0] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player2) ? gameStatus.l1_1.carta.imagen : gameStatus.l2_1.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player2) ? gameStatus.l1_1.carta.habilidadDTO.dmg :
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div id="l{{isYou(gameStatus.player1) ? '1' : '2'}}_1" class="{{yourlines[0] == null ? 'able' : ''}} your">
-            <div class="troop" *ngIf="yourlines[0] != null">
+            <div id="{{isYou(gameStatus.player1) ? gameStatus.l1_1.carta.id : gameStatus.l2_1.carta.id}}" class="troop yourself" *ngIf="yourlines[0] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player1) ? gameStatus.l1_1.carta.imagen : gameStatus.l2_1.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player1) ? gameStatus.l1_1.carta.habilidadDTO.dmg :
@@ -65,7 +65,7 @@
     </div>
     <div class="line" id="l2">
         <div>
-            <div class="troop oponent" *ngIf="oponentlines[1] != null">
+            <div class="troop oponent oponent_a" *ngIf="oponentlines[1] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player2) ? gameStatus.l1_2.carta.imagen : gameStatus.l2_2.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player2) ? gameStatus.l1_2.carta.habilidadDTO.dmg :
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div id="l{{isYou(gameStatus.player1) ? '1' : '2'}}_2" class="{{yourlines[1] == null ? 'able' : ''}} your">
-            <div class="troop" *ngIf="yourlines[1] != null">
+            <div id="{{isYou(gameStatus.player1) ? gameStatus.l1_2.carta.id : gameStatus.l2_2.carta.id}}" class="troop yourself" *ngIf="yourlines[1] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player1) ? gameStatus.l1_2.carta.imagen : gameStatus.l2_2.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player1) ? gameStatus.l1_2.carta.habilidadDTO.dmg :
@@ -95,7 +95,7 @@
     </div>
     <div class="line" id="l3">
         <div>
-            <div class="troop oponent" *ngIf="oponentlines[2] != null">
+            <div class="troop oponent oponent_a" *ngIf="oponentlines[2] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player2) ? gameStatus.l1_3.carta.imagen : gameStatus.l2_3.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player2) ? gameStatus.l1_3.carta.habilidadDTO.dmg :
@@ -109,7 +109,7 @@
             </div>
         </div>
         <div id="l{{isYou(gameStatus.player1) ? '1' : '2'}}_3" class="{{yourlines[2] == null ? 'able' : ''}} your">
-            <div class="troop" *ngIf="yourlines[2] != null">
+            <div id="{{isYou(gameStatus.player1) ? gameStatus.l1_3.carta.id : gameStatus.l2_3.carta.id}}" class="troop yourself" *ngIf="yourlines[2] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player1) ? gameStatus.l1_3.carta.imagen : gameStatus.l2_3.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player1) ? gameStatus.l1_3.carta.habilidadDTO.dmg :
@@ -125,7 +125,7 @@
     </div>
     <div class="line" id="l4">
         <div>
-            <div class="troop oponent" *ngIf="oponentlines[3] != null">
+            <div class="troop oponent oponent_a" *ngIf="oponentlines[3] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player2) ? gameStatus.l1_4.carta.imagen : gameStatus.l2_4.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player2) ? gameStatus.l1_4.carta.habilidadDTO.dmg :
@@ -139,7 +139,7 @@
             </div>
         </div>
         <div id="l{{isYou(gameStatus.player1) ? '1' : '2'}}_4" class="{{yourlines[3] == null ? 'able' : ''}} your">
-            <div class="troop" *ngIf="yourlines[3] != null">
+            <div id="{{isYou(gameStatus.player1) ? gameStatus.l1_4.carta.id : gameStatus.l2_4.carta.id}}" class="troop yourself" *ngIf="yourlines[3] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player1) ? gameStatus.l1_4.carta.imagen : gameStatus.l2_4.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player1) ? gameStatus.l1_4.carta.habilidadDTO.dmg :
@@ -155,7 +155,7 @@
     </div>
     <div class="line" id="l5">
         <div>
-            <div class="troop oponent" *ngIf="oponentlines[4] != null">
+            <div class="troop oponent oponent_a" *ngIf="oponentlines[4] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player2) ? gameStatus.l1_5.carta.imagen : gameStatus.l2_5.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player2) ? gameStatus.l1_5.carta.habilidadDTO.dmg :
@@ -169,7 +169,7 @@
             </div>
         </div>
         <div id="l{{isYou(gameStatus.player1) ? '1' : '2'}}_5" class="{{yourlines[4] == null ? 'able' : ''}} your">
-            <div class="troop" *ngIf="yourlines[4] != null">
+            <div id="{{isYou(gameStatus.player1) ? gameStatus.l1_5.carta.id : gameStatus.l2_5.carta.id}}" class="troop yourself" *ngIf="yourlines[4] != null">
                 <img src="{{resURL}}/Resources/img/cards/{{isYou(gameStatus.player1) ? gameStatus.l1_5.carta.imagen : gameStatus.l2_5.carta.imagen}}"
                     alt="">
                 <div class="dmg str">{{isYou(gameStatus.player1) ? gameStatus.l1_5.carta.habilidadDTO.dmg :

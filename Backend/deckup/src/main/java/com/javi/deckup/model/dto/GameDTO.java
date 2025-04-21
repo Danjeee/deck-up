@@ -78,5 +78,12 @@ public class GameDTO {
 					  .p2_c(input.getP2_c())
 					  .build();
 	}
+	public PlayerStatusDTO getPlayer(Integer num) {
+		if (num == 1) {
+			return this.player1;
+		} else {
+			return this.player2;
+		}
+	}
 
 }

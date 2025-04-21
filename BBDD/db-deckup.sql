@@ -27,7 +27,7 @@ CREATE TABLE `deckup`.`usuarios` (
   `mana` INT NOT NULL,
   `imagen` VARCHAR(100) NOT NULL,
   `precio` INT NOT NULL,
-  `tipo` VARCHAR(1) NOT NULL DEFAULT 'C',
+  `tipo` VARCHAR(10) NOT NULL DEFAULT 'card',
   `habilidad` INT NOT NULL DEFAULT 1,
   `exclusive` TINYINT DEFAULT 0,
   PRIMARY KEY (`id`));
@@ -561,10 +561,10 @@ INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilid
 
 /* Hechizos */
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, mana, tipo) VALUES
-('Misil magico', 'Un golpe duro que combina magia con impacto', 'misil_magico.jpeg', 200,1 ,1, 13, 0, 2, 'H'), #13
-('Punto cero', 'Tan frio como el universo mismo', 'punto_cero.jpeg', 2000,3 ,1, 14, 0, 3, 'H'), #14
-('Curacion inesperada', 'No es mucho pero oye, es barato', 'curacion_inesperada.jpeg', 500,2 ,1, 15, 0, 1, 'H'), #15
-('Evaporación', 'Eliminalos', 'evaporacion.jpeg', 200,1 ,1, 16, 0, 5, 'H'); #16
+('Misil magico', 'Un golpe duro que combina magia con impacto', 'misil_magico.jpeg', 200,1 ,1, 13, 0, 2, 'spell_all'), #13
+('Punto cero', 'Tan frio como el universo mismo', 'punto_cero.jpeg', 2000,3 ,1, 14, 0, 3, 'spell'), #14
+('Curacion inesperada', 'No es mucho pero oye, es barato', 'curacion_inesperada.jpeg', 500,2 ,1, 15, 0, 1, 'self_spell'), #15
+('Evaporación', 'Eliminalos', 'evaporacion.jpeg', 200,1 ,1, 16, 0, 5, 'spell'); #16
 
 /* Codigos */
 

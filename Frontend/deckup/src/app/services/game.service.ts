@@ -70,6 +70,17 @@ export class GameService extends environmentsURLs {
     )
   }
 
+  selfspell(linea: any, card: any, game: any, player: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("game_id", game)
+    data.append("card_id", card)
+    data.append("player", player)
+    data.append("linea", linea)
+    return this.http.post(`${this.gameURL}/selfspell`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   switchturn(game: any, player :any): Observable<any>{
     const data: FormData = new FormData()
     data.append("game_id", game)

@@ -38,7 +38,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.service.getGame(id).subscribe({
           next: (data) => {
             this.gameStatus = data;
-            this.gameActual = this.gameStatus
             this.rendergame(data)
           }
         })
@@ -54,7 +53,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       this.joinlistener(sessionStorage.getItem("game"))
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
-          if (data.id == sessionStorage.getItem("game")){
+          if (data.id == sessionStorage.getItem("game")) {
             this.rendergame(data)
             this.loaded = true
           }
@@ -64,8 +63,11 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
 
   rendergame(data: any) {
+    if (this.gameActual == null) {
+      this.gameActual = data
+    }
     if (data.status != 'activo') {
-      if (String(data.status).startsWith("winner: ")){
+      if (String(data.status).startsWith("winner: ")) {
         this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
       }
     }
@@ -84,7 +86,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       this.router.navigate(["/home"])
     }
     this.yourturn = false
-    if (data.status  == "activo"){
+    if (data.status == "activo") {
       if (data.turno == 1 && this.isYou(data.player1)) {
         this.yourturn = true
       }
@@ -99,12 +101,115 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (data.turno == 3) {
         this.turn3(data)
       }
+      let enemy = document.querySelectorAll(".enemy")[0] as HTMLElement
+      if (this.isYou(data.player1)) {
+        if (data.player2.vida > this.gameActual.player2.vida) {
+          ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+        }
+        this.mana = data.player1.mana
+      } else {
+        this.mana = data.player2.mana
+        if (data.player1.vida > this.gameActual.player1.vida) {
+          ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+        }
+      }
       setTimeout(() => {
         if (this.yourturn) {
           this.animatecards(document.querySelectorAll('.card'), this.mana)
+          this.animatespells(document.querySelectorAll('.spell'), this.mana)
+          this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
+          this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
+        this.renderenemyheals()
+        this.gameActual = data
       }, 100);
     }
+  }
+
+  renderenemyheals() {
+    const allenemies = document.querySelectorAll(".oponent")
+    allenemies.forEach((e: any) => {
+      const enemy: HTMLElement = e.parentElement
+      const line: HTMLElement = enemy.parentElement as HTMLElement;
+      console.log(e)
+      if (!this.isYou(this.gameStatus.player1)) {
+        switch (line.id) {
+          case "l1":
+            if (this.gameStatus.l1_1 != null && this.gameActual.l1_1 != null) {
+              if (this.gameStatus.l1_1.vida > this.gameActual.l1_1.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l2":
+            if (this.gameStatus.l1_2 != null && this.gameActual.l1_2 != null) {
+              if (this.gameStatus.l1_2.vida > this.gameActual.l1_2.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l3":
+            if (this.gameStatus.l1_3 != null && this.gameActual.l1_3 != null) {
+              if (this.gameStatus.l1_3.vida > this.gameActual.l1_3.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l4":
+            if (this.gameStatus.l1_4 != null && this.gameActual.l1_4 != null) {
+              if (this.gameStatus.l1_4.vida > this.gameActual.l1_4.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l5":
+            if (this.gameStatus.l1_5 != null && this.gameActual.l1_5 != null) {
+              if (this.gameStatus.l1_5.vida > this.gameActual.l1_5.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+        }
+      } else {
+        switch (line.id) {
+          case "l1":
+            if (this.gameStatus.l2_1 != null && this.gameActual.l2_1 != null) {
+              if (this.gameStatus.l2_1.vida > this.gameActual.l2_1.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l2":
+            if (this.gameStatus.l2_2 != null && this.gameActual.l2_2 != null) {
+              if (this.gameStatus.l2_2.vida > this.gameActual.l2_2.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l3":
+            if (this.gameStatus.l2_3 != null && this.gameActual.l2_3 != null) {
+              if (this.gameStatus.l2_3.vida > this.gameActual.l2_3.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l4":
+            if (this.gameStatus.l2_4 != null && this.gameActual.l2_4 != null) {
+              if (this.gameStatus.l2_4.vida > this.gameActual.l2_4.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+          case "l5":
+            if (this.gameStatus.l2_5 != null && this.gameActual.l2_5 != null) {
+              if (this.gameStatus.l2_5.vida > this.gameActual.l2_5.vida) {
+                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+              }
+            }
+            break;
+        }
+      }
+    });
   }
 
   animatecards(cards: any, mana: any) {
@@ -172,6 +277,298 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             if (ghost && currentTarget) {
               this.removeghost(currentTarget, ghost.id)
               this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+                next: (data) => {
+                  if (data.status != 200) {
+                    this.service.getGame(sessionStorage.getItem("game")).subscribe({
+                      next: (data) => {
+                        // console.log(data)
+                        this.rendergame(data)
+                        this.loaded = true
+                      }
+                    })
+                  }
+                }
+              })
+              ghost = null;
+              currentTarget = null;
+            } else if (ghost) {
+              ghost.style.opacity = 0;
+              setTimeout(() => ghost?.remove(), 300);
+              ghost = null;
+            }
+            setTimeout(() => {
+              card.style.transition = "transform .5s ease-in-out"
+              setTimeout(() => {
+                card.style.transform = ""
+                draggable.reset()
+              }, 10);
+            }, 20);
+          }
+        });
+      }
+    });
+  }
+
+  animatespells(cards: any, mana: any) {
+    Array.from(cards).forEach((cardd: any) => {
+      const card: HTMLElement = cardd
+      card.className = "spell disabled"
+      if (this.getCardById(cardd).mana <= mana) {
+        const card: HTMLElement = cardd
+        card.className = "spell"
+        const targets = document.querySelectorAll(".oponent");
+        let ghost: any = null;
+        let currentTarget: any = null;
+        const DRAG_THRESHOLD = 100;
+        const draggable = createDraggable(card, {
+          dragSpeed: .9,
+          onGrab: (e) => {
+            card.style.transition = ""
+          },
+          onDrag: () => {
+            const dragRect = card.getBoundingClientRect();
+
+            let closest: any = null;
+            let minDist = Infinity;
+
+            targets.forEach((target) => {
+              const rect = target.getBoundingClientRect();
+              const dx = rect.left + rect.width / 2 - (dragRect.left + dragRect.width / 2);
+              const dy = rect.top + rect.height / 2 - (dragRect.top + dragRect.height / 2);
+              const dist = Math.hypot(dx, dy);
+
+
+              if (dist < minDist) {
+                minDist = dist;
+                closest = target;
+              }
+            });
+
+            if (minDist < DRAG_THRESHOLD) {
+              if (currentTarget !== closest) {
+                if (ghost) { this.removeghost(currentTarget, ghost.id) };
+                ghost = card.cloneNode(true);
+                ghost.classList.add("ghost");
+                ghost.id = "ghost"
+                ghost.style.opacity = 0;
+                closest.appendChild(ghost);
+                requestAnimationFrame(() => {
+                  ghost.style.opacity = 1;
+                  card.style.opacity = "0";
+                });
+                currentTarget = closest;
+              }
+            } else {
+              if (ghost) {
+                let id = ghost.id
+                ghost.style.opacity = 0;
+                card.style.opacity = "1";
+                this.removeghost(currentTarget, id)
+                // setTimeout(() => , 1);
+                ghost = null;
+                currentTarget = null;
+              }
+            }
+          },
+          onRelease: (e) => {
+            if (ghost && currentTarget) {
+              // this.removeghost(currentTarget, ghost.id)
+              // this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+              //   next: (data) => {
+              //     if (data.status != 200) {
+              //       this.service.getGame(sessionStorage.getItem("game")).subscribe({
+              //         next: (data) => {
+              //           // console.log(data)
+              //           this.rendergame(data)
+              //           this.loaded = true
+              //         }
+              //       })
+              //     }
+              //   }
+              // })
+              ghost = null;
+              currentTarget = null;
+            } else if (ghost) {
+              ghost.style.opacity = 0;
+              setTimeout(() => ghost?.remove(), 300);
+              ghost = null;
+            }
+            setTimeout(() => {
+              card.style.transition = "transform .5s ease-in-out"
+              setTimeout(() => {
+                card.style.transform = ""
+                draggable.reset()
+              }, 10);
+            }, 20);
+          }
+        });
+      }
+    });
+  }
+
+  animatespells_all(cards: any, mana: any) {
+    Array.from(cards).forEach((cardd: any) => {
+      const card: HTMLElement = cardd
+      card.className = "spell_all disabled"
+      if (this.getCardById(cardd).mana <= mana) {
+        const card: HTMLElement = cardd
+        card.className = "spell_all"
+        const targets = document.querySelectorAll(".oponent_a");
+        let ghost: any = null;
+        let currentTarget: any = null;
+        const DRAG_THRESHOLD = 100;
+        const draggable = createDraggable(card, {
+          dragSpeed: .9,
+          onGrab: (e) => {
+            card.style.transition = ""
+          },
+          onDrag: () => {
+            const dragRect = card.getBoundingClientRect();
+
+            let closest: any = null;
+            let minDist = Infinity;
+
+            targets.forEach((target) => {
+              const rect = target.getBoundingClientRect();
+              const dx = rect.left + rect.width / 2 - (dragRect.left + dragRect.width / 2);
+              const dy = rect.top + rect.height / 2 - (dragRect.top + dragRect.height / 2);
+              const dist = Math.hypot(dx, dy);
+
+
+              if (dist < minDist) {
+                minDist = dist;
+                closest = target;
+              }
+            });
+
+            if (minDist < DRAG_THRESHOLD) {
+              if (currentTarget !== closest) {
+                if (ghost) { this.removeghost(currentTarget, ghost.id) };
+                ghost = card.cloneNode(true);
+                ghost.classList.add("ghost");
+                ghost.id = "ghost"
+                ghost.style.opacity = 0;
+                closest.appendChild(ghost);
+                requestAnimationFrame(() => {
+                  ghost.style.opacity = 1;
+                  card.style.opacity = "0";
+                });
+                currentTarget = closest;
+              }
+            } else {
+              if (ghost) {
+                let id = ghost.id
+                ghost.style.opacity = 0;
+                card.style.opacity = "1";
+                this.removeghost(currentTarget, id)
+                // setTimeout(() => , 1);
+                ghost = null;
+                currentTarget = null;
+              }
+            }
+          },
+          onRelease: (e) => {
+            if (ghost && currentTarget) {
+              // this.removeghost(currentTarget, ghost.id)
+              // this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+              //   next: (data) => {
+              //     if (data.status != 200) {
+              //       this.service.getGame(sessionStorage.getItem("game")).subscribe({
+              //         next: (data) => {
+              //           // console.log(data)
+              //           this.rendergame(data)
+              //           this.loaded = true
+              //         }
+              //       })
+              //     }
+              //   }
+              // })
+              ghost = null;
+              currentTarget = null;
+            } else if (ghost) {
+              ghost.style.opacity = 0;
+              setTimeout(() => ghost?.remove(), 300);
+              ghost = null;
+            }
+            setTimeout(() => {
+              card.style.transition = "transform .5s ease-in-out"
+              setTimeout(() => {
+                card.style.transform = ""
+                draggable.reset()
+              }, 10);
+            }, 20);
+          }
+        });
+      }
+    });
+  }
+
+  animatespells_self(cards: any, mana: any) {
+    Array.from(cards).forEach((cardd: any) => {
+      const card: HTMLElement = cardd
+      card.className = "spell_self disabled"
+      if (this.getCardById(cardd).mana <= mana) {
+        const card: HTMLElement = cardd
+        card.className = "spell_self"
+        const targets = document.querySelectorAll(".yourself");
+        let ghost: any = null;
+        let currentTarget: any = null;
+        const DRAG_THRESHOLD = 100;
+        const draggable = createDraggable(card, {
+          dragSpeed: .9,
+          onGrab: (e) => {
+            card.style.transition = ""
+          },
+          onDrag: () => {
+            const dragRect = card.getBoundingClientRect();
+
+            let closest: any = null;
+            let minDist = Infinity;
+
+            targets.forEach((target) => {
+              const rect = target.getBoundingClientRect();
+              const dx = rect.left + rect.width / 2 - (dragRect.left + dragRect.width / 2);
+              const dy = rect.top + rect.height / 2 - (dragRect.top + dragRect.height / 2);
+              const dist = Math.hypot(dx, dy);
+
+
+              if (dist < minDist) {
+                minDist = dist;
+                closest = target;
+              }
+            });
+
+            if (minDist < DRAG_THRESHOLD) {
+              if (currentTarget !== closest) {
+                if (ghost) { this.removeghost(currentTarget, ghost.id) };
+                ghost = card.cloneNode(true);
+                ghost.classList.add("ghost");
+                ghost.id = "ghost"
+                ghost.style.opacity = 0;
+                closest.appendChild(ghost);
+                requestAnimationFrame(() => {
+                  ghost.style.opacity = 1;
+                  card.style.opacity = "0";
+                });
+                currentTarget = closest;
+              }
+            } else {
+              if (ghost) {
+                let id = ghost.id
+                ghost.style.opacity = 0;
+                card.style.opacity = "1";
+                this.removeghost(currentTarget, id)
+                // setTimeout(() => , 1);
+                ghost = null;
+                currentTarget = null;
+              }
+            }
+          },
+          onRelease: (e) => {
+            if (ghost && currentTarget) {
+              ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
+              this.removeghost(currentTarget, ghost.id)
+              this.service.selfspell(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
                 next: (data) => {
                   if (data.status != 200) {
                     this.service.getGame(sessionStorage.getItem("game")).subscribe({
@@ -616,12 +1013,12 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  victoria(player: string){
+  victoria(player: string) {
     sessionStorage.removeItem("game")
     this.service.disconnect()
     const v = document.getElementById('v') as HTMLElement
     const title = document.getElementById('victory') as HTMLElement
-    title.innerHTML = "Ganador: "+player
+    title.innerHTML = "Ganador: " + player
     v.style.display = "flex"
 
     // Animar título
@@ -634,7 +1031,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
 
     const total: any[] = []
-    for (let i = 0; i<100; i++){
+    for (let i = 0; i < 100; i++) {
       const sq = document.createElement("div")
       sq.style.width = "10dvw"
       sq.style.height = "10dvh"
@@ -654,30 +1051,30 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         grid: [10, 10],
         from: 'center'
       }),
-    }).then(()=>{
+    }).then(() => {
       this.router.navigate(['/home'])
     })
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  instantlose($event: BeforeUnloadEvent){
-    sessionStorage.removeItem("game")
-    this.service.lose(this.gameStatus.id).subscribe({
-      next: (data) => {
-        console.log(data)
-      }
-    })
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // instantlose($event: BeforeUnloadEvent){
+  //   sessionStorage.removeItem("game")
+  //   this.service.lose(this.gameStatus.id).subscribe({
+  //     next: (data) => {
+  //       console.log(data)
+  //     }
+  //   })
+  // }
 
   ngOnDestroy(): void {
     this.service.disconnect()
-      if (this.router.url != "/game") {
-        this.service.lose(this.gameStatus.id).subscribe({
-          next: (data) => {
-            console.log(data)
-          }
-        })
-      }
+    if (this.router.url != "/game") {
+      // this.service.lose(this.gameStatus.id).subscribe({
+      //   next: (data) => {
+      //     console.log(data)
+      //   }
+      // })
+    }
   }
 
 }

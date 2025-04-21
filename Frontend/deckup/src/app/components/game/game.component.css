@@ -318,3 +318,37 @@
     left: 50%;
     transform: translate(-50%,-50%) !important;
 }
+.troop>.ghost{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateY(0) translateX(0) !important;
+    &>img{
+        opacity: .5;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+.player>.ghost{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateY(0) translateX(0) !important;
+    &>img{
+        opacity: .5;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 0;
+    }
+}

@@ -85,6 +85,7 @@ public class HabilidadDTO implements Serializable {
 		        .leth(input.getLeth())
 		        .esq(input.getEsq())
 		        .prcntUp(input.getPrcntUp())
+		        .heal(input.getHeal())
 		        .prcntDwn(input.getPrcntDwn())
 		        .build();
 	}
@@ -108,6 +109,7 @@ public class HabilidadDTO implements Serializable {
 	        .crit(input.getCrit())
 	        .critMult(input.getCritMult())
 	        .leth(input.getLeth())
+	        .heal(input.getHeal())
 	        .esq(input.getEsq())
 	        .prcntUp(input.getPrcntUp())
 	        .prcntDwn(input.getPrcntDwn())
