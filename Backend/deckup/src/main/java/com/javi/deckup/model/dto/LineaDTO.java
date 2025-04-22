@@ -20,8 +20,9 @@ public class LineaDTO {
     private Integer vida;
     private Integer stun;
     private String stun_name;
-    private Integer turn_dmg;
-    private Integer turn_dmg_left;
+    private Integer burn;
+    private Integer poisn;
+    private Integer bleed;
     private String turn_dmg_name;
     private GameDTO game;
 
@@ -36,9 +37,9 @@ public class LineaDTO {
 					   .vida(input.getVida())
 					   .stun(input.getStun())
 					   .stun_name(input.getStun_name())
-					   .turn_dmg(input.getTurn_dmg())
-					   .turn_dmg_left(input.getTurn_dmg_left())
-					   .turn_dmg_name(input.getTurn_dmg_name())
+					   .bleed(input.getBleed())
+					   .burn(input.getBurn())
+					   .poisn(input.getPoisn())
 					   .game(GameDTO.builder().id(input.getGame().getId()).build())
 					   .build();
 	}
@@ -53,9 +54,9 @@ public class LineaDTO {
 					   .vida(input.getVida())
 					   .stun(input.getStun())
 					   .stun_name(input.getStun_name())
-					   .turn_dmg(input.getTurn_dmg())
-					   .turn_dmg_left(input.getTurn_dmg_left())
-					   .turn_dmg_name(input.getTurn_dmg_name())
+					   .bleed(input.getBleed())
+					   .burn(input.getBurn())
+					   .poisn(input.getPoisn())
 					   .game(Game.builder().id(input.getGame().getId()).build())
 					   .build();
 	}

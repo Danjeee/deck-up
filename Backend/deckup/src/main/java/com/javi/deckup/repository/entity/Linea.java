@@ -35,9 +35,9 @@ public class Linea {
 	    private Integer vida;
 	    private Integer stun;
 	    private String stun_name;
-	    private Integer turn_dmg;
-	    private Integer turn_dmg_left;
-	    private String turn_dmg_name;
+	    private Integer burn;
+	    private Integer poisn;
+	    private Integer bleed;
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "game")
