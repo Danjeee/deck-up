@@ -71,7 +71,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
       }
     }
-    this.gameStatus = data
+    let prevdivs = null;
+    if (this.gameStatus != null){
+      prevdivs = document.querySelectorAll(".yourself")
+      setTimeout(() => {
+        this.gameStatus = data
+      }, 1000);
+    } else {
+      this.gameStatus = data
+    }
     this.oponentcards = this.oponentCards(data)
     this.yourlines = this.setLines(data)[0]
     this.oponentlines = this.setLines(data)[1]
@@ -102,15 +110,22 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.turn3(data)
       }
       let enemy = document.querySelectorAll(".enemy")[0] as HTMLElement
+      let u = document.querySelectorAll(".you")[0] as HTMLElement
       if (this.isYou(data.player1)) {
         if (data.player2.vida > this.gameActual.player2.vida) {
           ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+        }
+        if (data.player1.vida < this.gameActual.player1.vida) {
+          ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
         }
         this.mana = data.player1.mana
       } else {
         this.mana = data.player2.mana
         if (data.player1.vida > this.gameActual.player1.vida) {
           ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+        }
+        if (data.player2.vida < this.gameActual.player2.vida) {
+          ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
         }
       }
       setTimeout(() => {
@@ -120,6 +135,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
+
+        this.renderdmgs(prevdivs)
         this.renderenemyheals()
         this.gameActual = data
       }, 100);
@@ -131,7 +148,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     allenemies.forEach((e: any) => {
       const enemy: HTMLElement = e.parentElement
       const line: HTMLElement = enemy.parentElement as HTMLElement;
-      console.log(e)
       if (!this.isYou(this.gameStatus.player1)) {
         switch (line.id) {
           case "l1":
@@ -210,6 +226,113 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         }
       }
     });
+  }
+
+  renderdmgs(prevdivs: any) {
+    if (prevdivs != null){
+      prevdivs.forEach((e: any) => {
+        const enemy: HTMLElement = e.parentElement
+        const line: HTMLElement = enemy.parentElement as HTMLElement;
+        console.log(e)
+        if (this.isYou(this.gameStatus.player1)) {
+          switch (line.id) {
+            case "l1":
+              if (this.gameActual.l1_1 != null) {
+                if (this.gameStatus.l1_1 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l1_1.vida < this.gameActual.l1_1.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l2":
+              if (this.gameActual.l1_2 != null) {
+                if (this.gameStatus.l1_2 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l1_2.vida < this.gameActual.l1_2.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l3":
+              if (this.gameActual.l1_3 != null) {
+                if (this.gameStatus.l1_3 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l1_3.vida < this.gameActual.l1_3.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l4":
+              if (this.gameActual.l1_4 != null) {
+                if (this.gameStatus.l1_4 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l1_4.vida < this.gameActual.l1_4.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l5":
+              if (this.gameActual.l1_5 != null) {
+                if (this.gameStatus.l1_5 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l1_5.vida < this.gameActual.l1_5.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+          }
+        } else {
+          switch (line.id) {
+            case "l1":
+              if (this.gameActual.l2_1 != null) {
+                if (this.gameStatus.l2_1 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l2_1.vida < this.gameActual.l2_1.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l2":
+              if (this.gameActual.l2_2 != null) {
+                if (this.gameStatus.l2_2 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l2_2.vida < this.gameActual.l2_2.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l3":
+              if (this.gameActual.l2_3 != null) {
+                if (this.gameStatus.l2_3 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l2_3.vida < this.gameActual.l2_3.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l4":
+              if (this.gameActual.l2_4 != null) {
+                if (this.gameStatus.l2_4 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l2_4.vida < this.gameActual.l2_4.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+            case "l5":
+              if (this.gameActual.l2_5 != null) {
+                if (this.gameStatus.l2_5 == null) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                } else if (this.gameStatus.l2_5.vida < this.gameActual.l2_5.vida) {
+                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
+                }
+              }
+              break;
+          }
+        }
+      });
+    }
   }
 
   animatecards(cards: any, mana: any) {
@@ -372,20 +495,23 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           },
           onRelease: (e) => {
             if (ghost && currentTarget) {
-              // this.removeghost(currentTarget, ghost.id)
-              // this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
-              //   next: (data) => {
-              //     if (data.status != 200) {
-              //       this.service.getGame(sessionStorage.getItem("game")).subscribe({
-              //         next: (data) => {
-              //           // console.log(data)
-              //           this.rendergame(data)
-              //           this.loaded = true
-              //         }
-              //       })
-              //     }
-              //   }
-              // })
+              if (ghost && currentTarget) {
+                ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
+                this.removeghost(currentTarget, ghost.id)
+                this.service.spellthrow(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+                  next: (data) => {
+                    if (data.status != 200) {
+                      this.service.getGame(sessionStorage.getItem("game")).subscribe({
+                        next: (data) => {
+                          // console.log(data)
+                          this.rendergame(data)
+                          this.loaded = true
+                        }
+                      })
+                    }
+                  }
+                })
+              }
               ghost = null;
               currentTarget = null;
             } else if (ghost) {
@@ -469,20 +595,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           },
           onRelease: (e) => {
             if (ghost && currentTarget) {
-              // this.removeghost(currentTarget, ghost.id)
-              // this.service.put(currentTarget.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
-              //   next: (data) => {
-              //     if (data.status != 200) {
-              //       this.service.getGame(sessionStorage.getItem("game")).subscribe({
-              //         next: (data) => {
-              //           // console.log(data)
-              //           this.rendergame(data)
-              //           this.loaded = true
-              //         }
-              //       })
-              //     }
-              //   }
-              // })
+              ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
+              this.removeghost(currentTarget, ghost.id)
+              this.service.spellthrow(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+                next: (data) => {
+                  if (data.status != 200) {
+                    this.service.getGame(sessionStorage.getItem("game")).subscribe({
+                      next: (data) => {
+                        // console.log(data)
+                        this.rendergame(data)
+                        this.loaded = true
+                      }
+                    })
+                  }
+                }
+              })
               ghost = null;
               currentTarget = null;
             } else if (ghost) {

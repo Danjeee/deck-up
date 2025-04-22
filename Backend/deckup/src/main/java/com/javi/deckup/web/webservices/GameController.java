@@ -188,6 +188,93 @@ public class GameController {
 		return Response.success("donete");
 	}
 	
+	@PostMapping("/spellthrow")
+	public Response spellthrow(@ModelAttribute GameAction data) {
+		GameDTO game = gs.findById(data.getGame_id());
+		CartaDTO card = cs.findById(data.getCard_id());
+		System.out.println(data);
+		LineaDTO linea = null;
+		
+		switch (data.getLinea()) {
+			case "l1_1": linea = game.getL1_1(); break; 
+			case "l1_2": linea = game.getL1_2(); break; 
+			case "l1_3": linea = game.getL1_3(); break; 
+			case "l1_4": linea = game.getL1_4(); break; 
+			case "l1_5": linea = game.getL1_5(); break; 
+			case "l2_1": linea = game.getL2_1(); break; 
+			case "l2_2": linea = game.getL2_2(); break; 
+			case "l2_3": linea = game.getL2_3(); break; 
+			case "l2_4": linea = game.getL2_4(); break; 
+			case "l2_5": linea = game.getL2_5(); break; 
+			default: break;
+		}
+		if (game.getPlayer(data.getPlayer()).getMana() >= card.getMana()) {
+			if (linea == null) {
+				if (data.getPlayer() == 2) {
+					game.getPlayer1().setVida(game.getPlayer1().getVida() - card.getHabilidadDTO().getDmg());
+					if (game.getPlayer1().getVida() <= 0) {
+						game = fight(game);
+						return Response.success("donete");
+					}
+					gs.save(game.getPlayer1());
+				} else {
+					game.getPlayer2().setVida(game.getPlayer2().getVida() - card.getHabilidadDTO().getDmg());
+					if (game.getPlayer2().getVida() <= 0) {
+						game = fight(game);
+						return Response.success("donete");
+					}
+					gs.save(game.getPlayer2());
+				}
+			} else {
+				linea.setVida(linea.getVida() - card.getHabilidadDTO().getDmg());
+				if (linea.getVida() <= 0) {
+					gs.deleteLinea(linea);
+					if (game.getL1_1() != null) {if (game.getL1_1().getId() == linea.getId()) {game.setL1_1(null);}}
+					if (game.getL1_2() != null) {if (game.getL1_2().getId() == linea.getId()) {game.setL1_2(null);}}
+					if (game.getL1_3() != null) {if (game.getL1_3().getId() == linea.getId()) {game.setL1_3(null);}}
+					if (game.getL1_4() != null) {if (game.getL1_4().getId() == linea.getId()) {game.setL1_4(null);}}
+					if (game.getL1_5() != null) {if (game.getL1_5().getId() == linea.getId()) {game.setL1_5(null);}}
+					if (game.getL2_1() != null) {if (game.getL2_1().getId() == linea.getId()) {game.setL2_1(null);}}
+					if (game.getL2_2() != null) {if (game.getL2_2().getId() == linea.getId()) {game.setL2_2(null);}}
+					if (game.getL2_3() != null) {if (game.getL2_3().getId() == linea.getId()) {game.setL2_3(null);}}
+					if (game.getL2_4() != null) {if (game.getL2_4().getId() == linea.getId()) {game.setL2_4(null);}}
+					if (game.getL2_5() != null) {if (game.getL2_5().getId() == linea.getId()) {game.setL2_5(null);}}
+				} else {
+					gs.save(linea);
+				}
+			}
+		}
+		
+		boolean cardremoved = false;
+		if (data.getPlayer() == 1) {
+			if(game.getPlayer1().getCarta1()!=null){if (game.getPlayer1().getCarta1().getId() == data.getCard_id() && !cardremoved) {game.getPlayer1().setCarta1(null); cardremoved = true;}}
+			if(game.getPlayer1().getCarta2()!=null){if (game.getPlayer1().getCarta2().getId() == data.getCard_id() && !cardremoved) {game.getPlayer1().setCarta2(null); cardremoved = true;}}
+			if(game.getPlayer1().getCarta3()!=null){if (game.getPlayer1().getCarta3().getId() == data.getCard_id() && !cardremoved) {game.getPlayer1().setCarta3(null); cardremoved = true;}}
+			if(game.getPlayer1().getCarta4()!=null){if (game.getPlayer1().getCarta4().getId() == data.getCard_id() && !cardremoved) {game.getPlayer1().setCarta4(null); cardremoved = true;}}
+			if(game.getPlayer1().getCarta5()!=null){if (game.getPlayer1().getCarta5().getId() == data.getCard_id() && !cardremoved) {game.getPlayer1().setCarta5(null); cardremoved = true;}}
+			if (card.getMana() > game.getPlayer1().getMana()) {
+				return Response.error("No tienes mana");
+			} else {
+				game.getPlayer1().setMana(game.getPlayer1().getMana() - card.getMana());
+			}
+			game.setPlayer1(gs.save(game.getPlayer1()));
+		} else {
+			if(game.getPlayer2().getCarta1()!=null){if (game.getPlayer2().getCarta1().getId() == data.getCard_id() && !cardremoved) {game.getPlayer2().setCarta1(null); cardremoved = true;}}
+			if(game.getPlayer2().getCarta2()!=null){if (game.getPlayer2().getCarta2().getId() == data.getCard_id() && !cardremoved) {game.getPlayer2().setCarta2(null); cardremoved = true;}}
+			if(game.getPlayer2().getCarta3()!=null){if (game.getPlayer2().getCarta3().getId() == data.getCard_id() && !cardremoved) {game.getPlayer2().setCarta3(null); cardremoved = true;}}
+			if(game.getPlayer2().getCarta4()!=null){if (game.getPlayer2().getCarta4().getId() == data.getCard_id() && !cardremoved) {game.getPlayer2().setCarta4(null); cardremoved = true;}}
+			if(game.getPlayer2().getCarta5()!=null){if (game.getPlayer2().getCarta5().getId() == data.getCard_id() && !cardremoved) {game.getPlayer2().setCarta5(null); cardremoved = true;}}
+			if (card.getMana() > game.getPlayer2().getMana()) {
+				return Response.error("No tienes mana");
+			} else {
+				game.getPlayer2().setMana(game.getPlayer2().getMana() - card.getMana());
+			}
+			game.setPlayer2(gs.save(game.getPlayer2()));
+		}
+		gs.save(game, true);
+		return Response.success("donete");
+	}
+	
 	@PostMapping("/disconnect")
 	public Response dc(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
