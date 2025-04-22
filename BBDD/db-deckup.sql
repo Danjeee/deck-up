@@ -530,19 +530,19 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
-('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,null),
-('Masacre sangrienta', 'Asesinato multiple', 2, 25, 350,0,null),
+('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,0),
+('Masacre sangrienta', 'Asesinato multiple', 2, 25, 350,0,0),
 ('Maldición del rey', 'Domina a tus rivales', 5, 50, 50,null,5),
-('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 10, 999,null,null),
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 10, 999,null,0),
 ('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3),
-('Arrebato de ira', 'Nada mal para un principiante', 2, 50, 200,null,null),
+('Arrebato de ira', 'Nada mal para un principiante', 2, 50, 200,null,0),
 ('Big crush', 'El fin del universo', 10, 50, 50,2,5);
 
 INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, especial, bleed) VALUES
 ("Golpe mágico", "Acabas de ser golpeado mágicamente", 3, null, null, null, null, null), #13
-("Cero", "brr brr que frio hace por aqui", null, 1, "congelado", null, null, 1), #14
-("Curación inesperada", "¡HP UP!", null, null, null, 2, null, null), #15
-("Desvanecimiento", "Desaparezco", null, null, null, null, "D", null); #16
+("Cero", "brr brr que frio hace por aqui", 0, 1, "congelado", null, null, 1), #14
+("Curación inesperada", "¡HP UP!", 0, null, null, 2, null, null), #15
+("Desvanecimiento", "Desaparezco", 0, null, null, null, "D", null); #16
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, vida, mana) VALUES
