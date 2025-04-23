@@ -533,12 +533,12 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
 ('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,0),
-('Masacre sangrienta', 'Asesinato multiple', 2, 25, 350,0,0),
-('Maldición del rey', 'Domina a tus rivales', 5, 50, 50,null,5),
-('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 10, 999,null,0),
+('Masacre sangrienta', 'Asesinato multiple', 2, 2, 0,0,0),
+('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5),
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1),
 ('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3),
-('Arrebato de ira', 'Nada mal para un principiante', 2, 50, 200,null,0),
-('Big crush', 'El fin del universo', 10, 50, 50,2,5);
+('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0),
+('Big crush', 'El fin del universo', 10, null, null,2,5);
 
 INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, especial, bleed) VALUES
 ("Golpe mágico", "Acabas de ser golpeado mágicamente", 3, null, null, null, null, null), #13

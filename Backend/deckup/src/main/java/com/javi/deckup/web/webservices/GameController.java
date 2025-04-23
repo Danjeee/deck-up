@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.javi.deckup.model.dto.CartaDTO;
 import com.javi.deckup.model.dto.GameDTO;
+import com.javi.deckup.model.dto.HabilidadDTO;
 import com.javi.deckup.model.dto.LineaDTO;
 import com.javi.deckup.model.dto.PlayerStatusDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
@@ -604,346 +605,417 @@ public class GameController {
 	// List<String> willcrit = new ArrayList<>();
 	// }
 
-	private GameDTO turnDMGs(GameDTO game) {
-		GameDTO game_aux = GameDTO.builder().l1_1(game.getL1_1()).l1_2(game.getL1_2()).l1_3(game.getL1_3())
-				.l1_4(game.getL1_4()).l1_5(game.getL1_5()).l2_1(game.getL2_1()).l2_2(game.getL2_2())
-				.l2_3(game.getL2_3()).l2_4(game.getL2_4()).l2_5(game.getL2_5()).build();
-		// Linea 1
-		if (game.getL1_1() != null) {
-			if (game.getL1_1().getPoisn() != null && game.getL1_1().getPoisn() > 0) {
-				game.getL1_1().setVida(game.getL1_1().getVida() - 1);
-				game.getL1_1().setPoisn(game.getL1_1().getPoisn() - 1);
-				if (game.getL1_1().getVida() <= 0) {
-					game.setL1_1(null);
-				}
-				if (game.getL1_1().getPoisn() <= 0) {
-					game.getL1_1().setPoisn(null);
-				}
+	// Función para aplicar Poison a una línea
+	private void aplicarPoison(LineaDTO linea, GameDTO game) {
+		if (linea != null && linea.getPoisn() != null && linea.getPoisn() > 0) {
+			linea.setVida(linea.getVida() - 1);
+			linea.setPoisn(linea.getPoisn() - 1);
+			if (linea.getVida() <= 0) {
+				eliminarLinea(game, linea);
 			}
-			if (game.getL1_1().getBleed() != null && game.getL1_1().getBleed() > 0) {
-				game.getL1_1().setVida(game.getL1_1().getVida() - game.getL1_1().getBleed());
-				if (game.getL1_1().getVida() <= 0) {
-					game.setL1_1(null);
-				}
-			}
-			if (game.getL1_1().getBurn() != null && game.getL1_1().getBurn() > 0) {
-				game.getL1_1().setVida(game.getL1_1().getVida() - 1);
-				game.getL1_1().setBurn(game.getL1_1().getBurn() - 1);
-				if (game.getL1_1().getVida() <= 0) {
-					game.setL1_1(null);
-				}
-				if (game.getL1_1().getBurn() <= 0) {
-					game.getL1_1().setBurn(null);
-				}
-			}
-			if (game.getL1_1() != null) { // Vuelve a verificar por si se eliminó por los estados
-				gs.save(game.getL1_1());
+			if (linea.getPoisn() <= 0) {
+				linea.setPoisn(null);
 			}
 		}
+	}
 
-		// Linea 2
-		if (game.getL1_2() != null) {
-			if (game.getL1_2().getPoisn() != null && game.getL1_2().getPoisn() > 0) {
-				game.getL1_2().setVida(game.getL1_2().getVida() - 1);
-				game.getL1_2().setPoisn(game.getL1_2().getPoisn() - 1);
-				if (game.getL1_2().getVida() <= 0) {
-					game.setL1_2(null);
-				}
-				if (game.getL1_2().getPoisn() <= 0) {
-					game.getL1_2().setPoisn(null);
-				}
-			}
-			if (game.getL1_2().getBleed() != null && game.getL1_2().getBleed() > 0) {
-				game.getL1_2().setVida(game.getL1_2().getVida() - game.getL1_2().getBleed());
-				if (game.getL1_2().getVida() <= 0) {
-					game.setL1_2(null);
-				}
-			}
-			if (game.getL1_2().getBurn() != null && game.getL1_2().getBurn() > 0) {
-				game.getL1_2().setVida(game.getL1_2().getVida() - 1);
-				game.getL1_2().setBurn(game.getL1_2().getBurn() - 1);
-				if (game.getL1_2().getVida() <= 0) {
-					game.setL1_2(null);
-				}
-				if (game.getL1_2().getBurn() <= 0) {
-					game.getL1_2().setBurn(null);
-				}
-			}
-			if (game.getL1_2() != null) {
-				gs.save(game.getL1_2());
+	// Función para aplicar Bleed a una línea
+	private void aplicarBleed(LineaDTO linea, GameDTO game) {
+		if (linea != null && linea.getBleed() != null && linea.getBleed() > 0) {
+			linea.setVida(linea.getVida() - linea.getBleed());
+			if (linea.getVida() <= 0) {
+				eliminarLinea(game, linea);
 			}
 		}
+	}
 
-		// Linea 3
-		if (game.getL1_3() != null) {
-			if (game.getL1_3().getPoisn() != null && game.getL1_3().getPoisn() > 0) {
-				game.getL1_3().setVida(game.getL1_3().getVida() - 1);
-				game.getL1_3().setPoisn(game.getL1_3().getPoisn() - 1);
-				if (game.getL1_3().getVida() <= 0) {
-					game.setL1_3(null);
-				}
-				if (game.getL1_3().getPoisn() <= 0) {
-					game.getL1_3().setPoisn(null);
-				}
+	// Función para aplicar Burn a una línea
+	private void aplicarBurn(LineaDTO linea, GameDTO game) {
+		if (linea != null && linea.getBurn() != null && linea.getBurn() > 0) {
+			linea.setVida(linea.getVida() - 1);
+			linea.setBurn(linea.getBurn() - 1);
+			if (linea.getVida() <= 0) {
+				eliminarLinea(game, linea);
 			}
-			if (game.getL1_3().getBleed() != null && game.getL1_3().getBleed() > 0) {
-				game.getL1_3().setVida(game.getL1_3().getVida() - game.getL1_3().getBleed());
-				if (game.getL1_3().getVida() <= 0) {
-					game.setL1_3(null);
-				}
-			}
-			if (game.getL1_3().getBurn() != null && game.getL1_3().getBurn() > 0) {
-				game.getL1_3().setVida(game.getL1_3().getVida() - 1);
-				game.getL1_3().setBurn(game.getL1_3().getBurn() - 1);
-				if (game.getL1_3().getVida() <= 0) {
-					game.setL1_3(null);
-				}
-				if (game.getL1_3().getBurn() <= 0) {
-					game.getL1_3().setBurn(null);
-				}
-			}
-			if (game.getL1_3() != null) {
-				gs.save(game.getL1_3());
+			if (linea.getBurn() <= 0) {
+				linea.setBurn(null);
 			}
 		}
+	}
 
-		// Linea 4
-		if (game.getL1_4() != null) {
-			if (game.getL1_4().getPoisn() != null && game.getL1_4().getPoisn() > 0) {
-				game.getL1_4().setVida(game.getL1_4().getVida() - 1);
-				game.getL1_4().setPoisn(game.getL1_4().getPoisn() - 1);
-				if (game.getL1_4().getVida() <= 0) {
-					game.setL1_4(null);
-				}
-				if (game.getL1_4().getPoisn() <= 0) {
-					game.getL1_4().setPoisn(null);
-				}
-			}
-			if (game.getL1_4().getBleed() != null && game.getL1_4().getBleed() > 0) {
-				game.getL1_4().setVida(game.getL1_4().getVida() - game.getL1_4().getBleed());
-				if (game.getL1_4().getVida() <= 0) {
-					game.setL1_4(null);
-				}
-			}
-			if (game.getL1_4().getBurn() != null && game.getL1_4().getBurn() > 0) {
-				game.getL1_4().setVida(game.getL1_4().getVida() - 1);
-				game.getL1_4().setBurn(game.getL1_4().getBurn() - 1);
-				if (game.getL1_4().getVida() <= 0) {
-					game.setL1_4(null);
-				}
-				if (game.getL1_4().getBurn() <= 0) {
-					game.getL1_4().setBurn(null);
-				}
-			}
-			if (game.getL1_4() != null) {
-				gs.save(game.getL1_4());
-			}
+	// Función para eliminar una línea cuando su vida llega a 0
+	private void eliminarLinea(GameDTO game, LineaDTO linea) {
+		if (linea == game.getL1_1()) {
+			game.setL1_1(null);
+		} else if (linea == game.getL1_2()) {
+			game.setL1_2(null);
+		} else if (linea == game.getL1_3()) {
+			game.setL1_3(null);
+		} else if (linea == game.getL1_4()) {
+			game.setL1_4(null);
+		} else if (linea == game.getL1_5()) {
+			game.setL1_5(null);
+		} else if (linea == game.getL2_1()) {
+			game.setL2_1(null);
+		} else if (linea == game.getL2_2()) {
+			game.setL2_2(null);
+		} else if (linea == game.getL2_3()) {
+			game.setL2_3(null);
+		} else if (linea == game.getL2_4()) {
+			game.setL2_4(null);
+		} else if (linea == game.getL2_5()) {
+			game.setL2_5(null);
 		}
+	}
 
-		// Linea 5
-		if (game.getL1_5() != null) {
-			if (game.getL1_5().getPoisn() != null && game.getL1_5().getPoisn() > 0) {
-				game.getL1_5().setVida(game.getL1_5().getVida() - 1);
-				game.getL1_5().setPoisn(game.getL1_5().getPoisn() - 1);
-				if (game.getL1_5().getVida() <= 0) {
-					game.setL1_5(null);
-				}
-				if (game.getL1_5().getPoisn() <= 0) {
-					game.getL1_5().setPoisn(null);
-				}
-			}
-			if (game.getL1_5().getBleed() != null && game.getL1_5().getBleed() > 0) {
-				game.getL1_5().setVida(game.getL1_5().getVida() - game.getL1_5().getBleed());
-				if (game.getL1_5().getVida() <= 0) {
-					game.setL1_5(null);
-				}
-			}
-			if (game.getL1_5().getBurn() != null && game.getL1_5().getBurn() > 0) {
-				game.getL1_5().setVida(game.getL1_5().getVida() - 1);
-				game.getL1_5().setBurn(game.getL1_5().getBurn() - 1);
-				if (game.getL1_5().getVida() <= 0) {
-					game.setL1_5(null);
-				}
-				if (game.getL1_5().getBurn() <= 0) {
-					game.getL1_5().setBurn(null);
-				}
-			}
-			if (game.getL1_5() != null) {
-				gs.save(game.getL1_5());
-			}
-		}
+	// Función principal para ejecutar los efectos en todas las líneas
+	private GameDTO turnDMGs(GameDTO game_aux) {
+		GameDTO game = game_aux;
+		// Ejecutar en todas las líneas de L1 y L2
+		aplicarPoison(game.getL1_1(), game);
+		aplicarPoison(game.getL1_2(), game);
+		aplicarPoison(game.getL1_3(), game);
+		aplicarPoison(game.getL1_4(), game);
+		aplicarPoison(game.getL1_5(), game);
 
-		// Linea 2-1
-		if (game.getL2_1() != null) {
-			if (game.getL2_1().getPoisn() != null && game.getL2_1().getPoisn() > 0) {
-				game.getL2_1().setVida(game.getL2_1().getVida() - 1);
-				game.getL2_1().setPoisn(game.getL2_1().getPoisn() - 1);
-				if (game.getL2_1().getVida() <= 0) {
-					game.setL2_1(null);
-				}
-				if (game.getL2_1().getPoisn() <= 0) {
-					game.getL2_1().setPoisn(null);
-				}
-			}
-			if (game.getL2_1().getBleed() != null && game.getL2_1().getBleed() > 0) {
-				game.getL2_1().setVida(game.getL2_1().getVida() - game.getL2_1().getBleed());
-				if (game.getL2_1().getVida() <= 0) {
-					game.setL2_1(null);
-				}
-			}
-			if (game.getL2_1().getBurn() != null && game.getL2_1().getBurn() > 0) {
-				game.getL2_1().setVida(game.getL2_1().getVida() - 1);
-				game.getL2_1().setBurn(game.getL2_1().getBurn() - 1);
-				if (game.getL2_1().getVida() <= 0) {
-					game.setL2_1(null);
-				}
-				if (game.getL2_1().getBurn() <= 0) {
-					game.getL2_1().setBurn(null);
-				}
-			}
-			if (game.getL2_1() != null) {
-				gs.save(game.getL2_1());
-			}
-		}
+		aplicarPoison(game.getL2_1(), game);
+		aplicarPoison(game.getL2_2(), game);
+		aplicarPoison(game.getL2_3(), game);
+		aplicarPoison(game.getL2_4(), game);
+		aplicarPoison(game.getL2_5(), game);
 
-		// Linea 2-2
-		if (game.getL2_2() != null) {
-			if (game.getL2_2().getPoisn() != null && game.getL2_2().getPoisn() > 0) {
-				game.getL2_2().setVida(game.getL2_2().getVida() - 1);
-				game.getL2_2().setPoisn(game.getL2_2().getPoisn() - 1);
-				if (game.getL2_2().getVida() <= 0) {
-					game.setL2_2(null);
-				}
-				if (game.getL2_2().getPoisn() <= 0) {
-					game.getL2_2().setPoisn(null);
-				}
-			}
-			if (game.getL2_2().getBleed() != null && game.getL2_2().getBleed() > 0) {
-				game.getL2_2().setVida(game.getL2_2().getVida() - game.getL2_2().getBleed());
-				if (game.getL2_2().getVida() <= 0) {
-					game.setL2_2(null);
-				}
-			}
-			if (game.getL2_2().getBurn() != null && game.getL2_2().getBurn() > 0) {
-				game.getL2_2().setVida(game.getL2_2().getVida() - 1);
-				game.getL2_2().setBurn(game.getL2_2().getBurn() - 1);
-				if (game.getL2_2().getVida() <= 0) {
-					game.setL2_2(null);
-				}
-				if (game.getL2_2().getBurn() <= 0) {
-					game.getL2_2().setBurn(null);
-				}
-			}
-			if (game.getL2_2() != null) {
-				gs.save(game.getL2_2());
-			}
-		}
+		// Aplicar Bleed
+		aplicarBleed(game.getL1_1(), game);
+		aplicarBleed(game.getL1_2(), game);
+		aplicarBleed(game.getL1_3(), game);
+		aplicarBleed(game.getL1_4(), game);
+		aplicarBleed(game.getL1_5(), game);
 
-		// Linea 2-3
-		if (game.getL2_3() != null) {
-			if (game.getL2_3().getPoisn() != null && game.getL2_3().getPoisn() > 0) {
-				game.getL2_3().setVida(game.getL2_3().getVida() - 1);
-				game.getL2_3().setPoisn(game.getL2_3().getPoisn() - 1);
-				if (game.getL2_3().getVida() <= 0) {
-					game.setL2_3(null);
-				}
-				if (game.getL2_3().getPoisn() <= 0) {
-					game.getL2_3().setPoisn(null);
-				}
-			}
-			if (game.getL2_3().getBleed() != null && game.getL2_3().getBleed() > 0) {
-				game.getL2_3().setVida(game.getL2_3().getVida() - game.getL2_3().getBleed());
-				if (game.getL2_3().getVida() <= 0) {
-					game.setL2_3(null);
-				}
-			}
-			if (game.getL2_3().getBurn() != null && game.getL2_3().getBurn() > 0) {
-				game.getL2_3().setVida(game.getL2_3().getVida() - 1);
-				game.getL2_3().setBurn(game.getL2_3().getBurn() - 1);
-				if (game.getL2_3().getVida() <= 0) {
-					game.setL2_3(null);
-				}
-				if (game.getL2_3().getBurn() <= 0) {
-					game.getL2_3().setBurn(null);
-				}
-			}
-			if (game.getL2_3() != null) {
-				gs.save(game.getL2_3());
-			}
-		}
+		aplicarBleed(game.getL2_1(), game);
+		aplicarBleed(game.getL2_2(), game);
+		aplicarBleed(game.getL2_3(), game);
+		aplicarBleed(game.getL2_4(), game);
+		aplicarBleed(game.getL2_5(), game);
 
-		// Linea 2-4
-		if (game.getL2_4() != null) {
-			if (game.getL2_4().getPoisn() != null && game.getL2_4().getPoisn() > 0) {
-				game.getL2_4().setVida(game.getL2_4().getVida() - 1);
-				game.getL2_4().setPoisn(game.getL2_4().getPoisn() - 1);
-				if (game.getL2_4().getVida() <= 0) {
-					game.setL2_4(null);
-				}
-				if (game.getL2_4().getPoisn() <= 0) {
-					game.getL2_4().setPoisn(null);
-				}
-			}
-			if (game.getL2_4().getBleed() != null && game.getL2_4().getBleed() > 0) {
-				game.getL2_4().setVida(game.getL2_4().getVida() - game.getL2_4().getBleed());
-				if (game.getL2_4().getVida() <= 0) {
-					game.setL2_4(null);
-				}
-			}
-			if (game.getL2_4().getBurn() != null && game.getL2_4().getBurn() > 0) {
-				game.getL2_4().setVida(game.getL2_4().getVida() - 1);
-				game.getL2_4().setBurn(game.getL2_4().getBurn() - 1);
-				if (game.getL2_4().getVida() <= 0) {
-					game.setL2_4(null);
-				}
-				if (game.getL2_4().getBurn() <= 0) {
-					game.getL2_4().setBurn(null);
-				}
-			}
-			if (game.getL2_4() != null) {
-				gs.save(game.getL2_4());
-			}
-		}
+		// Aplicar Burn
+		aplicarBurn(game.getL1_1(), game);
+		aplicarBurn(game.getL1_2(), game);
+		aplicarBurn(game.getL1_3(), game);
+		aplicarBurn(game.getL1_4(), game);
+		aplicarBurn(game.getL1_5(), game);
 
-		// Linea 2-5
-		if (game.getL2_5() != null) {
-			if (game.getL2_5().getPoisn() != null && game.getL2_5().getPoisn() > 0) {
-				game.getL2_5().setVida(game.getL2_5().getVida() - 1);
-				game.getL2_5().setPoisn(game.getL2_5().getPoisn() - 1);
-				if (game.getL2_5().getVida() <= 0) {
-					game.setL2_5(null);
-				}
-				if (game.getL2_5().getPoisn() <= 0) {
-					game.getL2_5().setPoisn(null);
-				}
-			}
-			if (game.getL2_5().getBleed() != null && game.getL2_5().getBleed() > 0) {
-				game.getL2_5().setVida(game.getL2_5().getVida() - game.getL2_5().getBleed());
-				if (game.getL2_5().getVida() <= 0) {
-					game.setL2_5(null);
-				}
-			}
-			if (game.getL2_5().getBurn() != null && game.getL2_5().getBurn() > 0) {
-				game.getL2_5().setVida(game.getL2_5().getVida() - 1);
-				game.getL2_5().setBurn(game.getL2_5().getBurn() - 1);
-				if (game.getL2_5().getVida() <= 0) {
-					game.setL2_5(null);
-				}
-				if (game.getL2_5().getBurn() <= 0) {
-					game.getL2_5().setBurn(null);
-				}
-			}
-			if (game.getL2_5() != null) {
-				gs.save(game.getL2_5());
-			}
-		}
+		aplicarBurn(game.getL2_1(), game);
+		aplicarBurn(game.getL2_2(), game);
+		aplicarBurn(game.getL2_3(), game);
+		aplicarBurn(game.getL2_4(), game);
+		aplicarBurn(game.getL2_5(), game);
+
+		// Guardar cambios si es necesario
 		return game;
 	}
 
+	private void procesarLinea(LineaDTO linea_own, LineaDTO linea, String posicionOponente, GameDTO game,
+			GameDTO game_aux, PlayerStatusDTO player2) {
+		if (linea != null) {
+			linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
+
+			if (linea_own.getCarta().getHabilidadDTO().getPrcnt() != null) {
+				linea.setVida((int) Math.ceil(linea.getVida()
+						- linea.getCarta().getVida() * (linea_own.getCarta().getHabilidadDTO().getPrcnt() / 100)));
+			}
+
+			if (linea_own.getCarta().getHabilidadDTO().getLeth() != null && linea.getVida() > 0) {
+				linea.setVida((int) Math.ceil(linea.getVida() - (linea.getCarta().getVida() - linea.getVida())
+						* (linea_own.getCarta().getHabilidadDTO().getPrcnt() / 100)));
+			}
+
+			if (linea.getVida() <= 0) {
+				switch (posicionOponente) {
+				case "1_1":
+					game.setL1_1(null);
+					break;
+				case "1_2":
+					game.setL1_2(null);
+					break;
+				case "1_3":
+					game.setL1_3(null);
+					break;
+				case "1_4":
+					game.setL1_4(null);
+					break;
+				case "1_5":
+					game.setL1_5(null);
+					break;
+				case "2_1":
+					game.setL2_1(null);
+					break;
+				case "2_2":
+					game.setL2_2(null);
+					break;
+				case "2_3":
+					game.setL2_3(null);
+					break;
+				case "2_4":
+					game.setL2_4(null);
+					break;
+				case "2_5":
+					game.setL2_5(null);
+					break;
+				}
+			} else {
+				// Aplicar efectos
+				HabilidadDTO hab = linea_own.getCarta().getHabilidadDTO();
+
+				if (hab.getFreeze() != null && linea.getStun() == null) {
+					linea.setStun(hab.getFreeze());
+					linea.setStun_name(hab.getFreezeName());
+				}
+				if (hab.getBurn() != null) {
+					linea.setBurn(hab.getBurn());
+				}
+				if (hab.getPoisn() != null) {
+					linea.setPoisn(hab.getPoisn());
+				}
+				if (hab.getBleed() != null && (linea.getBleed() == null || linea.getBleed() < hab.getBleed())) {
+					linea.setBleed(hab.getBleed());
+				}
+				if (hab.getPrcntDwn() != null && linea.getPrcnt_dwn() < hab.getPrcntDwn()) {
+					linea.setPrcnt_dwn(hab.getPrcntDwn());
+				}
+			}
+		} else {
+			player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
+		}
+	}
+
+	private void ejecutarLinea(String posicion, GameDTO game, GameDTO game_aux, PlayerStatusDTO player2) {
+		LineaDTO linea_own = null;
+		LineaDTO linea_aux = null;
+		LineaDTO linea = null;
+
+		switch (posicion) {
+		case "1_1":
+			linea_own = game_aux.getL1_1();
+			linea_aux = game.getL1_1();
+			linea = game.getL2_1();
+			break;
+		case "1_2":
+			linea_own = game_aux.getL1_2();
+			linea = game.getL2_2();
+			linea_aux = game.getL1_2();
+			break;
+		case "1_3":
+			linea_own = game_aux.getL1_3();
+			linea = game.getL2_3();
+			linea_aux = game.getL1_3();
+			break;
+		case "1_4":
+			linea_own = game_aux.getL1_4();
+			linea = game.getL2_4();
+			linea_aux = game.getL1_4();
+			break;
+		case "1_5":
+			linea_own = game_aux.getL1_5();
+			linea = game.getL2_5();
+			linea_aux = game.getL1_5();
+			break;
+		case "2_1":
+			linea_own = game_aux.getL2_1();
+			linea = game.getL1_1();
+			linea_aux = game.getL2_1();
+			break;
+		case "2_2":
+			linea_own = game_aux.getL2_2();
+			linea = game.getL1_2();
+			linea_aux = game.getL2_2();
+			break;
+		case "2_3":
+			linea_own = game_aux.getL2_3();
+			linea = game.getL1_3();
+			linea_aux = game.getL2_3();
+			break;
+		case "2_4":
+			linea_own = game_aux.getL2_4();
+			linea = game.getL1_4();
+			linea_aux = game.getL2_4();
+			break;
+		case "2_5":
+			linea_own = game_aux.getL2_5();
+			linea = game.getL1_5();
+			linea_aux = game.getL2_5();
+			break;
+		}
+
+		if (linea_own != null) {
+			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
+				procesarLinea(linea_own, linea,
+						posicion.startsWith("1") ? "2_" + posicion.split("_")[1] : "1_" + posicion.split("_")[1], game,
+						game_aux, player2);
+			} else {
+				if (linea_aux != null) {
+					if (linea_aux.getStun() != null) {
+						linea_aux.setStun(linea_aux.getStun() - 1);
+						if (linea_aux.getStun() <= 0) {
+							linea_aux.setStun(null);
+							linea_aux.setStun_name(null);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private GameDTO clone(GameDTO game) { // Hago esto porque java es mas tiquismiquis y no existe macho que palo
+		// Copiar L1_1 a L1_5
+		LineaDTO l1_1 = null;
+		if (game.getL1_1() != null) {
+		    l1_1 = LineaDTO.builder()
+		                    .carta(game.getL1_1().getCarta())
+		                    .stun(game.getL1_1().getStun())
+		                    .stun_name(game.getL1_1().getStun_name())
+		                    .burn(game.getL1_1().getBurn())
+		                    .bleed(game.getL1_1().getBleed())
+		                    .prcnt_dwn(game.getL1_1().getPrcnt_dwn())
+		                    .prcnt_up(game.getL1_1().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l1_2 = null;
+		if (game.getL1_2() != null) {
+		    l1_2 = LineaDTO.builder()
+		                    .carta(game.getL1_2().getCarta())
+		                    .stun(game.getL1_2().getStun())
+		                    .stun_name(game.getL1_2().getStun_name())
+		                    .burn(game.getL1_2().getBurn())
+		                    .bleed(game.getL1_2().getBleed())
+		                    .prcnt_dwn(game.getL1_2().getPrcnt_dwn())
+		                    .prcnt_up(game.getL1_2().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l1_3 = null;
+		if (game.getL1_3() != null) {
+		    l1_3 = LineaDTO.builder()
+		                    .carta(game.getL1_3().getCarta())
+		                    .stun(game.getL1_3().getStun())
+		                    .stun_name(game.getL1_3().getStun_name())
+		                    .burn(game.getL1_3().getBurn())
+		                    .bleed(game.getL1_3().getBleed())
+		                    .prcnt_dwn(game.getL1_3().getPrcnt_dwn())
+		                    .prcnt_up(game.getL1_3().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l1_4 = null;
+		if (game.getL1_4() != null) {
+		    l1_4 = LineaDTO.builder()
+		                    .carta(game.getL1_4().getCarta())
+		                    .stun(game.getL1_4().getStun())
+		                    .stun_name(game.getL1_4().getStun_name())
+		                    .burn(game.getL1_4().getBurn())
+		                    .bleed(game.getL1_4().getBleed())
+		                    .prcnt_dwn(game.getL1_4().getPrcnt_dwn())
+		                    .prcnt_up(game.getL1_4().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l1_5 = null;
+		if (game.getL1_5() != null) {
+		    l1_5 = LineaDTO.builder()
+		                    .carta(game.getL1_5().getCarta())
+		                    .stun(game.getL1_5().getStun())
+		                    .stun_name(game.getL1_5().getStun_name())
+		                    .burn(game.getL1_5().getBurn())
+		                    .bleed(game.getL1_5().getBleed())
+		                    .prcnt_dwn(game.getL1_5().getPrcnt_dwn())
+		                    .prcnt_up(game.getL1_5().getPrcnt_up())
+		                    .build();
+		}
+
+		// Copiar L2_1 a L2_5
+		LineaDTO l2_1 = null;
+		if (game.getL2_1() != null) {
+		    l2_1 = LineaDTO.builder()
+		                    .carta(game.getL2_1().getCarta())
+		                    .stun(game.getL2_1().getStun())
+		                    .stun_name(game.getL2_1().getStun_name())
+		                    .burn(game.getL2_1().getBurn())
+		                    .bleed(game.getL2_1().getBleed())
+		                    .prcnt_dwn(game.getL2_1().getPrcnt_dwn())
+		                    .prcnt_up(game.getL2_1().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l2_2 = null;
+		if (game.getL2_2() != null) {
+		    l2_2 = LineaDTO.builder()
+		                    .carta(game.getL2_2().getCarta())
+		                    .stun(game.getL2_2().getStun())
+		                    .stun_name(game.getL2_2().getStun_name())
+		                    .burn(game.getL2_2().getBurn())
+		                    .bleed(game.getL2_2().getBleed())
+		                    .prcnt_dwn(game.getL2_2().getPrcnt_dwn())
+		                    .prcnt_up(game.getL2_2().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l2_3 = null;
+		if (game.getL2_3() != null) {
+		    l2_3 = LineaDTO.builder()
+		                    .carta(game.getL2_3().getCarta())
+		                    .stun(game.getL2_3().getStun())
+		                    .stun_name(game.getL2_3().getStun_name())
+		                    .burn(game.getL2_3().getBurn())
+		                    .bleed(game.getL2_3().getBleed())
+		                    .prcnt_dwn(game.getL2_3().getPrcnt_dwn())
+		                    .prcnt_up(game.getL2_3().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l2_4 = null;
+		if (game.getL2_4() != null) {
+		    l2_4 = LineaDTO.builder()
+		                    .carta(game.getL2_4().getCarta())
+		                    .stun(game.getL2_4().getStun())
+		                    .stun_name(game.getL2_4().getStun_name())
+		                    .burn(game.getL2_4().getBurn())
+		                    .bleed(game.getL2_4().getBleed())
+		                    .prcnt_dwn(game.getL2_4().getPrcnt_dwn())
+		                    .prcnt_up(game.getL2_4().getPrcnt_up())
+		                    .build();
+		}
+
+		LineaDTO l2_5 = null;
+		if (game.getL2_5() != null) {
+		    l2_5 = LineaDTO.builder()
+		                    .carta(game.getL2_5().getCarta())
+		                    .stun(game.getL2_5().getStun())
+		                    .stun_name(game.getL2_5().getStun_name())
+		                    .burn(game.getL2_5().getBurn())
+		                    .bleed(game.getL2_5().getBleed())
+		                    .prcnt_dwn(game.getL2_5().getPrcnt_dwn())
+		                    .prcnt_up(game.getL2_5().getPrcnt_up())
+		                    .build();
+		}
+
+		
+		GameDTO newgame = GameDTO.builder()
+								 .l1_1(l1_1)
+								 .l1_2(l1_2)
+								 .l1_3(l1_3)
+								 .l1_4(l1_4)
+								 .l1_5(l1_5)
+								 .l2_1(l2_1)
+								 .l2_2(l2_2)
+								 .l2_3(l2_3)
+								 .l2_4(l2_4)
+								 .l2_5(l2_5)
+								 .build();
+		return newgame;
+	}
+
 	private GameDTO fight(GameDTO game) {
-		GameDTO game_aux = GameDTO.builder().l1_1(game.getL1_1()).l1_2(game.getL1_2()).l1_3(game.getL1_3())
-				.l1_4(game.getL1_4()).l1_5(game.getL1_5()).l2_1(game.getL2_1()).l2_2(game.getL2_2())
-				.l2_3(game.getL2_3()).l2_4(game.getL2_4()).l2_5(game.getL2_5()).build();
+		GameDTO game_aux = clone(game);
 		if (game.getPlayer1().getVida() <= 0) {
 			game.setStatus("winner: " + game.getPlayer2().getUsuario().getUsername());
 			game.setL1_1(null);
@@ -978,273 +1050,53 @@ public class GameController {
 			ns.win(game.getPlayer1().getUsuario());
 			return game;
 		}
-		LineaDTO linea = null;
-		LineaDTO linea_own = null;
-		PlayerStatusDTO player1 = game.getPlayer1();
-		PlayerStatusDTO player2 = game.getPlayer2();
-		// Linea 1
-		if (game_aux.getL1_1() != null) {
-			linea_own = game_aux.getL1_1();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL2_1() != null) {
-					linea = game.getL2_1();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea_own.getCarta().getHabilidadDTO().getPrcnt() != null) {
-						linea.setVida((int)Math.ceil(linea.getVida() - linea.getCarta().getVida()*(linea_own.getCarta().getHabilidadDTO().getPrcnt()/100)));
-					}
-					if (linea_own.getCarta().getHabilidadDTO().getLeth() != null && linea.getVida() > 0) {
-						linea.setVida((int)Math.ceil(linea.getVida() - (linea.getCarta().getVida()-linea.getVida())*(linea_own.getCarta().getHabilidadDTO().getPrcnt()/100)));
-					}
-					if (linea.getVida() <= 0) {
-						game.setL2_1(null);
-					} else {
-						if (linea_own.getCarta().getHabilidadDTO().getFreeze() != null && linea.getStun() == null) {
-							linea.setStun(linea_own.getCarta().getHabilidadDTO().getFreeze());
-							linea.setStun_name(linea_own.getCarta().getHabilidadDTO().getFreezeName());
-						}
-						if (linea_own.getCarta().getHabilidadDTO().getBurn() != null) {
-							linea.setBurn(linea_own.getCarta().getHabilidadDTO().getBurn());
-						}
-						if (linea_own.getCarta().getHabilidadDTO().getPoisn() != null) {
-							linea.setPoisn(linea_own.getCarta().getHabilidadDTO().getPoisn());
-						}
-						if (linea_own.getCarta().getHabilidadDTO().getBleed() != null && (linea.getBleed() == null || linea.getBleed() < linea_own.getCarta().getHabilidadDTO().getBleed() ) ) {
-							linea.setBleed(linea_own.getCarta().getHabilidadDTO().getBleed());
-						}
-						if (linea_own.getCarta().getHabilidadDTO().getPrcntDwn() != null && linea.getPrcnt_dwn() < linea_own.getCarta().getHabilidadDTO().getPrcntDwn()) {
-							linea.setPrcnt_dwn(linea_own.getCarta().getHabilidadDTO().getPrcntDwn());
-						}
-						gs.save(linea);
-					}
-				} else {
-					player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
+		ejecutarLinea("1_1", game, game_aux, game.getPlayer2());
+		ejecutarLinea("1_2", game, game_aux, game.getPlayer2());
+		ejecutarLinea("1_3", game, game_aux, game.getPlayer2());
+		ejecutarLinea("1_4", game, game_aux, game.getPlayer2());
+		ejecutarLinea("1_5", game, game_aux, game.getPlayer2());
+		ejecutarLinea("2_1", game, game_aux, game.getPlayer1());
+		ejecutarLinea("2_2", game, game_aux, game.getPlayer1());
+		ejecutarLinea("2_3", game, game_aux, game.getPlayer1());
+		ejecutarLinea("2_4", game, game_aux, game.getPlayer1());
+		ejecutarLinea("2_5", game, game_aux, game.getPlayer1());
 
-		// Linea 2
-		if (game_aux.getL1_2() != null) {
-			linea_own = game_aux.getL1_2();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL2_2() != null) {
-					linea = game.getL2_2();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL2_2(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 3
-		if (game_aux.getL1_3() != null) {
-			linea_own = game_aux.getL1_3();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL2_3() != null) {
-					linea = game.getL2_3();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL2_3(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 4
-		if (game_aux.getL1_4() != null) {
-			linea_own = game_aux.getL1_4();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL2_4() != null) {
-					linea = game.getL2_4();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL2_4(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 5
-		if (game_aux.getL1_5() != null) {
-			linea_own = game_aux.getL1_5();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL2_5() != null) {
-					linea = game.getL2_5();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL2_5(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player2.setVida(player2.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 2-1
-		if (game_aux.getL2_1() != null) {
-			linea_own = game_aux.getL2_1();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL1_1() != null) {
-					linea = game.getL1_1();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL1_1(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 2-2
-		if (game_aux.getL2_2() != null) {
-			linea_own = game_aux.getL2_2();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL1_2() != null) {
-					linea = game.getL1_2();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL1_2(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 2-3
-		if (game_aux.getL2_3() != null) {
-			linea_own = game_aux.getL2_3();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL1_3() != null) {
-					linea = game.getL1_3();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL1_3(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 2-4
-		if (game_aux.getL2_4() != null) {
-			linea_own = game_aux.getL2_4();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL1_4() != null) {
-					linea = game.getL1_4();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL1_4(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
-
-		// Linea 2-5
-		if (game_aux.getL2_5() != null) {
-			linea_own = game_aux.getL2_5();
-			if (linea_own.getStun() == null || linea_own.getStun() <= 0) {
-				if (game.getL1_5() != null) {
-					linea = game.getL1_5();
-					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-					if (linea.getVida() <= 0) {
-						game.setL1_5(null);
-					} else {
-						gs.save(linea);
-					}
-				} else {
-					player1.setVida(player1.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
-				}
-			} else {
-				linea_own.setStun(linea_own.getStun() - 1);
-				if (linea_own.getStun() <= 0) {
-					linea_own.setStun(null);
-				}
-				gs.save(linea_own);
-			}
-		}
+		saveAllLines(game);
 
 		return game;
+	}
+
+	private void saveAllLines(GameDTO game) {
+		if (game.getL1_1() != null) {
+			gs.save(game.getL1_1());
+		}
+		if (game.getL1_2() != null) {
+			gs.save(game.getL1_2());
+		}
+		if (game.getL1_3() != null) {
+			gs.save(game.getL1_3());
+		}
+		if (game.getL1_4() != null) {
+			gs.save(game.getL1_4());
+		}
+		if (game.getL1_5() != null) {
+			gs.save(game.getL1_5());
+		}
+		if (game.getL2_1() != null) {
+			gs.save(game.getL2_1());
+		}
+		if (game.getL2_2() != null) {
+			gs.save(game.getL2_2());
+		}
+		if (game.getL2_3() != null) {
+			gs.save(game.getL2_3());
+		}
+		if (game.getL2_4() != null) {
+			gs.save(game.getL2_4());
+		}
+		if (game.getL2_5() != null) {
+			gs.save(game.getL2_5());
+		}
 	}
 
 }

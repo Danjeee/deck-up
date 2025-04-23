@@ -43,7 +43,7 @@ public class LineaDTO {
 					   .burn(input.getBurn())
 					   .poisn(input.getPoisn())
 					   .prcnt_dwn(input.getPrcnt_dwn())
-					   .prcnt_up(input.getPrcnt_up())
+					   .prcnt_up(input.getPrnct_up())
 					   .game(GameDTO.builder().id(input.getGame().getId()).build())
 					   .build();
 	}
@@ -62,7 +62,7 @@ public class LineaDTO {
 					   .burn(input.getBurn())
 					   .poisn(input.getPoisn())
 					   .prcnt_dwn(input.getPrcnt_dwn())
-					   .prcnt_up(input.getPrcnt_up())
+					   .prnct_up(input.getPrcnt_up())
 					   .game(Game.builder().id(input.getGame().getId()).build())
 					   .build();
 	}
