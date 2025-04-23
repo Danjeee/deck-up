@@ -989,9 +989,31 @@ public class GameController {
 				if (game.getL2_1() != null) {
 					linea = game.getL2_1();
 					linea.setVida(linea.getVida() - linea_own.getCarta().getHabilidadDTO().getDmg());
+					if (linea_own.getCarta().getHabilidadDTO().getPrcnt() != null) {
+						linea.setVida((int)Math.ceil(linea.getVida() - linea.getCarta().getVida()*(linea_own.getCarta().getHabilidadDTO().getPrcnt()/100)));
+					}
+					if (linea_own.getCarta().getHabilidadDTO().getLeth() != null && linea.getVida() > 0) {
+						linea.setVida((int)Math.ceil(linea.getVida() - (linea.getCarta().getVida()-linea.getVida())*(linea_own.getCarta().getHabilidadDTO().getPrcnt()/100)));
+					}
 					if (linea.getVida() <= 0) {
 						game.setL2_1(null);
 					} else {
+						if (linea_own.getCarta().getHabilidadDTO().getFreeze() != null && linea.getStun() == null) {
+							linea.setStun(linea_own.getCarta().getHabilidadDTO().getFreeze());
+							linea.setStun_name(linea_own.getCarta().getHabilidadDTO().getFreezeName());
+						}
+						if (linea_own.getCarta().getHabilidadDTO().getBurn() != null) {
+							linea.setBurn(linea_own.getCarta().getHabilidadDTO().getBurn());
+						}
+						if (linea_own.getCarta().getHabilidadDTO().getPoisn() != null) {
+							linea.setPoisn(linea_own.getCarta().getHabilidadDTO().getPoisn());
+						}
+						if (linea_own.getCarta().getHabilidadDTO().getBleed() != null && (linea.getBleed() == null || linea.getBleed() < linea_own.getCarta().getHabilidadDTO().getBleed() ) ) {
+							linea.setBleed(linea_own.getCarta().getHabilidadDTO().getBleed());
+						}
+						if (linea_own.getCarta().getHabilidadDTO().getPrcntDwn() != null && linea.getPrcnt_dwn() < linea_own.getCarta().getHabilidadDTO().getPrcntDwn()) {
+							linea.setPrcnt_dwn(linea_own.getCarta().getHabilidadDTO().getPrcntDwn());
+						}
 						gs.save(linea);
 					}
 				} else {

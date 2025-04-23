@@ -24,6 +24,8 @@ public class LineaDTO {
     private Integer poisn;
     private Integer bleed;
     private String turn_dmg_name;
+    private Double prcnt_dwn;
+    private Double prcnt_up;
     private GameDTO game;
 
 	
@@ -40,6 +42,8 @@ public class LineaDTO {
 					   .bleed(input.getBleed())
 					   .burn(input.getBurn())
 					   .poisn(input.getPoisn())
+					   .prcnt_dwn(input.getPrcnt_dwn())
+					   .prcnt_up(input.getPrcnt_up())
 					   .game(GameDTO.builder().id(input.getGame().getId()).build())
 					   .build();
 	}
@@ -57,6 +61,8 @@ public class LineaDTO {
 					   .bleed(input.getBleed())
 					   .burn(input.getBurn())
 					   .poisn(input.getPoisn())
+					   .prcnt_dwn(input.getPrcnt_dwn())
+					   .prcnt_up(input.getPrcnt_up())
 					   .game(Game.builder().id(input.getGame().getId()).build())
 					   .build();
 	}

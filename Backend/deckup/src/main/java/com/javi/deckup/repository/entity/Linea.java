@@ -38,6 +38,8 @@ public class Linea {
 	    private Integer burn;
 	    private Integer poisn;
 	    private Integer bleed;
+	    private Double prcnt_dwn;
+	    private Double prcnt_up;
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "game")

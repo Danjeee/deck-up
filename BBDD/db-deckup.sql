@@ -403,6 +403,8 @@ CREATE TABLE `deckup`.`lineas` (
   `burn` INT NULL,
   `poisn` INT NULL,
   `bleed` INT NULL,
+  `prnct_up` DECIMAL(3,2) NULL DEFAULT 0,
+  `prcnt_dwn` DECIMAL(3,2) NULL DEFAULT 0,
   `game` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_lineas_games_idx` (`game` ASC) VISIBLE,
