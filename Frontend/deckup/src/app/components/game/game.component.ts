@@ -25,6 +25,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   oponentlines: any
   yourturn: boolean = false
   mana: any
+  haschanged: boolean = false;
 
   constructor(private alert: AlertService, private router: Router, private service: GameService) {
     super()
@@ -37,8 +38,28 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (status != "" && status != null) {
         this.service.getGame(id).subscribe({
           next: (data) => {
-            this.gameStatus = data;
-            this.rendergame(data)
+            if (data.p1_c && data.p2_c == null) {
+              if (this.isYou(data.player2)) {
+                this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+                  next: (data) => {
+                    // this.service.getGame(sessionStorage.getItem("game")).subscribe({
+                    //   next: (data) => {
+                    //     // console.log(data)
+                    //     this.rendergame(data)
+                    //     this.loaded = true
+                    //   }
+                    // })
+                  }
+                })
+              }
+              if (data.status != "activo"){
+                this.gameStatus = data;
+                this.rendergame(data)
+              }
+            } else {
+              this.gameStatus = data;
+              this.rendergame(data)
+            }
           }
         })
       }
@@ -63,8 +84,22 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
 
   rendergame(data: any) {
-    if (this.gameActual == null) {
-      this.gameActual = data
+    let wait = 0
+    if (this.gameActual != null) {
+      if (data.turno != this.gameActual.turno) {
+        this.haschanged = true
+        wait = 200
+      }
+    }
+    if (this.gameActual == null || this.haschanged) {
+      if (wait != 0) {
+        setTimeout(() => {
+          this.gameActual = data
+        }, wait);
+      } else {
+        this.gameActual = data
+      }
+      this.haschanged = false
     }
     if (data.status != 'activo') {
       if (String(data.status).startsWith("winner: ")) {
@@ -72,17 +107,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       }
     }
     let prevdivs = null;
-    if (this.gameStatus != null){
-      prevdivs = document.querySelectorAll(".yourself")
+    let prevdivs_enemy = null;
+    if (this.gameStatus != null) {
+      prevdivs = document.querySelectorAll(".your")
+      prevdivs_enemy = document.querySelectorAll(".enemy_able")
+      this.renderdmgs(prevdivs, this.isYou(this.gameStatus.player1) ? 'lineas1' : 'lineas2', data)
+      this.renderdmgs(prevdivs_enemy, this.isYou(this.gameStatus.player1) ? 'lineas2' : 'lineas1', data)
       setTimeout(() => {
         this.gameStatus = data
       }, 1000);
     } else {
       this.gameStatus = data
     }
-    this.oponentcards = this.oponentCards(data)
     this.yourlines = this.setLines(data)[0]
     this.oponentlines = this.setLines(data)[1]
+    this.oponentcards = this.oponentCards(data)
     this.cards = this.mycards(data)
     if (data == null) {
       this.router.navigate(["/home"])
@@ -114,20 +153,33 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (this.isYou(data.player1)) {
         if (data.player2.vida > this.gameActual.player2.vida) {
           ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+          setTimeout(() => {
+            this.gameActual = data
+          }, 100);
         }
         if (data.player1.vida < this.gameActual.player1.vida) {
           ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
+          setTimeout(() => {
+            this.gameActual = data
+          }, 100);
         }
         this.mana = data.player1.mana
       } else {
         this.mana = data.player2.mana
         if (data.player1.vida > this.gameActual.player1.vida) {
           ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
+          setTimeout(() => {
+            this.gameActual = data
+          }, 100);
         }
         if (data.player2.vida < this.gameActual.player2.vida) {
           ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
+          setTimeout(() => {
+            this.gameActual = data
+          }, 100);
         }
       }
+      this.renderenemyheals(data)
       setTimeout(() => {
         if (this.yourturn) {
           this.animatecards(document.querySelectorAll('.card'), this.mana)
@@ -135,204 +187,68 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
-
-        this.renderdmgs(prevdivs)
-        this.renderenemyheals()
-        this.gameActual = data
       }, 100);
     }
   }
 
-  renderenemyheals() {
-    const allenemies = document.querySelectorAll(".oponent")
+  renderenemyheals(data: any) {
+    const allenemies = document.querySelectorAll(".oponent");
     allenemies.forEach((e: any) => {
-      const enemy: HTMLElement = e.parentElement
-      const line: HTMLElement = enemy.parentElement as HTMLElement;
-      if (!this.isYou(this.gameStatus.player1)) {
-        switch (line.id) {
-          case "l1":
-            if (this.gameStatus.l1_1 != null && this.gameActual.l1_1 != null) {
-              if (this.gameStatus.l1_1.vida > this.gameActual.l1_1.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l2":
-            if (this.gameStatus.l1_2 != null && this.gameActual.l1_2 != null) {
-              if (this.gameStatus.l1_2.vida > this.gameActual.l1_2.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l3":
-            if (this.gameStatus.l1_3 != null && this.gameActual.l1_3 != null) {
-              if (this.gameStatus.l1_3.vida > this.gameActual.l1_3.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l4":
-            if (this.gameStatus.l1_4 != null && this.gameActual.l1_4 != null) {
-              if (this.gameStatus.l1_4.vida > this.gameActual.l1_4.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l5":
-            if (this.gameStatus.l1_5 != null && this.gameActual.l1_5 != null) {
-              if (this.gameStatus.l1_5.vida > this.gameActual.l1_5.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-        }
-      } else {
-        switch (line.id) {
-          case "l1":
-            if (this.gameStatus.l2_1 != null && this.gameActual.l2_1 != null) {
-              if (this.gameStatus.l2_1.vida > this.gameActual.l2_1.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l2":
-            if (this.gameStatus.l2_2 != null && this.gameActual.l2_2 != null) {
-              if (this.gameStatus.l2_2.vida > this.gameActual.l2_2.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l3":
-            if (this.gameStatus.l2_3 != null && this.gameActual.l2_3 != null) {
-              if (this.gameStatus.l2_3.vida > this.gameActual.l2_3.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l4":
-            if (this.gameStatus.l2_4 != null && this.gameActual.l2_4 != null) {
-              if (this.gameStatus.l2_4.vida > this.gameActual.l2_4.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-          case "l5":
-            if (this.gameStatus.l2_5 != null && this.gameActual.l2_5 != null) {
-              if (this.gameStatus.l2_5.vida > this.gameActual.l2_5.vida) {
-                ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-              }
-            }
-            break;
-        }
-      }
+      const enemy = e.parentElement as HTMLElement;
+      const line = enemy.parentElement as HTMLElement;
+
+      const isPlayer1 = this.isYou(this.gameStatus.player1);
+      const lineNumber = line.id.replace("l", ""); // "l1" → "1"
+      const prefix = !isPlayer1 ? "l1" : "l2";
+      const key = `${prefix}_${lineNumber}`;
+      this.checkHealAndTriggerExplosion(e, key, data);
     });
   }
 
-  renderdmgs(prevdivs: any) {
-    if (prevdivs != null){
-      prevdivs.forEach((e: any) => {
-        const enemy: HTMLElement = e.parentElement
-        const line: HTMLElement = enemy.parentElement as HTMLElement;
-        console.log(e)
-        if (this.isYou(this.gameStatus.player1)) {
-          switch (line.id) {
-            case "l1":
-              if (this.gameActual.l1_1 != null) {
-                if (this.gameStatus.l1_1 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l1_1.vida < this.gameActual.l1_1.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l2":
-              if (this.gameActual.l1_2 != null) {
-                if (this.gameStatus.l1_2 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l1_2.vida < this.gameActual.l1_2.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l3":
-              if (this.gameActual.l1_3 != null) {
-                if (this.gameStatus.l1_3 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l1_3.vida < this.gameActual.l1_3.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l4":
-              if (this.gameActual.l1_4 != null) {
-                if (this.gameStatus.l1_4 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l1_4.vida < this.gameActual.l1_4.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l5":
-              if (this.gameActual.l1_5 != null) {
-                if (this.gameStatus.l1_5 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l1_5.vida < this.gameActual.l1_5.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-          }
-        } else {
-          switch (line.id) {
-            case "l1":
-              if (this.gameActual.l2_1 != null) {
-                if (this.gameStatus.l2_1 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l2_1.vida < this.gameActual.l2_1.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l2":
-              if (this.gameActual.l2_2 != null) {
-                if (this.gameStatus.l2_2 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l2_2.vida < this.gameActual.l2_2.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l3":
-              if (this.gameActual.l2_3 != null) {
-                if (this.gameStatus.l2_3 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l2_3.vida < this.gameActual.l2_3.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l4":
-              if (this.gameActual.l2_4 != null) {
-                if (this.gameStatus.l2_4 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l2_4.vida < this.gameActual.l2_4.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-            case "l5":
-              if (this.gameActual.l2_5 != null) {
-                if (this.gameStatus.l2_5 == null) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                } else if (this.gameStatus.l2_5.vida < this.gameActual.l2_5.vida) {
-                  ParticleComponent.animejs_explosion(e.getBoundingClientRect().width / 2 + e.getBoundingClientRect().left, e.getBoundingClientRect().height + e.getBoundingClientRect().top)
-                }
-              }
-              break;
-          }
-        }
-      });
+  private checkHealAndTriggerExplosion(element: HTMLElement, key: string, data: any) {
+    const status = this.gameActual[key];
+    const current = data[key];
+    if (status && current && status.vida < current.vida) {
+      this.haschanged = true
+      this.triggerExplosion(element);
     }
+  }
+
+  renderdmgs(prevdivs: any, lineastocheck: string, data: any) {
+    if (!prevdivs) return;
+
+    prevdivs.forEach((e: any) => {
+      if (e.id === "player1" || e.id === "player2") return;
+
+      const line = e.parentElement as HTMLElement;
+      const lineNumber = line.id.replace("l", ""); // ej. "l1" → "1"
+      const playerPrefix = lineastocheck === "lineas1" ? "l1" : "l2";
+      const key = `${playerPrefix}_${lineNumber}`;
+      this.checkDamageAndTriggerExplosion(e, key, data);
+    });
+  }
+
+  private checkDamageAndTriggerExplosion(element: HTMLElement, key: string, data: any) {
+    const newData = data[key];
+    const prevStatus = this.gameActual[key];
+    if (!newData) return;
+    let shouldExplode
+    if (newData == null && prevStatus != null) {
+      shouldExplode = true
+    }
+    if (prevStatus != null && newData != null) {
+      shouldExplode = prevStatus.vida > newData.vida
+    }
+
+    if (shouldExplode) {
+      this.haschanged = true
+      this.triggerExplosion(element);
+    }
+  }
+
+  private triggerExplosion(element: HTMLElement) {
+    const rect = element.getBoundingClientRect();
+    ParticleComponent.animejs_explosion(rect.width / 2 + rect.left, rect.height + rect.top);
   }
 
   animatecards(cards: any, mana: any) {
@@ -831,170 +747,132 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     //1-5 p1, 6-10 p2
     switch (linea) {
       case 1:
-        if (game.l1_1 != null) {
-          if (game.l2_1 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l1') : this.shoot("me_c", 'l1');
-            setTimeout(() => {
-              game.l2_1.vida -= game.l1_1.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l1') : this.shoot("me", 'l1');
-            setTimeout(() => {
-              game.player2.vida -= game.l1_1.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l1_1)) {
+          this.performAttack(game.l1_1, game.l2_1, "player2", "l1");
         }
-        (document.getElementById("l1") as HTMLElement).className = "line selectedline";
+        this.updateLineUI("l1");
         return 6;
+
       case 2:
-        if (game.l1_2 != null) {
-          if (game.l2_2 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l2') : this.shoot("me_c", 'l2');
-            setTimeout(() => {
-              game.l2_2.vida -= game.l1_2.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l2') : this.shoot("me", 'l2');
-            setTimeout(() => {
-              game.player2.vida -= game.l1_2.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l1_2)) {
+          this.performAttack(game.l1_2, game.l2_2, "player2", "l2");
         }
-        (document.getElementById("l2") as HTMLElement).className = "line selectedline";
-        (document.getElementById("l1") as HTMLElement).className = "line";
+        this.updateLineUI("l2", "l1");
         return 7;
+
       case 3:
-        if (game.l1_3 != null) {
-          if (game.l2_3 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l3') : this.shoot("me_c", 'l3');
-            setTimeout(() => {
-              game.l2_3.vida -= game.l1_3.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l3') : this.shoot("me", 'l3');
-            setTimeout(() => {
-              game.player2.vida -= game.l1_3.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l1_3)) {
+          this.performAttack(game.l1_3, game.l2_3, "player2", "l3");
         }
-        (document.getElementById("l3") as HTMLElement).className = "line selectedline";
-        (document.getElementById("l2") as HTMLElement).className = "line";
+        this.updateLineUI("l3", "l2");
         return 8;
+
       case 4:
-        if (game.l1_4 != null) {
-          if (game.l2_4 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l4') : this.shoot("me_c", 'l4');
-            setTimeout(() => {
-              game.l2_4.vida -= game.l1_4.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l4') : this.shoot("me", 'l4');
-            setTimeout(() => {
-              game.player2.vida -= game.l1_4.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l1_4)) {
+          this.performAttack(game.l1_4, game.l2_4, "player2", "l4");
         }
-        (document.getElementById("l4") as HTMLElement).className = "line selectedline";
-        (document.getElementById("l3") as HTMLElement).className = "line";
+        this.updateLineUI("l4", "l3");
         return 9;
+
       case 5:
-        if (game.l1_5 != null) {
-          if (game.l2_5 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent_c", 'l5') : this.shoot("me_c", 'l5');
-            setTimeout(() => {
-              game.l2_5.vida -= game.l1_5.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("oponent", 'l5') : this.shoot("me", 'l5');
-            setTimeout(() => {
-              game.player2.vida -= game.l1_5.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l1_5)) {
+          this.performAttack(game.l1_5, game.l2_5, "player2", "l5");
         }
-        (document.getElementById("l5") as HTMLElement).className = "line selectedline";
-        (document.getElementById("l4") as HTMLElement).className = "line";
+        this.updateLineUI("l5", "l4");
         return 10;
+
       case 6:
-        if (game.l2_1 != null) {
-          if (game.l1_1 != null) {
-            setTimeout(() => {
-              game.l1_1.vida -= game.l2_1.carta.habilidadDTO.dmg
-            }, 500);
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l1') : this.shoot("oponent_c", 'l1');
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l1') : this.shoot("oponent", 'l1');
-            setTimeout(() => {
-              game.player1.vida -= game.l2_1.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l2_1)) {
+          this.performAttack(game.l2_1, game.l1_1, "player1", "l1");
         }
         return 2;
+
       case 7:
-        if (game.l2_2 != null) {
-          if (game.l1_2 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l2') : this.shoot("oponent_c", 'l2');
-            setTimeout(() => {
-              game.l1_2.vida -= game.l2_2.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l2') : this.shoot("oponent", 'l2');
-            setTimeout(() => {
-              game.player1.vida -= game.l2_2.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l2_2)) {
+          this.performAttack(game.l2_2, game.l1_2, "player1", "l2");
         }
         return 3;
+
       case 8:
-        if (game.l2_3 != null) {
-          if (game.l1_3 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l3') : this.shoot("oponent_c", 'l3');
-            setTimeout(() => {
-              game.l1_3.vida -= game.l2_3.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l3') : this.shoot("oponent", 'l3');
-            setTimeout(() => {
-              game.player1.vida -= game.l2_3.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l2_3)) {
+          this.performAttack(game.l2_3, game.l1_3, "player1", "l3");
         }
         return 4;
+
       case 9:
-        if (game.l2_4 != null) {
-          if (game.l1_4 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l4') : this.shoot("oponent_c", 'l4');
-            setTimeout(() => {
-              game.l1_4.vida -= game.l2_4.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l4') : this.shoot("oponent", 'l4');
-            setTimeout(() => {
-              game.player1.vida -= game.l2_4.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l2_4)) {
+          this.performAttack(game.l2_4, game.l1_4, "player1", "l4");
         }
         return 5;
+
       case 10:
-        if (game.l2_5 != null) {
-          if (game.l1_5 != null) {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me_c", 'l5') : this.shoot("oponent_c", 'l5');
-            setTimeout(() => {
-              game.l1_5.vida -= game.l2_5.carta.habilidadDTO.dmg
-            }, 500);
-          } else {
-            this.isYou(this.gameStatus.player1) ? this.shoot("me", 'l5') : this.shoot("oponent", 'l5');
-            setTimeout(() => {
-              game.player1.vida -= game.l2_5.carta.habilidadDTO.dmg
-            }, 500);
-          }
+        if (this.canAttack(game.l2_5)) {
+          this.performAttack(game.l2_5, game.l1_5, "player1", "l5");
         }
-        (document.getElementById("l5") as HTMLElement).className = "line";
-        return -1;
-      default:
+        this.updateLineUI("none", "l5"); // deseleccionar
         return -1;
 
+      default:
+        return -1;
+    }
+
+
+  }
+
+  private canAttack(unit: any): boolean {
+    return unit != null && (unit.stun == null || unit.stun === 0);
+  }
+
+  private performAttack(from: any, to: any, playerTarget: string, line: string): void {
+    const isPlayer1 = this.isYou(this.gameStatus.player1);
+    let shooter
+    if (to) {
+      if (isPlayer1 && playerTarget == "player1") {
+        shooter = "me_c"
+      }
+      if (isPlayer1 && playerTarget == "player2") {
+        shooter = "oponent_c"
+      }
+      if (!isPlayer1 && playerTarget == "player2") {
+        shooter = "me_c"
+      }
+      if (!isPlayer1 && playerTarget == "player1") {
+        shooter = "oponent_c"
+      }
+    } else {
+      if (isPlayer1 && playerTarget == "player1") {
+        shooter = "me"
+      }
+      if (isPlayer1 && playerTarget == "player2") {
+        shooter = "oponent"
+      }
+      if (!isPlayer1 && playerTarget == "player2") {
+        shooter = "me"
+      }
+      if (!isPlayer1 && playerTarget == "player1") {
+        shooter = "oponent"
+      }
+    }
+    this.shoot(shooter, line);
+
+    setTimeout(() => {
+      if (to) {
+        to.vida -= from.carta.habilidadDTO.dmg;
+      } else {
+        this.gameStatus[playerTarget].vida -= from.carta.habilidadDTO.dmg;
+      }
+    }, 500);
+  }
+
+  private updateLineUI(currentLine: string, previousLine?: string): void {
+    if (currentLine != "none") {
+      (document.getElementById(currentLine) as HTMLElement).className = "line selectedline";
+    }
+    if (previousLine) {
+      (document.getElementById(previousLine) as HTMLElement).className = "line";
     }
   }
+
 
   fightLoop(linea: any, game: any) {
     if (linea != -1) {
@@ -1002,10 +880,9 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.gameStatus = game
         linea = this.fight(linea, game)
         this.fightLoop(linea, game)
-        console.log("linea")
       }, 500);
     } else {
-      setTimeout(() => {
+      if (this.isYou(this.gameStatus.player1)) {
         this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
           next: (data) => {
             // this.service.getGame(sessionStorage.getItem("game")).subscribe({
@@ -1017,7 +894,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             // })
           }
         })
-      }, this.isYou(this.gameStatus.player1) ? 0 : 500);
+      }
     }
   }
 

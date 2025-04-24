@@ -194,7 +194,6 @@ public class GameController {
 	public Response selfspell(@ModelAttribute GameAction data) {
 		GameDTO game = gs.findById(data.getGame_id());
 		CartaDTO card = cs.findById(data.getCard_id());
-		System.out.println(card);
 		LineaDTO linea = null;
 
 		switch (data.getLinea()) {
@@ -549,7 +548,6 @@ public class GameController {
 	@PostMapping("/switch")
 	public Response switchturn(@ModelAttribute GameAction data) {
 		GameDTO game = gs.findById(data.getGame_id());
-		System.out.println(game.getTurno());
 		switch (game.getTurno()) {
 		case 1:
 			game.setTurno(2);
@@ -557,17 +555,19 @@ public class GameController {
 			break;
 		case 2:
 			game = turnDMGs(game);
-			gs.save(game, true);
 			game.setTurno(3);
 			gs.save(game, true);
 			break;
 		case 3:
-			if (data.getPlayer() == 1) {
-				game.setP1_c(true);
-			} else {
-				game.setP2_c(true);
+			if (game.getP2_c() == null) {
+				if (data.getPlayer() == 1) {
+					game.setP1_c(true);
+					gs.save(game, true);
+				} else {
+					game.setP2_c(true);
+					gs.save(game);
+				}
 			}
-			gs.save(game);
 			if (game.getP1_c() != null && game.getP2_c() != null) {
 				if (game.getP1_c() && game.getP2_c()) {
 					game = fight(game);
@@ -608,14 +608,16 @@ public class GameController {
 	// Función para aplicar Poison a una línea
 	private void aplicarPoison(LineaDTO linea, GameDTO game) {
 		if (linea != null && linea.getPoisn() != null && linea.getPoisn() > 0) {
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 			linea.setVida(linea.getVida() - 1);
 			linea.setPoisn(linea.getPoisn() - 1);
 			if (linea.getVida() <= 0) {
-				eliminarLinea(game, linea);
+				linea.setVida(1);
 			}
 			if (linea.getPoisn() <= 0) {
 				linea.setPoisn(null);
 			}
+			gs.save(linea);
 		}
 	}
 
@@ -625,6 +627,8 @@ public class GameController {
 			linea.setVida(linea.getVida() - linea.getBleed());
 			if (linea.getVida() <= 0) {
 				eliminarLinea(game, linea);
+			} else {
+				gs.save(linea);
 			}
 		}
 	}
@@ -636,6 +640,8 @@ public class GameController {
 			linea.setBurn(linea.getBurn() - 1);
 			if (linea.getVida() <= 0) {
 				eliminarLinea(game, linea);
+			} else {
+				gs.save(linea);
 			}
 			if (linea.getBurn() <= 0) {
 				linea.setBurn(null);
