@@ -10,4 +10,6 @@ public interface CartaService {
 
 	CartaDTO findById(Integer id);
 
+	void save(CartaDTO carta);
+
 }

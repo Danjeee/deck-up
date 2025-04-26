@@ -9,6 +9,7 @@ import com.javi.deckup.repository.entity.Codigo;
 import com.javi.deckup.repository.entity.Habilidad;
 import com.javi.deckup.repository.entity.Paquete;
 import com.javi.deckup.repository.entity.PlayerCards;
+import com.javi.deckup.repository.entity.Rareza;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -95,7 +96,7 @@ public class CartaDTO implements Serializable {
 	// A la hora de convertir a entidad (para guardar) tendremos que seleccionar si la guardamos cargando las respectivas listas en el servicio
 	// Habrá que buscar todas estas listas si queremos EDITAR una carta (cosa que seguramente no se pueda)
 	// A la hora de guardar una nueva simplemente seteamos codigos y usuarios a null
-	public static Carta convertToEntity(CartaDTO input, Habilidad habilidad, List<Carta> cartasrareza, List<PlayerCards> usuarios, List<Codigo> cartascodigo) {
+	public static Carta convertToEntity(CartaDTO input) {
 		Paquete paquete = null;
 		if (input.getPaqueteDTO() != null) {
 			paquete = Paquete.builder().id(input.getPaqueteDTO().getId()).build();
@@ -110,11 +111,9 @@ public class CartaDTO implements Serializable {
 						.exclusive(input.isExclusive())
 						.mana(input.getMana())
 						.vida(input.getVida())
-						.rareza(RarezaDTO.convertToEntity(input.getRarezaDTO(), cartasrareza))
-						.habilidad(habilidad)
+						.rareza(Rareza.builder().id(input.getRarezaDTO().getId()).build())
+						.habilidad(Habilidad.builder().id(input.getHabilidadDTO().getId()).build())
 						.paquete(paquete)
-						.usuarios(usuarios)
-						.codigos(cartascodigo)
 						.build();
 						
 	}

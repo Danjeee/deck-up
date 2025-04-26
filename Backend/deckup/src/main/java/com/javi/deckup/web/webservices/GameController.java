@@ -186,7 +186,7 @@ public class GameController {
 			}
 			game.setPlayer2(gs.save(game.getPlayer2()));
 		}
-		gs.save(game, true);
+		gs.save(game, data.getLinea()+"/put");
 		return Response.success("donete");
 	}
 
@@ -232,6 +232,7 @@ public class GameController {
 		}
 		if (game.getPlayer(data.getPlayer()).getMana() >= card.getMana()) {
 			if (linea == null) {
+				data.setLinea("player"+data.getPlayer());
 				if (data.getPlayer() == 1) {
 					game.getPlayer1().setVida(game.getPlayer1().getVida() + card.getHabilidadDTO().getHeal());
 					if (game.getPlayer1().getVida() > 40) {
@@ -328,7 +329,7 @@ public class GameController {
 			}
 			game.setPlayer2(gs.save(game.getPlayer2()));
 		}
-		gs.save(game, true);
+		gs.save(game, data.getLinea()+"/heal");
 		return Response.success("donete");
 	}
 
@@ -375,6 +376,7 @@ public class GameController {
 		if (game.getPlayer(data.getPlayer()).getMana() >= card.getMana()) {
 			if (linea == null) {
 				if (data.getPlayer() == 2) {
+					data.setLinea("player1");
 					game.getPlayer1().setVida(game.getPlayer1().getVida() - card.getHabilidadDTO().getDmg());
 					if (game.getPlayer1().getVida() <= 0) {
 						game = fight(game);
@@ -382,6 +384,7 @@ public class GameController {
 					}
 					gs.save(game.getPlayer1());
 				} else {
+					data.setLinea("player2");
 					game.getPlayer2().setVida(game.getPlayer2().getVida() - card.getHabilidadDTO().getDmg());
 					if (game.getPlayer2().getVida() <= 0) {
 						game = fight(game);
@@ -525,7 +528,7 @@ public class GameController {
 			}
 			game.setPlayer2(gs.save(game.getPlayer2()));
 		}
-		gs.save(game, true);
+		gs.save(game, data.getLinea()+"/dmg");
 		return Response.success("donete");
 	}
 

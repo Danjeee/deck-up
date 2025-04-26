@@ -71,4 +71,8 @@ private Integer id;
 						  .cartas(cartas)
 						  .build();
 	}
+	
+	public PaqueteDTO(Integer id) {
+        this.id = id;
+    }
 }

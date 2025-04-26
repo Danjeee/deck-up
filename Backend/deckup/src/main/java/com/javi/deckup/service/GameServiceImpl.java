@@ -135,6 +135,12 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 
+
+	@Override
+	public void save(GameDTO game, String line) {
+		ws.gameStatusChange(MensajeDTO.builder().id(gr.save(GameDTO.convertToEntity(game)).getId()).contenido(line).destinoId(game.getId()).build());
+	}
+
 	@Override
 	public LineaDTO save(LineaDTO nuevaLinea) {
 		return LineaDTO.convertToDTO(lr.save(LineaDTO.convertToEntity(nuevaLinea)));

@@ -39,24 +39,47 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.service.getGame(id).subscribe({
           next: (data) => {
             if (data.p1_c && data.p2_c == null) {
-              if (this.isYou(data.player2)) {
-                this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
-                  next: (data) => {
-                    // this.service.getGame(sessionStorage.getItem("game")).subscribe({
-                    //   next: (data) => {
-                    //     // console.log(data)
-                    //     this.rendergame(data)
-                    //     this.loaded = true
-                    //   }
-                    // })
-                  }
-                })
-              }
-              if (data.status != "activo"){
+              setTimeout(() => {
+                if (this.isYou(data.player2)) {
+                  this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+                    next: (data) => {
+                      // this.service.getGame(sessionStorage.getItem("game")).subscribe({
+                      //   next: (data) => {
+                      //     // console.log(data)
+                      //     this.rendergame(data)
+                      //     this.loaded = true
+                      //   }
+                      // })
+                    }
+                  })
+                }
+              }, 100);
+              if (data.status != "activo") {
                 this.gameStatus = data;
                 this.rendergame(data)
               }
             } else {
+              status = (status + "").split("/")
+              if ((status[0] + "").startsWith("l")){
+                if (status[1] != "put"){
+                  this.triggerExplosion(document.getElementById(status[0]) as HTMLElement, status[1] == "heal" ? "#198754" : "#d9534f")
+                }
+              }
+              if ((status[0] + "").startsWith("p")){
+                const player = document.getElementById(status[0]) as HTMLElement
+                this.triggerExplosion(player, status[1] == "heal" ? "#198754" : "#d9534f")
+                if (status[1] == "heal"){
+                  player.style.backgroundColor = "#198754"
+                  setTimeout(() => {
+                    player.style.backgroundColor = "#fff"
+                  }, 301);
+                } else {
+                  player.style.backgroundColor = "#d33"
+                  setTimeout(() => {
+                    player.style.backgroundColor = "#fff"
+                  }, 301);
+                }
+              }
               this.gameStatus = data;
               this.rendergame(data)
             }
@@ -106,13 +129,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
       }
     }
-    let prevdivs = null;
-    let prevdivs_enemy = null;
     if (this.gameStatus != null) {
-      prevdivs = document.querySelectorAll(".your")
-      prevdivs_enemy = document.querySelectorAll(".enemy_able")
-      this.renderdmgs(prevdivs, this.isYou(this.gameStatus.player1) ? 'lineas1' : 'lineas2', data)
-      this.renderdmgs(prevdivs_enemy, this.isYou(this.gameStatus.player1) ? 'lineas2' : 'lineas1', data)
       setTimeout(() => {
         this.gameStatus = data
       }, 1000);
@@ -148,38 +165,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (data.turno == 3) {
         this.turn3(data)
       }
-      let enemy = document.querySelectorAll(".enemy")[0] as HTMLElement
-      let u = document.querySelectorAll(".you")[0] as HTMLElement
-      if (this.isYou(data.player1)) {
-        if (data.player2.vida > this.gameActual.player2.vida) {
-          ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
-          setTimeout(() => {
-            this.gameActual = data
-          }, 100);
-        }
-        if (data.player1.vida < this.gameActual.player1.vida) {
-          ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
-          setTimeout(() => {
-            this.gameActual = data
-          }, 100);
-        }
-        this.mana = data.player1.mana
-      } else {
-        this.mana = data.player2.mana
-        if (data.player1.vida > this.gameActual.player1.vida) {
-          ParticleComponent.animejs_explosion(enemy.getBoundingClientRect().left + enemy.getBoundingClientRect().width / 2, enemy.getBoundingClientRect().top + enemy.getBoundingClientRect().height)
-          setTimeout(() => {
-            this.gameActual = data
-          }, 100);
-        }
-        if (data.player2.vida < this.gameActual.player2.vida) {
-          ParticleComponent.animejs_explosion(u.getBoundingClientRect().left + u.getBoundingClientRect().width / 2, u.getBoundingClientRect().top + u.getBoundingClientRect().height)
-          setTimeout(() => {
-            this.gameActual = data
-          }, 100);
-        }
-      }
-      this.renderenemyheals(data)
+      setTimeout(() => {
+        this.renderStatusEffects()
+        this.checkStatus()
+      }, 300);
       setTimeout(() => {
         if (this.yourturn) {
           this.animatecards(document.querySelectorAll('.card'), this.mana)
@@ -233,22 +222,66 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     const prevStatus = this.gameActual[key];
     if (!newData) return;
     let shouldExplode
-    if (newData == null && prevStatus != null) {
-      shouldExplode = true
-    }
+    
     if (prevStatus != null && newData != null) {
       shouldExplode = prevStatus.vida > newData.vida
     }
-
+    if (newData == null && prevStatus != null) {
+      shouldExplode = true
+    }
+    
     if (shouldExplode) {
       this.haschanged = true
       this.triggerExplosion(element);
     }
   }
 
-  private triggerExplosion(element: HTMLElement) {
+  private triggerExplosion(element: HTMLElement, color:string = "#000000") {
     const rect = element.getBoundingClientRect();
-    ParticleComponent.animejs_explosion(rect.width / 2 + rect.left, rect.height + rect.top);
+    ParticleComponent.animejs_explosion(rect.width / 2 + rect.left, rect.height + rect.top, color);
+  }
+
+  renderStatusEffects() {
+    for (let player = 1; player <= 2; player++) {
+      for (let line = 1; line <= 5; line++) {
+        let key = `l${player}_${line}`;
+        if (this.gameStatus[key] != null) {
+          if (this.gameStatus[key].stun != null) {
+            if (this.gameStatus[key].stun > 0) {
+              (document.getElementById(key) as HTMLElement).classList.add('status');
+              (document.getElementById(key) as HTMLElement).classList.add('frozen');
+            }
+          }
+          if (this.gameStatus[key].bleed != null) {
+            if (this.gameStatus[key].bleed > 0) {
+              (document.getElementById(key) as HTMLElement).classList.add('status');
+              (document.getElementById(key) as HTMLElement).classList.add('bleed');
+              if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
+                 this.triggerExplosion(document.getElementById(key) as HTMLElement)
+              }
+            }
+          }
+          if (this.gameStatus[key].poisn != null) {
+            if (this.gameStatus[key].poisn > 0) {
+              (document.getElementById(key) as HTMLElement).classList.add('status');
+              (document.getElementById(key) as HTMLElement).classList.add('poisn');
+            }
+            if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
+              this.triggerExplosion(document.getElementById(key) as HTMLElement)
+           }
+          }
+          if (this.gameStatus[key].burn != null) {
+            if (this.gameStatus[key].burn > 0) {
+              (document.getElementById(key) as HTMLElement).classList.add('status');
+              (document.getElementById(key) as HTMLElement).classList.add('burn');
+            }
+            if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
+              this.triggerExplosion(document.getElementById(key) as HTMLElement)
+           }
+          }
+        }
+      }
+    }
   }
 
   animatecards(cards: any, mana: any) {
@@ -412,7 +445,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           onRelease: (e) => {
             if (ghost && currentTarget) {
               if (ghost && currentTarget) {
-                ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
                 this.removeghost(currentTarget, ghost.id)
                 this.service.spellthrow(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
                   next: (data) => {
@@ -511,7 +543,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           },
           onRelease: (e) => {
             if (ghost && currentTarget) {
-              ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
               this.removeghost(currentTarget, ghost.id)
               this.service.spellthrow(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
                 next: (data) => {
@@ -609,7 +640,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           },
           onRelease: (e) => {
             if (ghost && currentTarget) {
-              ParticleComponent.animejs_explosion(currentTarget.getBoundingClientRect().left + currentTarget.getBoundingClientRect().width / 2, currentTarget.getBoundingClientRect().top + currentTarget.getBoundingClientRect().height)
               this.removeghost(currentTarget, ghost.id)
               this.service.selfspell(currentTarget.parentElement.id, card.id, this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
                 next: (data) => {
@@ -743,12 +773,51 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     return cardret
   }
 
+  checkStatus(){
+    for (let player = 1; player <= 2; player++) {
+      for (let line = 1; line <= 5; line++) {
+        let key = `l${player}_${line}`;
+        if (this.gameStatus[key] != null) {
+          if (this.gameStatus[key].bleed == null) {
+            (document.getElementById(key) as HTMLElement).classList.remove('status');
+            (document.getElementById(key) as HTMLElement).classList.remove('bleed');
+          }
+          if (this.gameStatus[key].poisn == null) {
+            (document.getElementById(key) as HTMLElement).classList.remove('status');
+            (document.getElementById(key) as HTMLElement).classList.remove('poisn');
+          }
+          if (this.gameStatus[key].burn == null) {
+            (document.getElementById(key) as HTMLElement).classList.remove('status');
+            (document.getElementById(key) as HTMLElement).classList.remove('burn');
+          }
+        } else {
+          (document.getElementById(key) as HTMLElement).classList.remove('status');
+          (document.getElementById(key) as HTMLElement).classList.remove('bleed');
+          (document.getElementById(key) as HTMLElement).classList.remove('poisn');
+          (document.getElementById(key) as HTMLElement).classList.remove('burn');
+        }
+      }
+    }
+  }
+
+  checkFreeze(key: string){
+        if (this.gameStatus[key] != null) {
+          if (this.gameStatus[key].stun != null) {
+            if (this.gameStatus[key].stun == 1) {
+              (document.getElementById(key) as HTMLElement).classList.remove('frozen');
+            }
+          }
+        }
+  }
+
   fight(linea: any, game: any) {
     //1-5 p1, 6-10 p2
     switch (linea) {
       case 1:
         if (this.canAttack(game.l1_1)) {
           this.performAttack(game.l1_1, game.l2_1, "player2", "l1");
+        } else {
+          this.checkFreeze("l1_1")
         }
         this.updateLineUI("l1");
         return 6;
@@ -756,6 +825,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 2:
         if (this.canAttack(game.l1_2)) {
           this.performAttack(game.l1_2, game.l2_2, "player2", "l2");
+        } else {
+          this.checkFreeze("l1_2")
         }
         this.updateLineUI("l2", "l1");
         return 7;
@@ -763,6 +834,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 3:
         if (this.canAttack(game.l1_3)) {
           this.performAttack(game.l1_3, game.l2_3, "player2", "l3");
+        } else {
+          this.checkFreeze("l1_3")
         }
         this.updateLineUI("l3", "l2");
         return 8;
@@ -770,6 +843,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 4:
         if (this.canAttack(game.l1_4)) {
           this.performAttack(game.l1_4, game.l2_4, "player2", "l4");
+        } else {
+          this.checkFreeze("l1_4")
         }
         this.updateLineUI("l4", "l3");
         return 9;
@@ -777,6 +852,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 5:
         if (this.canAttack(game.l1_5)) {
           this.performAttack(game.l1_5, game.l2_5, "player2", "l5");
+        } else {
+          this.checkFreeze("l1_5")
         }
         this.updateLineUI("l5", "l4");
         return 10;
@@ -784,30 +861,40 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case 6:
         if (this.canAttack(game.l2_1)) {
           this.performAttack(game.l2_1, game.l1_1, "player1", "l1");
+        } else {
+          this.checkFreeze("l2_1")
         }
         return 2;
 
       case 7:
         if (this.canAttack(game.l2_2)) {
           this.performAttack(game.l2_2, game.l1_2, "player1", "l2");
+        } else {
+          this.checkFreeze("l2_2")
         }
         return 3;
 
       case 8:
         if (this.canAttack(game.l2_3)) {
           this.performAttack(game.l2_3, game.l1_3, "player1", "l3");
+        } else {
+          this.checkFreeze("l2_3")
         }
         return 4;
 
       case 9:
         if (this.canAttack(game.l2_4)) {
           this.performAttack(game.l2_4, game.l1_4, "player1", "l4");
+        } else {
+          this.checkFreeze("l2_4")
         }
         return 5;
 
       case 10:
         if (this.canAttack(game.l2_5)) {
           this.performAttack(game.l2_5, game.l1_5, "player1", "l5");
+        } else {
+          this.checkFreeze("l2_5")
         }
         this.updateLineUI("none", "l5"); // deseleccionar
         return -1;
@@ -882,19 +969,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.fightLoop(linea, game)
       }, 500);
     } else {
-      if (this.isYou(this.gameStatus.player1)) {
-        this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
-          next: (data) => {
-            // this.service.getGame(sessionStorage.getItem("game")).subscribe({
-            //   next: (data) => {
-            //     // console.log(data)
-            //     this.rendergame(data)
-            //     this.loaded = true
-            //   }
-            // })
-          }
-        })
-      }
+      setTimeout(()=>{
+        if (this.isYou(this.gameStatus.player1)) {
+          this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
+            next: (data) => {
+              // this.service.getGame(sessionStorage.getItem("game")).subscribe({
+              //   next: (data) => {
+              //     // console.log(data)
+              //     this.rendergame(data)
+              //     this.loaded = true
+              //   }
+              // })
+            }
+          })
+        }
+      },100)
     }
   }
 

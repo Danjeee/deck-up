@@ -13,6 +13,8 @@ public interface GameService {
 
 	void save(GameDTO game, boolean notify);
 	
+	void save(GameDTO game, String line);
+	
 	GameDTO join(UsuarioDTO user);
 	
 	List<GameDTO> findAll();

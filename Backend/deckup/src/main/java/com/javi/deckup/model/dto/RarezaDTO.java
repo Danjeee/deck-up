@@ -3,6 +3,8 @@ package com.javi.deckup.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Rareza;
 
@@ -46,5 +48,9 @@ public class RarezaDTO implements Serializable {
 						 .cartas(cartas)
 						 .build();
 	}
+	
+    public RarezaDTO(Integer id) {
+        this.id = id;
+    }
 	
 }

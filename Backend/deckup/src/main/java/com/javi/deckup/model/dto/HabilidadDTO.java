@@ -116,4 +116,8 @@ public class HabilidadDTO implements Serializable {
 	        .build();
 	}
 	
+	public HabilidadDTO(Integer id) {
+        this.id = id;
+    }
+	
 }

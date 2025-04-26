@@ -180,7 +180,7 @@ export class ParticleComponent extends environmentsURLs {
   }
 
 
-  public static animejs_explosion(x: any, y: any, time: any = 500) {
+  public static animejs_explosion(x: any, y: any, color: string = "#000000") {
     const cont = document.createElement('div')
     cont.id = Math.floor(Math.random() * 9999) + "expcont"
     cont.style.position = "fixed"
@@ -196,7 +196,7 @@ export class ParticleComponent extends environmentsURLs {
       part.style.width = "40px"
       part.style.height = "40px"
       part.style.backdropFilter = "blur(10px);"    
-      part.style.backgroundColor = "rgba(0,0,0,.5)"  
+      part.style.backgroundColor = color+"80"  
       cont.appendChild(part)
       animated.push(part)
     }

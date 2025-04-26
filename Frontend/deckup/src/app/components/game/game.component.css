@@ -352,3 +352,39 @@
         border-radius: 0;
     }
 }
+.status::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    transform: translateY(-20%);
+    height: 100%;  
+    opacity: 0.4;                  
+    pointer-events: none;
+    scale: 1.7;
+    z-index: 10;
+    animation: scale .5s linear;
+}
+.frozen::after {
+    background-image: url("http://localhost/Resources/img/misc/frozen.png");
+}
+.bleed::after {
+    background-image: url("http://localhost/Resources/img/misc/bleeding.gif");
+}
+.poisn::after {
+    background-image: url("http://localhost/Resources/img/misc/poisn.gif");
+}
+.burn::after {
+    background-image: url("http://localhost/Resources/img/misc/fire.gif");
+}
+@keyframes scale {
+    from{
+        scale: .3;
+    }
+    to{
+        scale: 1.7;
+    }
+}

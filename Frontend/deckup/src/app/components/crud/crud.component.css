@@ -1,0 +1,148 @@
+/* Estilo para la lista de ítems */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  li > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Modal Backdrop */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  /* Estilo para el contenido del modal */
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    animation: modalFadeIn 0.3s ease;
+    align-items: center;
+    &>div{
+        width: 100%;
+        display: flex;
+        justify-content: space-around !important;
+        align-items: center;
+        flex-direction: row !important;
+        
+    }
+  }
+  input{
+        margin: 0 !important;
+  }
+  
+  /* Animación de entrada y salida del modal */
+  .animate-modal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .animate-modal.hide {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Espaciado dentro del modal */
+  .modal-content h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .modal-content input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .modal-content button {
+    margin-top: 1rem;
+  }
+  
+  .modal-content div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  /* Ajustar la distribución de los elementos (datos y botones) */
+  li > div {
+    display: grid;
+    grid-template-columns: 75% 25%; /* El 75% para los valores, 25% para los botones */
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  li > div > div {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  li > div > div > button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Valores dentro de los items */
+  li > div > div + div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  li > div > div + div > span {
+    flex: 1;
+    text-align: center;
+  }
+  #global{
+    padding: 1em;
+    position: fixed;
+    left: 50%;
+    width: 80%;
+    height: 75dvh;
+    top: 20dvh;
+    transform: translateX(-50%);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }

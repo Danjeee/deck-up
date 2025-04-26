@@ -61,11 +61,6 @@ public class Carta {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "carta")
 	@ToString.Exclude
 	private List<PlayerCards> usuarios;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "carta")
-	@ToString.Exclude
-	private List<Codigo> codigos;
-	
 	@ManyToOne
 	@JoinColumn(name = "habilidad")
 	private Habilidad habilidad;

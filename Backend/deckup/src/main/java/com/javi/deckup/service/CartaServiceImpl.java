@@ -27,4 +27,10 @@ public class CartaServiceImpl implements CartaService {
 		return carta == null ? null : CartaDTO.convertToDTO(carta);
 	}
 
+	@Override
+	public void save(CartaDTO carta) {
+		cr.save(CartaDTO.convertToEntity(carta));
+		
+	}
+
 }

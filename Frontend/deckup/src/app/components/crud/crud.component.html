@@ -1,0 +1,92 @@
+<div id="global">
+    <div style="padding: 1rem; margin-bottom: 1rem;">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="search()"
+        placeholder="Buscar..."
+        class="str t-d"
+        style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;"
+      />
+    </div>
+  
+    <ul style="list-style: none; padding: 0;">
+      <li
+        *ngFor="let item of filteredItems"
+        class="btn skew bg-w"
+        style="margin-bottom: 1rem; padding: 1rem;"
+      >
+        <div
+          *ngIf="!editingItem || editingItem?.id !== item.id"
+          style="display: flex; align-items: center; justify-content: space-between;"
+        >
+          <!-- Botones justificados -->
+          <div style="flex: 0 0 25%; display: flex; justify-content: space-between;">
+            <button class="btn but bg-p" (click)="edit(item)">Editar</button>
+            <button class="btn but bg-r" (click)="delete(item)">Eliminar</button>
+          </div>
+  
+          <!-- Valores justificados -->
+          <div style="flex: 0 0 75%; display: flex; justify-content: space-between;">
+            <span
+              *ngFor="let key of objectKeys(item) | slice:0:3"
+              class="str t-d"
+              style="flex: 1; text-align: center;"
+            >
+              {{ item[key] }}
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Modal con animación -->
+  <div
+    *ngIf="editingItem"
+    class="modal-backdrop show"
+    (click)="startModalClose($event)"
+  >
+    <div
+      class="modal-content animate-modal"
+      [class.hide]="modalClosing"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 class="str t-d">Editar</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div *ngFor="let key of objectKeys(editingItem)" style="margin-bottom: 1rem;">
+          <label class="str t-d">{{ key }}:</label>
+  
+          <!-- Cambiar el campo según su tipo -->
+          <div *ngIf="isBoolean(editingItem[key])">
+            <input
+              type="checkbox"
+              [(ngModel)]="editingItem[key]"
+              [name]="key"
+              class="str t-d"
+            />
+          </div>
+          <div *ngIf="isObject(editingItem[key])">
+            <!-- Muestra solo el primer campo del objeto -->
+            <input
+              id={{key}}
+              [value]="editingItem[key][objectKeys(editingItem[key], true)[0]]"
+              class="str t-d"
+            />
+          </div>
+          <div *ngIf="!isBoolean(editingItem[key]) && !isObject(editingItem[key])">
+            <input
+              [(ngModel)]="editingItem[key]"
+              [name]="key"
+              class="str t-d"
+            />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button type="submit" class="btn but bg-p">Guardar</button>
+          <button type="button" class="btn but bg-p" (click)="startModalClose()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

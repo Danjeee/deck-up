@@ -59,6 +59,10 @@ body {
     color: #fff;
 }
 
+.bg-w {
+    background-color: #fff;
+}
+
 .bg-s {
     background-color: #5898d8;
     color: #fff;
@@ -73,6 +77,9 @@ body {
     border: #13253e 2px solid;
     border-radius: 7px;
     padding: 15px;
+}
+.t-d{
+    color: #13253e;
 }
 
 .fd {
