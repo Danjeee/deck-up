@@ -777,23 +777,31 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     for (let player = 1; player <= 2; player++) {
       for (let line = 1; line <= 5; line++) {
         let key = `l${player}_${line}`;
+        let count = 0;
         if (this.gameStatus[key] != null) {
-          if (this.gameStatus[key].bleed == null) {
-            (document.getElementById(key) as HTMLElement).classList.remove('status');
+          if (this.gameStatus[key].bleed || this.gameStatus[key].bleed == 0 == null) {
             (document.getElementById(key) as HTMLElement).classList.remove('bleed');
+            count++;
           }
-          if (this.gameStatus[key].poisn == null) {
-            (document.getElementById(key) as HTMLElement).classList.remove('status');
+          if (this.gameStatus[key].poisn == null || this.gameStatus[key].poisn == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('poisn');
+            count++
           }
-          if (this.gameStatus[key].burn == null) {
-            (document.getElementById(key) as HTMLElement).classList.remove('status');
+          if (this.gameStatus[key].burn == null || this.gameStatus[key].burn == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('burn');
+            count++
+          }
+          if (this.gameStatus[key].stun == null) {
+            count++
+          }
+          if (count == 4){
+            (document.getElementById(key) as HTMLElement).classList.remove('status');
           }
         } else {
           (document.getElementById(key) as HTMLElement).classList.remove('status');
           (document.getElementById(key) as HTMLElement).classList.remove('bleed');
           (document.getElementById(key) as HTMLElement).classList.remove('poisn');
+          (document.getElementById(key) as HTMLElement).classList.remove('frozen');
           (document.getElementById(key) as HTMLElement).classList.remove('burn');
         }
       }
