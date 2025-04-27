@@ -22,6 +22,12 @@ export class AppComponent implements OnInit {
       this.router.events.subscribe( e => {
         if (e instanceof NavigationStart) {
           if (UserSession.getUser() != "Guest" && this.router.url != "/login" && this.router.url != "/register") {
+            if (sessionStorage.getItem("back") != null){
+              LoadComponent.prev.pop()
+              sessionStorage.removeItem("back")
+            } else {
+              LoadComponent.prev.push(this.router.url)
+            }
             this.service.restoreUser(UserSession.getId(), UserSession.getUser().auth).subscribe({
               next: (data) => {
                 if (data.status == 200) {

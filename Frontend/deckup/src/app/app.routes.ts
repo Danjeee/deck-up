@@ -11,6 +11,7 @@ import { DeckBuilderComponent } from './components/deck-builder/deck-builder.com
 import { MatchmakingComponent } from './components/matchmaking/matchmaking.component';
 import { GameComponent } from './components/game/game.component';
 import { CrudComponent } from './components/crud/crud.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -25,5 +26,6 @@ export const routes: Routes = [
     {path: 'deck-builder', component: DeckBuilderComponent},
     {path: 'matchmaking', component: MatchmakingComponent},
     {path: 'game', component: GameComponent},
-    {path: 'crud', component: CrudComponent},
+    {path: 'admin', component: AdminComponent},
+    {path: 'admin/crud', component: CrudComponent},
 ];

@@ -17,10 +17,13 @@ import { NotificacionService } from '../../services/notificacion.service';
 })
 export class HomeComponent implements OnInit {
 
+  
+  usuario: any
 
   constructor(private service: UserService, private alert: AlertService, private router: Router, private notif: NotificacionService){}
 
   ngOnInit(): void {
+    this.usuario = UserSession.getUser()
     setTimeout(() => {
       this.notif.claimAll().subscribe({
         next: (data) => {
@@ -44,7 +47,6 @@ export class HomeComponent implements OnInit {
     }, 1);
   }
 
-  usuario = UserSession.getUser()
 
   time_left_s: number = 0
   time_left_m: number = 0

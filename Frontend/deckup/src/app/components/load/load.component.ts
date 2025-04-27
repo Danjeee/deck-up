@@ -16,7 +16,7 @@ export class LoadComponent implements OnInit {
 
   url = "/" + window.location.href.split("/")[window.location.href.split("/").length - 1]
 
-  static prev = "/home"
+  static prev = ["/home"]
 
   ngOnInit(): void {
     

@@ -186,7 +186,8 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   }
 
   back() {
-    this.router.navigate([LoadComponent.prev])
+    sessionStorage.setItem("back", 'true')
+    this.router.navigate([LoadComponent.prev[LoadComponent.prev.length - 1]])
     //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
   }
 

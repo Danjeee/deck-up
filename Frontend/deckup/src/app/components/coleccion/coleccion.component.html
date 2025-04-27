@@ -108,7 +108,7 @@
         <div *ngIf="bigcard.habilidadDTO.freeze"
             class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Stun: </h4>
-            <p class="str">{{bigcard.habilidadDTO.freeze}} turnos</p>
+            <p class="str">{{bigcard.habilidadDTO.freeze - 1}} turnos</p>
         </div>
 
         <div *ngIf="bigcard.habilidadDTO.freezeName"

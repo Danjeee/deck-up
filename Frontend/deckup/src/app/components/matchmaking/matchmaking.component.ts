@@ -47,7 +47,9 @@ export class MatchmakingComponent implements AfterViewInit, OnDestroy {
     this.service.disconnect()
     if (this.router.url != "/game") {
       this.service.cancel().subscribe({
-        next: (data) => { console.log(data) }
+        next: (data) => { 
+          //console.log(data)
+         }
       })
     }
   }
@@ -56,7 +58,9 @@ export class MatchmakingComponent implements AfterViewInit, OnDestroy {
     this.service.disconnect()
     if (this.router.url != "/game") {
       this.service.cancel().subscribe({
-        next: (data) => { console.log(data) }
+        next: (data) => { 
+          //console.log(data)
+         }
       })
     }
   }

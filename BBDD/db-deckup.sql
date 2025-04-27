@@ -529,7 +529,7 @@ INSERT INTO rarezas(nombre, porcentaje) VALUES
 INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name, burn) VALUES
 ('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null), # 1
 ('Golpe', 'Golpea al rival', 1, null, null, null, null), # 2
-('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 1, 'Noqueado', null), # 3
+('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 2, 'Noqueado', null), # 3
 ('Ignicion', 'Quema al rival', 1, null, null, null, 1), # 4
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
