@@ -60,15 +60,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
               }
             } else {
               status = (status + "").split("/")
-              if ((status[0] + "").startsWith("l")){
-                if (status[1] != "put"){
+              if ((status[0] + "").startsWith("l")) {
+                if (status[1] != "put") {
                   this.triggerExplosion(document.getElementById(status[0]) as HTMLElement, status[1] == "heal" ? "#198754" : "#d9534f")
                 }
               }
-              if ((status[0] + "").startsWith("p")){
+              if ((status[0] + "").startsWith("p")) {
                 const player = document.getElementById(status[0]) as HTMLElement
                 this.triggerExplosion(player, status[1] == "heal" ? "#198754" : "#d9534f")
-                if (status[1] == "heal"){
+                if (status[1] == "heal") {
                   player.style.backgroundColor = "#198754"
                   setTimeout(() => {
                     player.style.backgroundColor = "#fff"
@@ -180,63 +180,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
   }
 
-  renderenemyheals(data: any) {
-    const allenemies = document.querySelectorAll(".oponent");
-    allenemies.forEach((e: any) => {
-      const enemy = e.parentElement as HTMLElement;
-      const line = enemy.parentElement as HTMLElement;
-
-      const isPlayer1 = this.isYou(this.gameStatus.player1);
-      const lineNumber = line.id.replace("l", ""); // "l1" → "1"
-      const prefix = !isPlayer1 ? "l1" : "l2";
-      const key = `${prefix}_${lineNumber}`;
-      this.checkHealAndTriggerExplosion(e, key, data);
-    });
-  }
-
-  private checkHealAndTriggerExplosion(element: HTMLElement, key: string, data: any) {
-    const status = this.gameActual[key];
-    const current = data[key];
-    if (status && current && status.vida < current.vida) {
-      this.haschanged = true
-      this.triggerExplosion(element);
-    }
-  }
-
-  renderdmgs(prevdivs: any, lineastocheck: string, data: any) {
-    if (!prevdivs) return;
-
-    prevdivs.forEach((e: any) => {
-      if (e.id === "player1" || e.id === "player2") return;
-
-      const line = e.parentElement as HTMLElement;
-      const lineNumber = line.id.replace("l", ""); // ej. "l1" → "1"
-      const playerPrefix = lineastocheck === "lineas1" ? "l1" : "l2";
-      const key = `${playerPrefix}_${lineNumber}`;
-      this.checkDamageAndTriggerExplosion(e, key, data);
-    });
-  }
-
-  private checkDamageAndTriggerExplosion(element: HTMLElement, key: string, data: any) {
-    const newData = data[key];
-    const prevStatus = this.gameActual[key];
-    if (!newData) return;
-    let shouldExplode
-    
-    if (prevStatus != null && newData != null) {
-      shouldExplode = prevStatus.vida > newData.vida
-    }
-    if (newData == null && prevStatus != null) {
-      shouldExplode = true
-    }
-    
-    if (shouldExplode) {
-      this.haschanged = true
-      this.triggerExplosion(element);
-    }
-  }
-
-  private triggerExplosion(element: HTMLElement, color:string = "#000000") {
+  private triggerExplosion(element: HTMLElement, color: string = "#000000") {
     const rect = element.getBoundingClientRect();
     ParticleComponent.animejs_explosion(rect.width / 2 + rect.left, rect.height + rect.top, color);
   }
@@ -247,37 +191,39 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         let key = `l${player}_${line}`;
         if (this.gameStatus[key] != null) {
           if (this.gameStatus[key].stun != null) {
-            if (this.gameStatus[key].stun > 0) {
+            if (this.gameStatus[key].stun != 0) {
               (document.getElementById(key) as HTMLElement).classList.add('status');
               (document.getElementById(key) as HTMLElement).classList.add('frozen');
             }
           }
           if (this.gameStatus[key].bleed != null) {
-            if (this.gameStatus[key].bleed > 0) {
+            if (this.gameStatus[key].bleed != 0) {
               (document.getElementById(key) as HTMLElement).classList.add('status');
               (document.getElementById(key) as HTMLElement).classList.add('bleed');
-              if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
-                 this.triggerExplosion(document.getElementById(key) as HTMLElement)
+              if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null) {
+                this.triggerExplosion(document.getElementById(key) as HTMLElement)
               }
             }
           }
           if (this.gameStatus[key].poisn != null) {
-            if (this.gameStatus[key].poisn > 0) {
+            if (this.gameStatus[key].poisn != 0) {
               (document.getElementById(key) as HTMLElement).classList.add('status');
               (document.getElementById(key) as HTMLElement).classList.add('poisn');
+
+              if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null) {
+                this.triggerExplosion(document.getElementById(key) as HTMLElement)
+              }
             }
-            if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
-              this.triggerExplosion(document.getElementById(key) as HTMLElement)
-           }
           }
           if (this.gameStatus[key].burn != null) {
-            if (this.gameStatus[key].burn > 0) {
+            if (this.gameStatus[key].burn != 0) {
               (document.getElementById(key) as HTMLElement).classList.add('status');
               (document.getElementById(key) as HTMLElement).classList.add('burn');
             }
-            if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null){
+            if (this.gameStatus.turno == 3 && this.gameStatus.p1_c == null) {
               this.triggerExplosion(document.getElementById(key) as HTMLElement)
-           }
+
+            }
           }
         }
       }
@@ -773,13 +719,13 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     return cardret
   }
 
-  checkStatus(){
+  checkStatus() {
     for (let player = 1; player <= 2; player++) {
       for (let line = 1; line <= 5; line++) {
         let key = `l${player}_${line}`;
         let count = 0;
         if (this.gameStatus[key] != null) {
-          if (this.gameStatus[key].bleed || this.gameStatus[key].bleed == 0 == null) {
+          if (this.gameStatus[key].bleed == null || this.gameStatus[key].bleed == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('bleed');
             count++;
           }
@@ -794,7 +740,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           if (this.gameStatus[key].stun == null) {
             count++
           }
-          if (count == 4){
+          if (count == 4) {
             (document.getElementById(key) as HTMLElement).classList.remove('status');
           }
         } else {
@@ -808,14 +754,14 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
   }
 
-  checkFreeze(key: string){
-        if (this.gameStatus[key] != null) {
-          if (this.gameStatus[key].stun != null) {
-            if (this.gameStatus[key].stun == 1) {
-              (document.getElementById(key) as HTMLElement).classList.remove('frozen');
-            }
-          }
+  checkFreeze(key: string) {
+    if (this.gameStatus[key] != null) {
+      if (this.gameStatus[key].stun != null) {
+        if (this.gameStatus[key].stun == 1) {
+          (document.getElementById(key) as HTMLElement).classList.remove('frozen');
         }
+      }
+    }
   }
 
   fight(linea: any, game: any) {
@@ -948,15 +894,40 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         shooter = "oponent"
       }
     }
-    this.shoot(shooter, line);
+    let crit = "false"
+    if (from.willcrit != null){
+      if (from.willcrit == true){
+        crit = "#ffffff"
+      } 
+    } else {
+      crit = from.carta.habilidadDTO.color
+    }
+    this.shoot(shooter, line, crit);
 
     setTimeout(() => {
       if (to) {
-        to.vida -= from.carta.habilidadDTO.dmg;
+        to.vida = this.realizarDmgs(from, to.vida, to.carta.vida)
       } else {
-        this.gameStatus[playerTarget].vida -= from.carta.habilidadDTO.dmg;
+        this.gameStatus[playerTarget].vida = this.realizarDmgs(from, this.gameStatus[playerTarget].vida, 40)
       }
     }, 500);
+  }
+
+  realizarDmgs(from:any, vida: any, max: any): number{
+    if (from.carta.habilidadDTO.leth != null && vida > 0){
+      vida -= (max - vida) * from.carta.habilidadDTO.leth/100
+    }
+    vida -= from.carta.habilidadDTO.dmg
+    if (from.carta.habilidadDTO.prcnt != null){
+      vida -= max * from.carta.habilidadDTO.prcnt/100
+    }
+    if (from.willcrit){
+      vida -= (from.carta.habilidadDTO.dmg*from.carta.habilidadDTO.critMult/100);
+    }
+    if (vida < 0){
+      vida = 0
+    }
+    return vida;
   }
 
   private updateLineUI(currentLine: string, previousLine?: string): void {
@@ -977,7 +948,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.fightLoop(linea, game)
       }, 500);
     } else {
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.isYou(this.gameStatus.player1)) {
           this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
             next: (data) => {
@@ -991,14 +962,14 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             }
           })
         }
-      },100)
+      }, 100)
     }
   }
 
   turn3(game: any = this.gameStatus) {
     this.fightLoop(1, game)
   }
-  shoot(where: any, line: any) {
+  shoot(where: any, line: any, color: string = "#000000") {
     const me = document.getElementsByClassName("you")[0] as HTMLElement
     const enemy = document.getElementsByClassName("enemy")[0] as HTMLElement
     const linea = document.getElementById(line) as HTMLElement
@@ -1009,10 +980,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     shoot.style.width = linea.getBoundingClientRect().width / 4 + "px"
     shoot.style.height = linea.getBoundingClientRect().height + "px"
     shoot.style.position = "fixed"
-    //shoot.style.display = "flex"
-    // shoot.style.alignItems = "center"
-    //shoot.style.flexDirection = "column"
-    // shoot.style.overflow = "hidden"
     shoot.style.zIndex = "2"
     document.body.appendChild(shoot)
     let x
@@ -1025,7 +992,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       part.style.width = tmn + "px"
       part.style.height = tmn + "px"
       part.style.backdropFilter = "blur(10px);"
-      part.style.backgroundColor = "rgba(0,0,0,.5)"
+      part.style.backgroundColor = color+"80"
       shoot.appendChild(part)
       animated.push(part)
     }
@@ -1038,12 +1005,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         shoot.style.left = x + "px"
         this.animateShot(animated, shoot, false)
         setTimeout(() => {
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom, color)
         }, 450);
-        // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
-        //   document.body.removeChild(shoot)
-        //   
-        // })
         break;
       case 'oponent_c':
         y = linea.getBoundingClientRect().top
@@ -1053,12 +1016,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         shoot.style.left = x + "px"
         this.animateShot(animated, shoot, true)
         setTimeout(() => {
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5, color)
         }, 450);
-        // animate(shoot, { y: finalY, duration: 450 }).then(()=>{
-        //   document.body.removeChild(shoot)
-        //   ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2 , linea.getBoundingClientRect().top*1.5)
-        // })
         break;
       case 'oponent':
         y = linea.getBoundingClientRect().top - 50
@@ -1073,7 +1032,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             enemy.style.animation = ""
             enemy.style.backgroundColor = "#fff"
           }, 301);
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5 - 50)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().top * 1.5 - 50, color)
         }, 450);
         break;
       case 'me':
@@ -1089,7 +1048,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             me.style.animation = ""
             me.style.backgroundColor = "#fff"
           }, 301);
-          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom + 50)
+          ParticleComponent.animejs_explosion(linea.getBoundingClientRect().left + linea.getBoundingClientRect().width / 2, linea.getBoundingClientRect().bottom + 50, color)
         }, 450);
 
         break;

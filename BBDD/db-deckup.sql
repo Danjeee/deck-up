@@ -53,10 +53,10 @@ CREATE TABLE `deckup`.`rarezas` (
   `descripcion` VARCHAR(255) NOT NULL,
   `dmg` INT NULL,
   `heal` INT NULL,
-  `prnct_up` DECIMAL(3,2) NULL,
-  `prcnt_dwn` DECIMAL(3,2) NULL,
-  `crit` DECIMAL(3,2) NULL,
-  `crit_dmg` DECIMAL(3,2) NULL,
+  `prnct_up` INT NULL,
+  `prcnt_dwn` INT NULL,
+  `crit` INT NULL,
+  `crit_dmg` INT NULL,
   `especial` VARCHAR(1) NULL,
   PRIMARY KEY (`id`));
   
@@ -72,15 +72,16 @@ CREATE TABLE `deckup`.`rarezas` (
   `burn` INT NULL,
   `poisn` INT NULL,
   `bleed` INT NULL,
-  `prcnt` DECIMAL(3,2) NULL,
+  `prcnt` INT NULL,
   `entorno` INT NULL,
   `load_atq` INT NULL,
-  `crit` DECIMAL (3,2) NULL,
-  `crit_mult` DECIMAL (3,2) NULL,
-  `leth` DECIMAL (3,2) NULL,
-  `esq`	DECIMAL (3,2) NULL,
-  `prcnt_up` DECIMAL (3,2) NULL,
-  `prcnt_dwn` DECIMAL (3,2) NULL,
+  `crit` INT NULL,
+  `crit_mult` INT NULL,
+  `leth` INT NULL,
+  `esq`	INT NULL,
+  `prcnt_up` INT NULL,
+  `prcnt_dwn` INT NULL,
+  `color` VARCHAR(7) NULL DEFAULT "#000000",
   PRIMARY KEY (`id`),
   INDEX `fk_hab_ent_idx` (`entorno` ASC) VISIBLE,
   CONSTRAINT `fk_hab_ent`
@@ -403,8 +404,9 @@ CREATE TABLE `deckup`.`lineas` (
   `burn` INT NULL,
   `poisn` INT NULL,
   `bleed` INT NULL,
-  `prnct_up` DECIMAL(3,2) NULL DEFAULT 0,
-  `prcnt_dwn` DECIMAL(3,2) NULL DEFAULT 0,
+  `prnct_up` INT NULL DEFAULT 0,
+  `prcnt_dwn` INT NULL DEFAULT 0,
+  `willcrit` TINYINT NULL DEFAULT 0,
   `game` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_lineas_games_idx` (`game` ASC) VISIBLE,
@@ -532,13 +534,19 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
-('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,0),
-('Masacre sangrienta', 'Asesinato multiple', 2, 2, 0,0,0),
-('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5),
-('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1),
-('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3),
-('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0),
-('Big crush', 'El fin del universo', 10, null, null,2,5);
+('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,0); #6
+
+INSERT INTO habilidades(nombre, descripcion, dmg, bleed, crit, crit_mult) VALUES
+('Masacre sangrienta', 'Asesinato multiple', 2, 1, 50, 100); #7
+
+INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
+('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5), #8
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1), #9
+('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3), #10
+('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0); #11
+
+INSERT INTO habilidades(nombre, descripcion, dmg, prcnt, heal) VALUES
+('Big crush', 'El fin del universo', 1, 50, 2); #12
 
 INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, especial, bleed) VALUES
 ("Golpe mágico", "Acabas de ser golpeado mágicamente", 3, null, null, null, null, null), #13

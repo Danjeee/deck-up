@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HabilidadDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	private Integer id;
 	
@@ -42,23 +42,25 @@ public class HabilidadDTO implements Serializable {
     
 	private Integer bleed;
     
-	private Double prcnt;
+	private Integer prcnt;
     
 	private EntornoDTO entorno;
     
 	private Integer loadAtq;
     
-	private Double crit;
+	private Integer crit;
 	
-	private Double critMult;
+	private Integer critMult;
     
-	private Double leth;
+	private Integer leth;
     
-	private Double esq;
+	private Integer esq;
     
-	private Double prcntUp;
+	private Integer prcntUp;
     
-	private Double prcntDwn;
+	private Integer prcntDwn;
+	
+	private String color;
 	
 	// No incluyo la lista de cartas porque es innecesaria
 	
@@ -78,6 +80,7 @@ public class HabilidadDTO implements Serializable {
 		        .poisn(input.getPoisn())
 		        .bleed(input.getBleed())
 		        .prcnt(input.getPrcnt())
+		        .color(input.getColor())
 		        .entorno(EntornoDTO.convertToDTO(input.getEntorno()))
 		        .loadAtq(input.getLoadAtq())
 		        .crit(input.getCrit())
@@ -103,6 +106,7 @@ public class HabilidadDTO implements Serializable {
 	        .burn(input.getBurn())
 	        .poisn(input.getPoisn())
 	        .bleed(input.getBleed())
+	        .color(input.getColor())
 	        .prcnt(input.getPrcnt())
 	        .entorno(EntornoDTO.convertToEntity(input.getEntorno()))
 	        .loadAtq(input.getLoadAtq())

@@ -120,19 +120,19 @@
         <div *ngIf="bigcard.habilidadDTO.burn"
             class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Quemadura: </h4>
-            <p class="str">{{bigcard.habilidadDTO.burn}}/tick</p>
+            <p class="str">{{bigcard.habilidadDTO.burn}} / tick</p>
         </div>
 
         <div *ngIf="bigcard.habilidadDTO.poisn"
             class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Veneno: </h4>
-            <p class="str">{{bigcard.habilidadDTO.poisn}}/tick</p>
+            <p class="str">{{bigcard.habilidadDTO.poisn}} / tick</p>
         </div>
 
         <div *ngIf="bigcard.habilidadDTO.bleed"
             class="btn {{bigcard.rarezaDTO.nombre == '???' ? 'idk' : bigcard.rarezaDTO.nombre}} skew">
             <h4 class="str">Sangrado: </h4>
-            <p class="str">{{bigcard.habilidadDTO.bleed}} turnos</p>
+            <p class="str">{{bigcard.habilidadDTO.bleed}} / tick</p>
         </div>
 
         <div *ngIf="bigcard.habilidadDTO.prcnt"

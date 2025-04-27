@@ -39,9 +39,11 @@ public class Linea {
 	    private Integer poisn;
 	    private Integer bleed;
 	    @Column(name = "prcnt_dwn")
-	    private Double prcnt_dwn;
+	    private Integer prcnt_dwn;
 	    @Column(name = "prnct_up")
-	    private Double prnct_up;
+	    private Integer prnct_up;
+	    @Column(name = "willcrit")
+	    private Boolean willcrit;
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "game")

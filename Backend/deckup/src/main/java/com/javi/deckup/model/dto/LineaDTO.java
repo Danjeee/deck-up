@@ -24,9 +24,10 @@ public class LineaDTO {
     private Integer poisn;
     private Integer bleed;
     private String turn_dmg_name;
-    private Double prcnt_dwn;
-    private Double prcnt_up;
+    private Integer prcnt_dwn;
+    private Integer prcnt_up;
     private GameDTO game;
+    private Boolean willcrit;
 
 	
 	public static LineaDTO convertToDTO(Linea input) {
@@ -44,6 +45,7 @@ public class LineaDTO {
 					   .poisn(input.getPoisn())
 					   .prcnt_dwn(input.getPrcnt_dwn())
 					   .prcnt_up(input.getPrnct_up())
+					   .willcrit(input.getWillcrit())
 					   .game(GameDTO.builder().id(input.getGame().getId()).build())
 					   .build();
 	}
@@ -63,6 +65,7 @@ public class LineaDTO {
 					   .poisn(input.getPoisn())
 					   .prcnt_dwn(input.getPrcnt_dwn())
 					   .prnct_up(input.getPrcnt_up())
+					   .willcrit(input.getWillcrit())
 					   .game(Game.builder().id(input.getGame().getId()).build())
 					   .build();
 	}

@@ -17,7 +17,6 @@
         style="margin-bottom: 1rem; padding: 1rem;"
       >
         <div
-          *ngIf="!editingItem || editingItem?.id !== item.id"
           style="display: flex; align-items: center; justify-content: space-between;"
         >
           <!-- Botones justificados -->
@@ -25,7 +24,6 @@
             <button class="btn but bg-p" (click)="edit(item)">Editar</button>
             <button class="btn but bg-r" (click)="delete(item)">Eliminar</button>
           </div>
-  
           <!-- Valores justificados -->
           <div style="flex: 0 0 75%; display: flex; justify-content: space-between;">
             <span
@@ -48,7 +46,7 @@
     (click)="startModalClose($event)"
   >
     <div
-      class="modal-content animate-modal"
+      class="modal-content animate-modal btn"
       [class.hide]="modalClosing"
       (click)="$event.stopPropagation()"
     >

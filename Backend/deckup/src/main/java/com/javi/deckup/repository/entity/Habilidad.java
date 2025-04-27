@@ -52,7 +52,7 @@ public class Habilidad {
     
     private Integer bleed;
     
-    private Double prcnt;
+    private Integer prcnt;
     
     @ManyToOne
 	@JoinColumn(name = "entorno")
@@ -60,17 +60,19 @@ public class Habilidad {
     
     private Integer loadAtq;
     
-    private Double crit;
+    private Integer crit;
     
-    private Double critMult;
+    private Integer critMult;
     
-    private Double leth;
+    private Integer leth;
     
-    private Double esq;
+    private Integer esq;
     
-    private Double prcntUp;
+    private Integer prcntUp;
     
-    private Double prcntDwn;
+    private Integer prcntDwn;
+    
+    private String color;
 	
     //Innecesario
 	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "habilidad")
