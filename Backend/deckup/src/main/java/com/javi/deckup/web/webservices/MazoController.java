@@ -47,7 +47,7 @@ public class MazoController {
 		UsuarioDTO user = us.findByToken(mazo.getUsuario().getAuth());
 		if (user != null) {
 			if (mazo.getNombre() == null || mazo.getNombre() == "") {
-				mazo.setNombre("Mazo "+ms.count());
+				mazo.setNombre("Mazo "+ms.count(user.getId()));
 			}
 			mazo.setUsuario(user);
 			ms.save(mazo);
@@ -66,6 +66,11 @@ public class MazoController {
 			}
 			if (mazo.getUsuario().getId() != user.getId()) {
 				return Response.error("Este mazo no te pertenece");
+			}
+			if (user.getMazo() != null) {
+				if (mazo.getId() == user.getMazo().getId()) {
+					return Response.error("No puedes borrar tu mazo seleccionado");
+				}
 			}
 			ms.deleteById(mazo.getId());
 			return Response.success("Mazo guardado correctamente");

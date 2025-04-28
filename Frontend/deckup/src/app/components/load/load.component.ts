@@ -63,8 +63,7 @@ export class LoadComponent implements OnInit {
       case 3:
         if (UserSession.getRole() != "ADMIN") {
           this.alert.error("Error", "No puedes acceder a este contenido")
-          //this.router.navigate(["/home"])
-          console.log(window.location.href)
+          this.router.navigate(["/home"])
         }
         break;
       default:

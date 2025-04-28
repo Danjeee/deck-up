@@ -57,4 +57,9 @@ public class MazoServiceImpl implements MazoService{
 		}
 	}
 
+	@Override
+	public Long count(Long idUser) {
+		return mr.countByUser(idUser) + 1;
+	}
+
 }

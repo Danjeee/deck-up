@@ -12,6 +12,8 @@ public interface MazoService {
 
 	Long count();
 
+	Long count(Long idUser);
+
 	MazoDTO findById(Long id);
 
 	void deleteById(Long id);

@@ -962,7 +962,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             }
           })
         }
-      }, 100)
+      }, 200)
     }
   }
 
@@ -1116,15 +1116,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // instantlose($event: BeforeUnloadEvent){
-  //   sessionStorage.removeItem("game")
-  //   this.service.lose(this.gameStatus.id).subscribe({
-  //     next: (data) => {
-  //       console.log(data)
-  //     }
-  //   })
-  // }
+  @HostListener('window:beforeunload', ['$event'])
+  instantlose($event: BeforeUnloadEvent){
+    sessionStorage.removeItem("game")
+    this.service.lose(this.gameStatus.id).subscribe({
+      next: (data) => {
+        console.log(data)
+      }
+    })
+  }
 
   ngOnDestroy(): void {
     this.service.disconnect()

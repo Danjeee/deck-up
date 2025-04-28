@@ -17,4 +17,7 @@ public interface MazoRepository extends JpaRepository<Mazo, Long>{
 	@Query(value = "SELECT * FROM mazos WHERE id_usuario = ?1", nativeQuery = true)
 	List<Mazo> findAllByUser(Long id);
 
+	@Query(value = "SELECT count(*) FROM mazos WHERE id_usuario = ?1", nativeQuery = true)
+	Long countByUser(Long idUser);
+
 }
