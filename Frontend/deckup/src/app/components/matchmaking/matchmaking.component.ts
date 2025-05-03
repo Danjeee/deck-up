@@ -31,7 +31,7 @@ export class MatchmakingComponent implements AfterViewInit, OnDestroy {
   listener() {
     this.service.joinListener()
 
-    this.service.getstatus().subscribe((accepted: any) => {
+    this.service.getStatus().subscribe((accepted: any) => {
       if (accepted != "" && accepted != null) {
         setTimeout(() => {
           sessionStorage.setItem("game", accepted)

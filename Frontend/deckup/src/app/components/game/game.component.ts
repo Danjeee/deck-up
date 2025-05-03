@@ -34,7 +34,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   joinlistener(id: any) {
     this.service.joinListener(id)
     this.loaded = false;
-    this.service.getstatus().subscribe((status: any) => {
+    this.service.getStatus().subscribe((status: any) => {
       if (status != "" && status != null) {
         this.service.getGame(id).subscribe({
           next: (data) => {
@@ -94,12 +94,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     if (sessionStorage.getItem("game") == null || sessionStorage.getItem("game") == "") {
       this.router.navigate(["/home"])
     } else {
-      this.joinlistener(sessionStorage.getItem("game"))
+      setTimeout(() => {
+        this.joinlistener(sessionStorage.getItem("game"))
+      }, 100);
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
           if (data.id == sessionStorage.getItem("game")) {
             this.rendergame(data)
-            this.loaded = true
+            setTimeout(() => {
+              this.loaded = true
+            }, 1000);
           }
         }
       })

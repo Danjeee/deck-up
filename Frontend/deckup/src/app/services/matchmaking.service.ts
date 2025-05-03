@@ -10,60 +10,86 @@ import { UserSession } from '../utils/UserSession';
   providedIn: 'root'
 })
 export class MatchmakingService extends environmentsURLs {
-
-  matchURL = `${this.apiURL}/ws`
-
-  matchRestURL = `${this.apiURL}/game/matchmaking`
+  matchURL = `${this.apiURL}/ws`;
+  matchRestURL = `${this.apiURL}/game/matchmaking`;
 
   private stompClient: any;
-
-  private status: BehaviorSubject<any> = new BehaviorSubject<any>("")
+  private isConnected = false;
+  private reconnectDelay = 3000;
+  private status: BehaviorSubject<any> = new BehaviorSubject<any>('');
 
   constructor(private http: HttpClient) {
-    super()
-  }
-  initConectionSocket() {
-    const socket = new SockJS(this.matchURL)
-    this.stompClient = Stomp.over(socket)
-    this.stompClient.debug = () => { }
+    super();
   }
 
-  startMatch(): Observable<any>{
-    const data: FormData = new FormData()
-    data.append("auth", UserSession.getUser().auth)
-    return this.http.post(`${this.matchRestURL}`, data).pipe(
-      catchError(err => {throw err})
-    )
+  private initConnectionSocket(): void {
+    const socket = new SockJS(this.matchURL);
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.debug = () => {};
   }
 
-  joinListener() {
-    this.initConectionSocket()
+  private reconnect(): void {
+    console.warn('Reintentando conexión WebSocket...');
+    setTimeout(() => {
+      this.joinListener(); // reinicia conexión y suscripción
+    }, this.reconnectDelay);
+  }
+
+  joinListener(): void {
+    const userId = UserSession.getId();
+    this.status = new BehaviorSubject<any>('');
+
+    if (!this.stompClient || !this.isConnected) {
+      this.initConnectionSocket();
+    }
+
     try {
       this.stompClient.connect({}, () => {
-        this.stompClient.subscribe(`/matchmaking/${UserSession.getId()}`, (messages: any) => {
-          const ur = messages.body
-          this.status.next(ur)
+        this.isConnected = true;
+        console.log('Conectado a WebSocket para matchmaking');
+
+        this.stompClient.subscribe(`/matchmaking/${userId}`, (message: any) => {
+          this.status.next(message.body);
         });
-      })
+      }, (error: any) => {
+        console.error('Error en conexión WebSocket:', error);
+        this.isConnected = false;
+        this.reconnect();
+      });
     } catch (error) {
-      this.stompClient.disconnect()
+      console.error('Excepción en WebSocket:', error);
+      this.disconnect();
+      this.reconnect();
     }
   }
 
-  getstatus() {
+  getStatus(): Observable<any> {
     return this.status.asObservable();
   }
 
-  disconnect() {
-    this.stompClient.disconnect()
-    this.status = new BehaviorSubject<any>("");
+  disconnect(): void {
+    if (this.stompClient && this.isConnected) {
+      this.stompClient.disconnect(() => {
+        console.log('WebSocket desconectado');
+      });
+    }
+    this.isConnected = false;
+    this.status = new BehaviorSubject<any>(''); // resetear estado
   }
 
-  cancel(): Observable<any>{
-    const data: FormData = new FormData;
-    data.append("user_auth", UserSession.getUser().auth)
+  startMatch(): Observable<any> {
+    const data = new FormData();
+    data.append('auth', UserSession.getUser().auth);
+    return this.http.post(`${this.matchRestURL}`, data).pipe(
+      catchError(err => { throw err; })
+    );
+  }
+
+  cancel(): Observable<any> {
+    const data = new FormData();
+    data.append('user_auth', UserSession.getUser().auth);
     return this.http.post(`${this.matchRestURL}/cancel`, data).pipe(
-      catchError(err => {throw err})
-    )
+      catchError(err => { throw err; })
+    );
   }
 }
