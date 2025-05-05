@@ -35,7 +35,7 @@
 <div id="map" *ngIf="loaded">
     <div class="line" *ngFor="let line of [0,1,2,3,4]; let i = index" [id]="'l' + (i+1)">
         <div [id]="'l' + (!isYou(gameStatus.player1) ? '1' : '2') + '_' + (i+1)" class="enemy_able">
-          <div class="troop oponent oponent_a" *ngIf="oponentlines[i] != null">
+          <div class="troop oponent oponent_a" *ngIf="oponentlines[i] != null" (click)="showstatus(oponentlines[i], $event)">
             <img [src]="resURL + '/Resources/img/cards/' + (isYou(gameStatus.player2) ? gameStatus['l1_' + (i+1)].carta.imagen : gameStatus['l2_' + (i+1)].carta.imagen)" alt="">
             <div class="dmg str">
               {{ isYou(gameStatus.player2) ? gameStatus['l1_' + (i+1)].carta.habilidadDTO.dmg : gameStatus['l2_' + (i+1)].carta.habilidadDTO.dmg }}
@@ -50,7 +50,7 @@
       
         <div [id]="'l' + (isYou(gameStatus.player1) ? '1' : '2') + '_' + (i+1)" [class.your]="true" [class.able]="yourlines[i] == null">
           <div *ngIf="yourlines[i] != null" class="troop yourself"
-               [id]="isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.id : gameStatus['l2_' + (i+1)].carta.id">
+               [id]="isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.id : gameStatus['l2_' + (i+1)].carta.id" (click)="showstatus(yourlines[i], $event)">
             <img [src]="resURL + '/Resources/img/cards/' + (isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.imagen : gameStatus['l2_' + (i+1)].carta.imagen)" alt="">
             <div class="dmg str">
               {{ isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.habilidadDTO.dmg : gameStatus['l2_' + (i+1)].carta.habilidadDTO.dmg }}

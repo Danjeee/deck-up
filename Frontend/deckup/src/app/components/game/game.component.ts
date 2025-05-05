@@ -7,6 +7,7 @@ import { UserSession } from '../../utils/UserSession';
 import { CommonModule } from '@angular/common';
 import { animate, createDraggable, createSpring, stagger, utils } from 'animejs';
 import { ParticleComponent } from '../particle/particle.component';
+import { Utils } from '../../utils/Utils';
 
 @Component({
   selector: 'app-game',
@@ -57,6 +58,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
               if (data.status != "activo") {
                 this.gameStatus = data;
                 this.rendergame(data)
+                this.loaded = true
               }
             } else {
               status = (status + "").split("/")
@@ -82,6 +84,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
               }
               this.gameStatus = data;
               this.rendergame(data)
+              this.loaded = true
             }
           }
         })
@@ -100,46 +103,25 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       this.service.getGame(sessionStorage.getItem("game")).subscribe({
         next: (data) => {
           if (data.id == sessionStorage.getItem("game")) {
-            this.rendergame(data)
-            setTimeout(() => {
-              this.loaded = true
-            }, 1000);
+            this.renderAll(data)
           }
         }
       })
     }
   }
 
-  rendergame(data: any) {
-    let wait = 0
-    if (this.gameActual != null) {
-      if (data.turno != this.gameActual.turno) {
-        this.haschanged = true
-        wait = 200
-      }
-    }
-    if (this.gameActual == null || this.haschanged) {
-      if (wait != 0) {
-        setTimeout(() => {
-          this.gameActual = data
-        }, wait);
-      } else {
-        this.gameActual = data
-      }
-      this.haschanged = false
-    }
+  async renderAll(data: any){
+    this.loaded = await this.rendergame(data);
+  }
+
+  async rendergame(data: any): Promise<boolean> {
     if (data.status != 'activo') {
       if (String(data.status).startsWith("winner: ")) {
         this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
       }
     }
-    if (this.gameStatus != null) {
-      setTimeout(() => {
-        this.gameStatus = data
-      }, 1000);
-    } else {
       this.gameStatus = data
-    }
+    
     this.yourlines = this.setLines(data)[0]
     this.oponentlines = this.setLines(data)[1]
     this.oponentcards = this.oponentCards(data)
@@ -170,18 +152,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.turn3(data)
       }
       setTimeout(() => {
-        this.renderStatusEffects()
-        this.checkStatus()
-      }, 300);
-      setTimeout(() => {
         if (this.yourturn) {
           this.animatecards(document.querySelectorAll('.card'), this.mana)
           this.animatespells(document.querySelectorAll('.spell'), this.mana)
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
-      }, 100);
+        this.renderStatusEffects()
+        this.checkStatus()
+      }, 200);
     }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 100);
+    })
   }
 
   private triggerExplosion(element: HTMLElement, color: string = "#000000") {
@@ -713,6 +698,92 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
+  showstatus(line: any, e: MouseEvent){
+    const id = "status" + Math.random()*999
+    const modal = document.createElement('div')
+    modal.className = "modal btn " + (line.carta.rarezaDTO.nombre == "???" ? "idk":line.carta.rarezaDTO.nombre)
+    modal.id = id
+    Utils.css(modal, {
+      width: "auto",
+      height: "200px",
+      overflowY: "auto",
+      overflowX: "hidden",
+      position: "fixed",
+      transform: "translate(-50%, -50%) scale(1)",
+      zIndex: "10",
+      left: (e.clientX) + "px",
+      top: (e.clientY) + "px",
+      transition: "translate .5s",
+      transformOrigin: "center center",
+      padding: "1em",
+      textAlign: "center",
+      scrollbarColor: "#FFFFFF80 transparent",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "start",
+    })
+    const tit = document.createElement('h1')
+    tit.innerHTML = line.carta.nombre
+    Utils.css(tit,{
+      color: "#13253e"
+    })
+    modal.appendChild(tit)
+    Object.keys(line).forEach((key) => {
+      if (line[key] != null && line[key] != 0 && key != "game" && key != "willcrit" && key != "id" && key != "carta"){
+        let attr = document.createElement("h3")
+        attr.className = "str"
+        Utils.css(attr,{
+          color: "#13253e",
+          margin: "0"
+        })
+        attr.innerHTML = Utils.msg[key] + ": " + line[key]
+        modal.appendChild(attr)
+      }
+    })
+    const hab = document.createElement('h1')
+    hab.innerHTML = "Habilidad: " + line.carta.habilidadDTO.nombre
+    Utils.css(hab,{
+      color: "#13253e"
+    })
+    modal.appendChild(hab)
+    const habilidad = line.carta.habilidadDTO
+    Object.keys(line.carta.habilidadDTO).forEach((key) => {
+      if (habilidad[key] != null && habilidad[key] != 0 && key != "nombre" && key != "id" && key != "descripcion" && key != "especial" && key != "color" && key != "entorno"){
+        let attr = document.createElement("h3")
+        attr.className = "str"
+        Utils.css(attr,{
+          color: "#13253e",
+          margin: "0"
+        })
+        let p = ""
+        if (key.includes("crit")){p = "%"}
+        attr.innerHTML = Utils.msg["hab_" + key] + ": " + habilidad[key] + p
+        modal.appendChild(attr)
+      }
+    })
+
+    modal.addEventListener('mouseleave', ()=>{
+      modal.animate([
+        {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"},
+        {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"}
+      ], {
+        duration: 400,
+        easing: "linear"
+      })
+      setTimeout(() => {
+        modal.remove()
+      }, 400);
+    })
+    document.body.appendChild(modal)
+    modal.animate([
+      {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"},
+      {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"}
+    ], {
+      duration: 500,
+      easing: "linear"
+    })
+  }
+
   getCardById(card: any) {
     let cardret: any
     this.cards.forEach((e: any) => {
@@ -907,12 +978,17 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       crit = from.carta.habilidadDTO.color
     }
     this.shoot(shooter, line, crit);
-
+    const playerFrom = playerTarget.charAt(playerTarget.length-1) == "1" ? "2":"1"
     setTimeout(() => {
       if (to) {
         to.vida = this.realizarDmgs(from, to.vida, to.carta.vida)
       } else {
         this.gameStatus[playerTarget].vida = this.realizarDmgs(from, this.gameStatus[playerTarget].vida, 40)
+      }
+      if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0){
+        const fromHTML = (document.getElementById("l" + playerFrom + "_" + line.charAt(line.length-1)) as HTMLElement).getBoundingClientRect()
+        ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width/2, fromHTML.y + fromHTML.height/2, "#198754")
+        from.vida = (from.vida + from.carta.habilidadDTO.heal) > from.carta.vida ? from.carta.vida : (from.vida + from.carta.habilidadDTO.heal)
       }
     }, 500);
   }
@@ -1085,7 +1161,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     title.innerHTML = "Ganador: " + player
     v.style.display = "flex"
 
-    // Animar título
     animate(title, {
       opacity: [0, 1],
       scale: [0.8, 1],
@@ -1120,15 +1195,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  instantlose($event: BeforeUnloadEvent){
-    sessionStorage.removeItem("game")
-    this.service.lose(this.gameStatus.id).subscribe({
-      next: (data) => {
-        console.log(data)
-      }
-    })
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // instantlose($event: BeforeUnloadEvent){
+  //   sessionStorage.removeItem("game")
+  //   this.service.lose(this.gameStatus.id).subscribe({
+  //     next: (data) => {
+  //       console.log(data)
+  //     }
+  //   })
+  // }
 
   ngOnDestroy(): void {
     this.service.disconnect()

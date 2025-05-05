@@ -190,10 +190,14 @@
 .troop {
     width: 100%;
     height: 100%;
-
+    cursor: pointer;
+    transition: scale .3s ease-in-out;
     &>img {
         width: 100%;
         height: 100%;
+    }
+    &:hover{
+        scale: 1.05;
     }
 }
 
@@ -391,4 +395,7 @@
     to{
         scale: 1.7;
     }
+}
+.modal::-webkit-scrollbar-track {
+    background: transparent;
 }
