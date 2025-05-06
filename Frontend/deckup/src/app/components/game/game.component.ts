@@ -725,7 +725,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     const tit = document.createElement('h1')
     tit.innerHTML = line.carta.nombre
     Utils.css(tit,{
-      color: "#13253e"
+      color: "#13253e",
+      pointerEvents: "none"
     })
     modal.appendChild(tit)
     Object.keys(line).forEach((key) => {
@@ -734,7 +735,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         attr.className = "str"
         Utils.css(attr,{
           color: "#13253e",
-          margin: "0"
+          margin: "0",
+          pointerEvents: "none"
         })
         attr.innerHTML = Utils.msg[key] + ": " + line[key]
         modal.appendChild(attr)
@@ -743,7 +745,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     const hab = document.createElement('h1')
     hab.innerHTML = "Habilidad: " + line.carta.habilidadDTO.nombre
     Utils.css(hab,{
-      color: "#13253e"
+      color: "#13253e",
+      pointerEvents: "none"
     })
     modal.appendChild(hab)
     const habilidad = line.carta.habilidadDTO
@@ -753,16 +756,45 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         attr.className = "str"
         Utils.css(attr,{
           color: "#13253e",
-          margin: "0"
+          margin: "0",
+          pointerEvents: "none"
         })
         let p = ""
+        if (key.includes("prcnt")){p = "%"}
         if (key.includes("crit")){p = "%"}
         attr.innerHTML = Utils.msg["hab_" + key] + ": " + habilidad[key] + p
         modal.appendChild(attr)
       }
     })
 
+    let mousein = false;
+    modal.addEventListener('mouseenter', ()=>{
+      mousein = true
+    })
     modal.addEventListener('mouseleave', ()=>{
+      mousein = false;
+      setTimeout(() => {
+        if (!mousein){
+          Utils.css(modal, {
+            pointerEvents: "none"
+          })
+          modal.animate([
+            {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"},
+            {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"}
+          ], {
+            duration: 400,
+            easing: "linear"
+          })
+          setTimeout(() => {
+            modal.remove()
+          }, 400);
+        }
+      }, 2000);
+    })
+    modal.addEventListener('click', ()=>{
+      Utils.css(modal, {
+        pointerEvents: "none"
+      })
       modal.animate([
         {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"},
         {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"}
@@ -772,7 +804,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       })
       setTimeout(() => {
         modal.remove()
-      }, 400);
+      }, 399);
     })
     document.body.appendChild(modal)
     modal.animate([
@@ -985,11 +1017,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       } else {
         this.gameStatus[playerTarget].vida = this.realizarDmgs(from, this.gameStatus[playerTarget].vida, 40)
       }
-      if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0){
-        const fromHTML = (document.getElementById("l" + playerFrom + "_" + line.charAt(line.length-1)) as HTMLElement).getBoundingClientRect()
-        ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width/2, fromHTML.y + fromHTML.height/2, "#198754")
-        from.vida = (from.vida + from.carta.habilidadDTO.heal) > from.carta.vida ? from.carta.vida : (from.vida + from.carta.habilidadDTO.heal)
-      }
     }, 500);
   }
 
@@ -1019,7 +1046,25 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
   }
 
-
+  renderAllHeals(){
+    Object.keys(this.gameStatus).forEach((key: any) =>{
+      if ((key + "").startsWith("l")){
+        if (this.gameStatus[key] != null){
+          if (this.gameStatus[key].vida > 0 && this.gameStatus[key].carta.habilidadDTO.heal != 0 && this.gameStatus[key].carta.habilidadDTO.heal != null
+            && (this.gameStatus[key].stun == 0 || this.gameStatus[key].stun == null)
+          ){
+            let from = this.gameStatus[key]
+            if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0){
+              const fromHTML = (document.getElementById(key) as HTMLElement).getBoundingClientRect()
+              ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width/2, fromHTML.y + fromHTML.height/2, "#198754")
+              from.vida = (from.vida + from.carta.habilidadDTO.heal) > from.carta.vida ? from.carta.vida : (from.vida + from.carta.habilidadDTO.heal)
+            }
+          }
+        }
+      }
+    })
+    
+  }
   fightLoop(linea: any, game: any) {
     if (linea != -1) {
       setTimeout(() => {
@@ -1029,6 +1074,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       }, 500);
     } else {
       setTimeout(() => {
+        this.renderAllHeals()
         if (this.isYou(this.gameStatus.player1)) {
           this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
             next: (data) => {

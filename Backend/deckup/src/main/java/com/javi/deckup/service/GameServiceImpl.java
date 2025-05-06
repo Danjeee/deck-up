@@ -143,7 +143,12 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public LineaDTO save(LineaDTO nuevaLinea) {
-		return LineaDTO.convertToDTO(lr.save(LineaDTO.convertToEntity(nuevaLinea)));
+		if (nuevaLinea != null) {
+			return LineaDTO.convertToDTO(lr.save(LineaDTO.convertToEntity(nuevaLinea)));
+		} else {
+			return null;
+		}
+		
 	}
 
 	@Override

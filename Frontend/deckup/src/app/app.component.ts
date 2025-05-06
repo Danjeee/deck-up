@@ -26,7 +26,9 @@ export class AppComponent implements OnInit {
               LoadComponent.prev.pop()
               sessionStorage.removeItem("back")
             } else {
-              LoadComponent.prev.push(this.router.url)
+              if (this.router.url != "deck-builder"){
+                LoadComponent.prev.push(this.router.url)
+              }
             }
             this.service.restoreUser(UserSession.getId(), UserSession.getUser().auth).subscribe({
               next: (data) => {

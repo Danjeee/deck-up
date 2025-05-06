@@ -1,3 +1,4 @@
+<img src="{{resURL}}/Resources/img/misc/fondo.jpg" alt="fondo" id="bg">
 <div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you yourself' : 'enemy oponent_a'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player1.usuario.pfp}}">
@@ -20,13 +21,14 @@
     </div>
 </div>
 
-<div id="oponentcards" class="cardcont" *ngIf="loaded">
+<div id="oponentcards" class="cardcont glass" *ngIf="loaded">
     <div *ngFor="let card of oponentcards">
         <img src="{{resURL}}/Resources/img/misc/Comun_back.png" alt="carta_oponente">
     </div>
 </div>
 
-<div id="mycards" class="cardcont" *ngIf="loaded">
+<div id="mycards" class="cardcont glass" *ngIf="loaded">
+<div *ngIf="loaded" id="mana" class="str">{{isYou(gameStatus.player1) ? gameStatus.player1.mana : gameStatus.player2.mana }}</div>
     <div *ngFor="let card of cards" class="{{card.tipo}} {{yourturn ? '' : 'disabled' }}"  id="{{card.id}}">
         <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="carta_oponente">
         <p class="mana str">{{card.mana}}</p>
@@ -64,8 +66,7 @@
         </div>
       </div>
 </div>
-<div *ngIf="yourturn && loaded" id="switch" class="btn but str bg-g" (click)="switchTurn()">Acabar turno</div>
-<div *ngIf="loaded" id="mana" class="str">{{isYou(gameStatus.player1) ? gameStatus.player1.mana : gameStatus.player2.mana }}</div>
+<div *ngIf="yourturn && loaded" id="switch" class="btn but str glass-g" (click)="switchTurn()">Acabar turno</div>
 <div class="victory-cont" id="v">
     <h1 id="victory" class="str btn bg-t">¡Victoria!</h1>
 </div>

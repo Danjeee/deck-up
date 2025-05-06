@@ -64,7 +64,7 @@ CREATE TABLE `deckup`.`rarezas` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
-  `especial` VARCHAR(1) NULL,
+  `especial` VARCHAR(5) NULL,
   `dmg` INT NULL DEFAULT 0,
   `heal` INT NULL DEFAULT 0,
   `freeze` INT NULL,
@@ -533,17 +533,17 @@ INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name,
 ('Ignicion', 'Quema al rival', 1, null, null, null, 1), # 4
 ('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
 
-INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
-('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 10, 50, 50,1,0); #6
+INSERT INTO habilidades(nombre, descripcion, dmg, especial) VALUES
+('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 7,"DKA"); #6
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, crit, crit_mult) VALUES
 ('Masacre sangrienta', 'Asesinato multiple', 2, 1, 50, 100); #7
 
-INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal) VALUES
-('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5), #8
-('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1), #9
-('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3), #10
-('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0); #11
+INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal, especial) VALUES
+('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5, "DDA"), #8
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1, "DD2"), #9
+('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3, "DHA2"), #10
+('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0, null); #11
 
 INSERT INTO habilidades(nombre, descripcion, dmg, prcnt, heal) VALUES
 ('Big crush', 'El fin del universo', 1, 50, 2); #12
@@ -552,7 +552,7 @@ INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, esp
 ("Golpe mágico", "Acabas de ser golpeado mágicamente", 3, null, null, null, null, null), #13
 ("Cero", "brr brr que frio hace por aqui", 0, 1, "congelado", null, null, 1), #14
 ("Curación inesperada", "¡HP UP!", 0, null, null, 2, null, null), #15
-("Desvanecimiento", "Desaparezco", 0, null, null, null, "D", null); #16
+("Desvanecimiento", "Desaparezco", 0, null, null, null, "K", null); #16
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, vida, mana) VALUES

@@ -69,7 +69,8 @@
 }
 
 #oponentcards {
-    top: 3dvh;
+    top: 50%;
+    transform: translateY(-50%);
     left: 3dvw;
     justify-content: start;
     align-items: start;
@@ -77,7 +78,8 @@
 }
 
 #mycards {
-    bottom: 3dvh;
+    top: 50%;
+    transform: translateY(-45%);
     right: 5dvw;
     justify-content: end;
     align-items: end;
@@ -99,14 +101,17 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    width: 50%;
-    height: 150px;
+    width: 150px;
+    height: 80%;
     gap: 5px;
+    justify-content: space-around !important;
+    align-items: center !important;
 
     &>div {
         will-change: transform;
-        width: 10%;
+        width: 60%;
         position: relative;
+        display: flex;
 
         &>img {
             width: 100%;
@@ -134,19 +139,21 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    border: #000 2px solid;
     width: 15%;
     align-items: center;
 
     &>div {
         width: 100%;
-        height: 100px;
+        height: 170px;
         position: relative;
     }
 }
 
 .line>div {
-    background-color: aqua;
+    &:is(.able) {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 1em;
+    }
 
     &>.ghost,
     .tmp_troop {
@@ -192,11 +199,15 @@
     height: 100%;
     cursor: pointer;
     transition: scale .3s ease-in-out;
+
     &>img {
+        
+        object-fit: cover;
         width: 100%;
         height: 100%;
     }
-    &:hover{
+
+    &:hover {
         scale: 1.05;
     }
 }
@@ -230,38 +241,38 @@
 
 .oponent {
     &>.vida {
-        top: -40%;
+        top: -20%;
     }
 
     &>.dmg {
-        top: -40%;
+        top: -20%;
     }
 }
 
 .your {
     &>div>.vida {
-        bottom: -40%;
+        bottom: -20%;
     }
 
     &>div>.dmg {
-        bottom: -40%;
+        bottom: -20%;
     }
 }
 
 #switch {
     position: fixed;
     z-index: 2;
-    right: 10dvw;
-    bottom: 3dvh;
-    padding-top: 30px;
+    right: 15dvw;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-top: 60px;
     font-size: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 60px;
 }
 
 #mana {
-    position: fixed;
-    right: 3.7%;
-    top: 25dvh;
+    position: absolute;
+    top: -1dvh;
     width: 40px;
     height: 40px;
     font-size: 30px;
@@ -277,15 +288,27 @@
 }
 
 .selectedline {
-    box-shadow: 0px 0px 30px #FDFD96;
+    box-shadow: 0px 0px 30px #FDFD96, inset 0px 0px 30px #FDFD96;
 }
 
 @keyframes hit {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    25% { transform: translate(-50%, -50%) rotate(-2deg); }
-    75% { transform: translate(-50%, -50%) rotate(2deg); }
-    100% { transform: translate(-50%, -50%) rotate(0deg); }
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) rotate(-2deg);
+    }
+
+    75% {
+        transform: translate(-50%, -50%) rotate(2deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
 }
+
 .particle {
     position: absolute;
     width: 60px;
@@ -295,7 +318,8 @@
     opacity: 0.8;
     pointer-events: none;
 }
-.victory-cont{
+
+.victory-cont {
     position: absolute;
     top: 0;
     left: 0;
@@ -306,30 +330,35 @@
     backdrop-filter: blur(10px);
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: rgba(0,0,0, .4);
+    background-color: rgba(0, 0, 0, .4);
     gap: 0;
-    &>*{
+
+    &>* {
         margin: 0;
         padding: 0;
         color: #3498db;
     }
 }
-#victory{
+
+#victory {
     padding: 50px;
     position: absolute;
     font-size: 60px;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%) !important;
+    transform: translate(-50%, -50%) !important;
 }
-.troop>.ghost{
+
+.troop>.ghost {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     transform: translateY(0) translateX(0) !important;
-    &>img{
+
+    &>img {
+        object-fit: cover;
         opacity: .5;
         width: 100%;
         height: 100%;
@@ -338,14 +367,16 @@
         left: 0;
     }
 }
-.player>.ghost{
+
+.player>.ghost {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     transform: translateY(0) translateX(0) !important;
-    &>img{
+
+    &>img {
         opacity: .5;
         object-fit: cover;
         width: 100%;
@@ -356,6 +387,7 @@
         border-radius: 0;
     }
 }
+
 .status::after {
     content: "";
     position: absolute;
@@ -365,37 +397,72 @@
     background-size: cover;
     background-position: center;
     transform: translateY(-20%);
-    height: 100%;  
-    opacity: 0.4;                  
+    height: 100%;
+    opacity: 0.4;
     pointer-events: none;
     scale: 1.7;
     z-index: 10;
     animation: scale .5s linear;
 }
+
 .frozen::after {
     background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/frozen.png");
     /*background-image: url("http://localhost/Resources/img/misc/frozen.png");*/
 }
+
 .bleed::after {
     background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/bleeding.gif");
-   /*background-image: url("http://localhost/Resources/img/misc/bleeding.gif");*/
+    /*background-image: url("http://localhost/Resources/img/misc/bleeding.gif");*/
 }
+
 .poisn::after {
     background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/poisn.gif");
     /*background-image: url("http://localhost/Resources/img/misc/poisn.gif");*/
 }
+
 .burn::after {
     background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/fire.gif");
     /*background-image: url("http://localhost/Resources/img/misc/fire.gif");*/
 }
+
 @keyframes scale {
-    from{
+    from {
         scale: .3;
     }
-    to{
+
+    to {
         scale: 1.7;
     }
 }
+
 .modal::-webkit-scrollbar-track {
     background: transparent;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: -200;
+    pointer-events: none;
+    object-fit: cover;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.32);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-g {
+    background: rgba(25, 135, 84, 0.68);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(25, 135, 84, 0.3);
 }

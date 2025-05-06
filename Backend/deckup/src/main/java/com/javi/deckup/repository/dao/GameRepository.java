@@ -31,4 +31,8 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 	@Query(value = "DELETE FROM lineas WHERE game = ?1", nativeQuery = true)
 	void deleteAllLines(Long id);
 
+	@Modifying
+	@Query(value = "UPDATE lineas SET vida = ?2 WHERE id = ?1", nativeQuery = true)
+	void healLine(Long id, Integer vida);
+
 }
