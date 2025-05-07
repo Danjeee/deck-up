@@ -817,9 +817,10 @@ public class GameController {
 			gs.save(game, true);
 			break;
 		case 2:
+			String tdmgs = takedmg(game);
 			game = turnDMGs(game);
 			game.setTurno(3);
-			gs.save(game, true);
+			gs.save(game, "turndmg" + tdmgs);
 			break;
 		case 3:
 			if (game.getP2_c() == null) {
@@ -862,16 +863,45 @@ public class GameController {
 
 		return Response.success("donete");
 	}
-
-	// CRIT
-	// private List<String> prefight(game) {
-	// List<String> willcrit = new ArrayList<>();
-	// }
+	
+	private String checktdmgs(String tstring,LineaDTO linea) {
+		boolean alr = false;
+		if (linea != null) {
+			if (linea.getBleed() != null && linea.getBleed() > 0 && !alr) {
+				alr = true;
+				tstring += "/"+ linea.getId();
+			}
+			if (linea.getBurn() != null && linea.getBurn() > 0 && !alr) {
+				alr = true;
+				tstring += "/"+ linea.getId();
+			}
+			if (linea.getPoisn() != null && linea.getPoisn() > 0 && !alr) {
+				alr = true;
+				tstring += "/"+ linea.getId();
+			}
+			
+		}
+		return tstring;
+	}
+	
+	private String takedmg(GameDTO game) {
+		String dmgs = "";
+		dmgs = checktdmgs(dmgs, game.getL1_1());
+		dmgs = checktdmgs(dmgs, game.getL1_2());
+		dmgs = checktdmgs(dmgs, game.getL1_3());
+		dmgs = checktdmgs(dmgs, game.getL1_4());
+		dmgs = checktdmgs(dmgs, game.getL1_5());
+		dmgs = checktdmgs(dmgs, game.getL2_1());
+		dmgs = checktdmgs(dmgs, game.getL2_2());
+		dmgs = checktdmgs(dmgs, game.getL2_3());
+		dmgs = checktdmgs(dmgs, game.getL2_4());
+		dmgs = checktdmgs(dmgs, game.getL2_5());
+		return dmgs;
+	}
 
 	// Función para aplicar Poison a una línea
 	private void aplicarPoison(LineaDTO linea, GameDTO game) {
 		if (linea != null && linea.getPoisn() != null && linea.getPoisn() > 0) {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 			linea.setVida(linea.getVida() - 1);
 			linea.setPoisn(linea.getPoisn() - 1);
 			if (linea.getVida() <= 0) {

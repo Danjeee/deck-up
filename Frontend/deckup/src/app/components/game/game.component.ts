@@ -82,8 +82,23 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
                   }, 301);
                 }
               }
+              if (status[0] == "turndmg"){
+                const lines = Array.from(status).splice(1)
+                lines.forEach((line: any) => {
+                  Object.keys(data).forEach((key: any) => {
+                    if ((key + "").startsWith("l")){
+                      if (data[key] != null){
+                        if (data[key].id == line){
+                          this.triggerExplosion(document.getElementById(key) as HTMLElement)
+                        }
+                      }
+                    }
+                  })
+                });
+              }
               this.gameStatus = data;
-              this.rendergame(data)
+              data.command = status;
+              this.renderAll(data)
               this.loaded = true
             }
           }
@@ -112,6 +127,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   async renderAll(data: any){
     this.loaded = await this.rendergame(data);
+    if (data.command != null){
+      console.log(data.command)
+      setTimeout(() => {
+        if (data.command[1] == "put") {
+          this.animatedrop(data.command[0])
+          let comm = data[data.command[0]].carta.habilidadDTO.especial + ""
+          if (comm != null){
+            comm = comm.replace(/\d+/g, '')
+            if (comm.startsWith("D")){
+              this.renderDeployEffects(comm, data)
+            }
+          }
+        }
+      }, 0);
+    }
   }
 
   async rendergame(data: any): Promise<boolean> {
@@ -158,7 +188,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
-        this.renderStatusEffects()
+        //this.renderStatusEffects()
         this.checkStatus()
       }, 200);
     }
@@ -167,6 +197,97 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         resolve(true)
       }, 100);
     })
+  }
+
+  renderDeployEffects(comm: any, data: any){
+    let enemy = ""
+    switch (comm){
+      case "DD":
+      case "DP":
+      case "DF":
+      case "DB":
+      case "DK":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        enemy = (enemy == "1") ? "2" : "1"
+        let line = (data.command[0] + "").split("_")[1]
+        console.log(data.command)
+        console.log(enemy)
+        console.log(line)
+        console.log("l"+enemy+"_"+line)
+        if (data["l"+enemy+"_"+line] != null){
+          this.triggerExplosion(document.getElementById("l"+enemy+"_"+line) as HTMLElement, "#d9534f")
+        }
+        break;
+      case "DFA":
+      case "DDA":
+      case "DBA":
+      case "DKA":
+      case "DPA":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        enemy = (enemy == "1") ? "2" : "1"
+        Object.keys(data).forEach((key:any) => {
+          key = key + ""
+          if (key.startsWith("l")){
+            if (key.charAt(1) == enemy && data[key] != null){
+              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#d9534f")
+            }
+          }
+        }) 
+        break;
+      case "DHA":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        Object.keys(data).forEach((key:any) => {
+          key = key + ""
+          if (key.startsWith("l")){
+            if (key.charAt(1) == enemy && key != data.command[0] && data[key] != null){
+              console.log("Heal: "+ key)
+              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#198754")
+            }
+          }
+        }) 
+        break;
+    }
+  }
+
+  animatedrop(line: any){
+    const parent = document.getElementById(line) as HTMLElement
+    const div = parent.querySelector<HTMLElement>(".troop") as HTMLElement
+    this.fallAndSquash(div)
+  }
+  fallAndSquash(div: HTMLElement) {
+    let pos = -300;
+    const target = 0;
+    const speed = 10;
+  
+    function fall() {
+      if (pos < target) {
+        pos += speed;
+        div.style.position = "absolute"
+        div.style.top = pos + 'px';
+        requestAnimationFrame(fall);
+      } else {
+        squash();
+      }
+    }
+  
+    function squash() {
+      div.style.transition = 'transform 0.15s ease-out';
+      div.style.transform = 'scaleX(1.2) scaleY(0.8)';
+  
+      setTimeout(() => {
+        rebound();
+      }, 150);
+    }
+  
+    function rebound() {
+      div.style.transition = 'transform 0.2s ease-out';
+      div.style.transform = 'scaleX(1) scaleY(1)';
+      setTimeout(() => {
+        div.style.transition = 'scale 0.5s ease-in-out';
+      }, 200);
+    }
+  
+    fall();
   }
 
   private triggerExplosion(element: HTMLElement, color: string = "#000000") {
