@@ -118,6 +118,62 @@ public class GameController {
 			}
 		}
 	}
+	
+	private boolean execDieFunc(LineaDTO enemy, GameDTO game, LineaDTO you, int player, HabilidadDTO hab) {
+		boolean dies = false;
+		String command = hab.getEspecial();
+		int dur = 1;
+		if (Character.isDigit(command.charAt(command.length() - 1))) {
+			dur = Character.getNumericValue(command.charAt(command.length() - 1));
+			command = command.substring(0, command.length() - 1);
+		}
+		switch (command) {
+		case "TF":
+			stun(enemy, dur, hab.getFreezeName());
+			gs.save(enemy);
+			break;
+		case "TB":
+			burn(enemy, dur);
+			gs.save(enemy);
+			break;
+		case "TK":
+			dies = true;
+			break;
+		case "TP":
+			poison(enemy, dur);
+			gs.save(enemy);
+			break;
+		case "TD":
+			dies = damage(enemy, dur);
+			gs.save(enemy);
+			break;
+		case "TY":
+			if (player == 1) {
+				game.getPlayer2().setVida(game.getPlayer2().getVida() - dur);
+				gs.save(game.getPlayer2());
+			} else {
+				game.getPlayer1().setVida(game.getPlayer1().getVida() - dur);
+				gs.save(game.getPlayer1());
+			}
+			break;
+		case "TFA":
+			freezeAll(player, game, dur, hab.getFreezeName());
+			break;
+		case "TBA":
+			setAllOnFire(player, game, dur);
+			break;
+		case "TKA":
+			killAll(player, game);
+			break;
+		case "TPA":
+			poisonAll(player, game, dur);
+			break;
+		case "TDA":
+			damageAll(player, game, dur);
+			break;
+		}
+		return dies;
+	}
 
 	private boolean execDeployFunc(LineaDTO enemy, GameDTO game, LineaDTO you, int player, HabilidadDTO hab) {
 		boolean dies = false;
@@ -166,8 +222,31 @@ public class GameController {
 		case "DDA":
 			damageAll(player, game, dur);
 			break;
+		case "DHC":
+			healAll(player, game, dur);
+			break;
 		case "DHA":
 			healAll(player, game, dur);
+			if (player == 1) {
+				game.getPlayer1().setVida(game.getPlayer1().getVida() + dur);
+				if (game.getPlayer1().getVida() > 40) {game.getPlayer1().setVida(40);}
+				gs.save(game.getPlayer2());
+			} else {
+				game.getPlayer2().setVida(game.getPlayer2().getVida() + dur);
+				if (game.getPlayer2().getVida() > 40) {game.getPlayer2().setVida(40);}
+				gs.save(game.getPlayer2());
+			}
+			break;
+		case "DHP":
+			if (player == 1) {
+				game.getPlayer1().setVida(game.getPlayer1().getVida() + dur);
+				if (game.getPlayer1().getVida() > 40) {game.getPlayer1().setVida(40);}
+				gs.save(game.getPlayer2());
+			} else {
+				game.getPlayer2().setVida(game.getPlayer2().getVida() + dur);
+				if (game.getPlayer2().getVida() > 40) {game.getPlayer2().setVida(40);}
+				gs.save(game.getPlayer2());
+			}
 			break;
 		}
 		return dies;
@@ -1038,6 +1117,41 @@ public class GameController {
 		// Guardar cambios si es necesario
 		return game;
 	}
+	
+	private void killLine(String posicionOponente, GameDTO game) {
+		switch (posicionOponente) {
+		case "1_1":
+			game.setL1_1(null);
+			break;
+		case "1_2":
+			game.setL1_2(null);
+			break;
+		case "1_3":
+			game.setL1_3(null);
+			break;
+		case "1_4":
+			game.setL1_4(null);
+			break;
+		case "1_5":
+			game.setL1_5(null);
+			break;
+		case "2_1":
+			game.setL2_1(null);
+			break;
+		case "2_2":
+			game.setL2_2(null);
+			break;
+		case "2_3":
+			game.setL2_3(null);
+			break;
+		case "2_4":
+			game.setL2_4(null);
+			break;
+		case "2_5":
+			game.setL2_5(null);
+			break;
+		}
+	}
 
 	private void procesarLinea(LineaDTO linea_own, LineaDTO linea, String posicionOponente, GameDTO game,
 			GameDTO game_aux, PlayerStatusDTO player2, LineaDTO linea_aux) {
@@ -1067,6 +1181,27 @@ public class GameController {
 			}
 
 			if (linea.getVida() <= 0) {
+				if (linea.getCarta().getHabilidadDTO().getEspecial() != null) {
+					if (linea.getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+						int player = 0;
+						String pos = "";
+						if (posicionOponente.startsWith("1")) {
+							player = 2;
+							pos = "2";
+						} else {
+							player = 1;
+							pos = "1";
+						}
+						execDieFunc(linea_aux, game, linea, player, linea.getCarta().getHabilidadDTO());
+						if (linea_aux != null) {
+							if (linea_aux.getVida() <= 0) {
+								pos += "_";
+								pos += posicionOponente.charAt(posicionOponente.length()-1);
+								killLine(pos, game);
+							}
+						}
+					}
+				}
 				switch (posicionOponente) {
 				case "1_1":
 					game.setL1_1(null);

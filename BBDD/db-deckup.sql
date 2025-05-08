@@ -526,12 +526,12 @@ INSERT INTO rarezas(nombre, porcentaje) VALUES
 ('Mitica', 0.5), # 5
 ('???', 0.01); # 6
 
-INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name, burn) VALUES
-('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null), # 1
-('Golpe', 'Golpea al rival', 1, null, null, null, null), # 2
-('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 2, 'Noqueado', null), # 3
-('Ignicion', 'Quema al rival', 1, null, null, null, 1), # 4
-('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null); #5
+INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name, burn, especial) VALUES
+('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null, "DKA"), # 1
+('Golpe', 'Golpea al rival', 1, null, null, null, null, "TD"), # 2
+('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 2, 'Noqueado', null, "TFA"), # 3
+('Ignicion', 'Quema al rival', 1, null, null, null, 1, "TB"), # 4
+('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null, "TDA2"); #5
 
 INSERT INTO habilidades(nombre, descripcion, dmg, especial) VALUES
 ('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 7,"DKA"); #6
@@ -542,7 +542,7 @@ INSERT INTO habilidades(nombre, descripcion, dmg, bleed, crit, crit_mult) VALUES
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal, especial) VALUES
 ('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5, "DDA"), #8
 ('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1, "DD2"), #9
-('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3, "DHA2"), #10
+('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3, "DHC2"), #10
 ('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0, null); #11
 
 INSERT INTO habilidades(nombre, descripcion, dmg, prcnt, heal) VALUES

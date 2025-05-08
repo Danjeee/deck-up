@@ -65,30 +65,29 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
               if ((status[0] + "").startsWith("l")) {
                 if (status[1] != "put") {
                   this.triggerExplosion(document.getElementById(status[0]) as HTMLElement, status[1] == "heal" ? "#198754" : "#d9534f")
+                } else {
+                  let comm = data[status[0]].carta.habilidadDTO.especial + ""
+                    if (comm != null){
+                      comm = comm.replace(/\d+/g, '')
+                      if (comm.startsWith("D")){
+                        console.log(comm)
+                        this.gameStatus.command = status;
+                        this.renderDeployEffects(comm, this.gameStatus)
+                      }
+                    }
                 }
               }
               if ((status[0] + "").startsWith("p")) {
                 const player = document.getElementById(status[0]) as HTMLElement
-                this.triggerExplosion(player, status[1] == "heal" ? "#198754" : "#d9534f")
-                if (status[1] == "heal") {
-                  player.style.backgroundColor = "#198754"
-                  setTimeout(() => {
-                    player.style.backgroundColor = "#fff"
-                  }, 301);
-                } else {
-                  player.style.backgroundColor = "#d33"
-                  setTimeout(() => {
-                    player.style.backgroundColor = "#fff"
-                  }, 301);
-                }
+                this.triggerPlayer(player, status)
               }
               if (status[0] == "turndmg"){
                 const lines = Array.from(status).splice(1)
                 lines.forEach((line: any) => {
-                  Object.keys(data).forEach((key: any) => {
+                  Object.keys(this.gameStatus).forEach((key: any) => {
                     if ((key + "").startsWith("l")){
-                      if (data[key] != null){
-                        if (data[key].id == line){
+                      if (this.gameStatus[key] != null){
+                        if (this.gameStatus[key].id == line){
                           this.triggerExplosion(document.getElementById(key) as HTMLElement)
                         }
                       }
@@ -105,6 +104,21 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         })
       }
     })
+  }
+
+  triggerPlayer(player: any, status: any){
+    this.triggerExplosion(player, status == "heal" ? "#198754" : "#d9534f")
+                if (status == "heal") {
+                  player.style.backgroundColor = "#198754"
+                  setTimeout(() => {
+                    player.style.backgroundColor = "#fff"
+                  }, 301);
+                } else {
+                  player.style.backgroundColor = "#d33"
+                  setTimeout(() => {
+                    player.style.backgroundColor = "#fff"
+                  }, 301);
+                }
   }
 
   ngAfterViewInit(): void {
@@ -128,17 +142,9 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   async renderAll(data: any){
     this.loaded = await this.rendergame(data);
     if (data.command != null){
-      console.log(data.command)
       setTimeout(() => {
         if (data.command[1] == "put") {
           this.animatedrop(data.command[0])
-          let comm = data[data.command[0]].carta.habilidadDTO.especial + ""
-          if (comm != null){
-            comm = comm.replace(/\d+/g, '')
-            if (comm.startsWith("D")){
-              this.renderDeployEffects(comm, data)
-            }
-          }
         }
       }, 0);
     }
@@ -210,10 +216,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
         enemy = (enemy == "1") ? "2" : "1"
         let line = (data.command[0] + "").split("_")[1]
-        console.log(data.command)
-        console.log(enemy)
-        console.log(line)
-        console.log("l"+enemy+"_"+line)
         if (data["l"+enemy+"_"+line] != null){
           this.triggerExplosion(document.getElementById("l"+enemy+"_"+line) as HTMLElement, "#d9534f")
         }
@@ -236,17 +238,67 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         break;
       case "DHA":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "heal")
+        this.healAll(enemy,data)
+        break;
+      case "DHC":
+        this.healAll(enemy,data)
+        break;
+      case "DHP":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "heal")
+        break;
+    }
+  }
+
+  renderDieEffects(comm: any, data: any){
+    let enemy = ""
+    switch (comm){
+      case "TD":
+      case "TP":
+      case "TF":
+      case "TB":
+      case "TK":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        enemy = (enemy == "1") ? "2" : "1"
+        let line = (data.command[0] + "").split("_")[1]
+        if (data["l"+enemy+"_"+line] != null){
+          this.triggerExplosion(document.getElementById("l"+enemy+"_"+line) as HTMLElement, "#d9534f")
+        }
+        break;
+      case "TFA":
+      case "TDA":
+      case "TBA":
+      case "TKA":
+      case "TPA":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        enemy = (enemy == "1") ? "2" : "1"
         Object.keys(data).forEach((key:any) => {
           key = key + ""
           if (key.startsWith("l")){
-            if (key.charAt(1) == enemy && key != data.command[0] && data[key] != null){
-              console.log("Heal: "+ key)
-              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#198754")
+            if (key.charAt(1) == enemy && data[key] != null){
+              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#d9534f")
             }
           }
         }) 
         break;
+      case "TY":
+        enemy = (data.command[0] + "").split("_")[0].charAt(1)
+           enemy = (enemy == "1") ? "2" : "1"
+        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "dmg")
+        break;
     }
+  }
+  healAll(enemy:any, data:any){
+    enemy = (data.command[0] + "").split("_")[0].charAt(1)
+        Object.keys(data).forEach((key:any) => {
+          key = key + ""
+          if (key.startsWith("l")){
+            if (key.charAt(1) == enemy && key != data.command[0] && data[key] != null){
+              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#198754")
+            }
+          }
+        }) 
   }
 
   animatedrop(line: any){
@@ -804,6 +856,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   }
 
   switchTurn() {
+    this.gameStatus.turn = -1;
     this.service.switchturn(this.gameStatus.id, (this.isYou(this.gameStatus.player1) ? 1 : 2)).subscribe({
       next: (data) => {
         if (data.status != 200) {
@@ -1132,16 +1185,17 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
     this.shoot(shooter, line, crit);
     const playerFrom = playerTarget.charAt(playerTarget.length-1) == "1" ? "2":"1"
+    const lineFinal = "l"+playerFrom+"_"+line.charAt(1)
     setTimeout(() => {
       if (to) {
-        to.vida = this.realizarDmgs(from, to.vida, to.carta.vida)
+        to.vida = this.realizarDmgs(from, to.vida, to.carta.vida, to.carta.habilidadDTO, lineFinal)
       } else {
         this.gameStatus[playerTarget].vida = this.realizarDmgs(from, this.gameStatus[playerTarget].vida, 40)
       }
     }, 500);
   }
 
-  realizarDmgs(from:any, vida: any, max: any): number{
+  realizarDmgs(from:any, vida: any, max: any, hab: any = null, line: any = null): number{
     if (from.carta.habilidadDTO.leth != null && vida > 0){
       vida -= (max - vida) * from.carta.habilidadDTO.leth/100
     }
@@ -1154,6 +1208,15 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
     if (vida < 0){
       vida = 0
+    }
+    if (hab != null){
+      if (vida == 0 && hab.especial != null){
+        if ((hab.especial + "").startsWith("T")){
+          const comm = hab.especial.replace(/\d+/g, '')
+          this.gameStatus.command = line
+          this.renderDieEffects(comm, this.gameStatus)
+        }
+      }
     }
     return vida;
   }
@@ -1175,7 +1238,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
             && (this.gameStatus[key].stun == 0 || this.gameStatus[key].stun == null)
           ){
             let from = this.gameStatus[key]
-            if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0){
+            if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0 && from.vida < from.carta.vida){
               const fromHTML = (document.getElementById(key) as HTMLElement).getBoundingClientRect()
               ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width/2, fromHTML.y + fromHTML.height/2, "#198754")
               from.vida = (from.vida + from.carta.habilidadDTO.heal) > from.carta.vida ? from.carta.vida : (from.vida + from.carta.habilidadDTO.heal)
