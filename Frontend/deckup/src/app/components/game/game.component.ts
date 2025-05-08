@@ -70,7 +70,6 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
                     if (comm != null){
                       comm = comm.replace(/\d+/g, '')
                       if (comm.startsWith("D")){
-                        console.log(comm)
                         this.gameStatus.command = status;
                         this.renderDeployEffects(comm, this.gameStatus)
                       }
@@ -253,6 +252,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
 
   renderDieEffects(comm: any, data: any){
     let enemy = ""
+    console.log(comm)
     switch (comm){
       case "TD":
       case "TP":

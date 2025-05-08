@@ -76,15 +76,16 @@ public class GameController {
 
 	private void burn(LineaDTO linea, int cant) {
 		if (linea != null) {
-			if (linea.getBurn() != null && linea.getBurn() != 0) {
+			if (linea.getBurn() == null || linea.getBurn() == 0) {
 				linea.setBurn(cant);
+				System.out.println(linea);
 			}
 		}
 	}
 
 	private void stun(LineaDTO linea, int cant, String name) {
 		if (linea != null) {
-			if (linea.getStun() != null && linea.getStun() != 0) {
+			if (linea.getStun() == null || linea.getStun() == 0) {
 				linea.setStun(cant);
 				linea.setStun_name(name);
 			}
@@ -93,7 +94,7 @@ public class GameController {
 
 	private void poison(LineaDTO linea, int cant) {
 		if (linea != null) {
-			if (linea.getPoisn() != null && linea.getPoisn() != 0) {
+			if (linea.getPoisn() == null || linea.getPoisn() == 0) {
 				linea.setPoisn(cant);
 			}
 		}
@@ -120,6 +121,12 @@ public class GameController {
 	}
 	
 	private boolean execDieFunc(LineaDTO enemy, GameDTO game, LineaDTO you, int player, HabilidadDTO hab) {
+		if (hab.getEspecial() == null) {
+			return false;
+		}
+		if (hab.getEspecial().charAt(0) != 'T') {
+			return false;
+		}
 		boolean dies = false;
 		String command = hab.getEspecial();
 		int dur = 1;
@@ -127,14 +134,16 @@ public class GameController {
 			dur = Character.getNumericValue(command.charAt(command.length() - 1));
 			command = command.substring(0, command.length() - 1);
 		}
+
 		switch (command) {
 		case "TF":
 			stun(enemy, dur, hab.getFreezeName());
 			gs.save(enemy);
 			break;
-		case "TB":
+		case "TB": // check
 			burn(enemy, dur);
 			gs.save(enemy);
+			
 			break;
 		case "TK":
 			dies = true;
@@ -143,7 +152,7 @@ public class GameController {
 			poison(enemy, dur);
 			gs.save(enemy);
 			break;
-		case "TD":
+		case "TD": // check
 			dies = damage(enemy, dur);
 			gs.save(enemy);
 			break;
@@ -156,23 +165,52 @@ public class GameController {
 				gs.save(game.getPlayer1());
 			}
 			break;
-		case "TFA":
+		case "TFA": // check
+			player = (player == 1) ? 2:1; 
 			freezeAll(player, game, dur, hab.getFreezeName());
 			break;
 		case "TBA":
+			player = (player == 1) ? 2:1; 
 			setAllOnFire(player, game, dur);
 			break;
 		case "TKA":
+			player = (player == 1) ? 2:1; 
 			killAll(player, game);
 			break;
 		case "TPA":
+			player = (player == 1) ? 2:1; 
 			poisonAll(player, game, dur);
 			break;
-		case "TDA":
+		case "TDA": // check
+			player = (player == 1) ? 2:1; 
 			damageAll(player, game, dur);
 			break;
 		}
+
+		System.out.println(command);
+		if (command.contains("A")) {
+			System.out.println("IN: " + command);
+			System.out.println("IN: " + player);
+			saveAllLines(game, true);
+		}
 		return dies;
+	}
+
+	private void savePlayerLines(GameDTO game, int player) {
+		player = (player == 1) ? 2:1; 
+		if (player == 1) {
+			gs.save(game.getL1_1());
+			gs.save(game.getL1_2());
+			gs.save(game.getL1_3());
+			gs.save(game.getL1_4());
+			gs.save(game.getL1_5());
+		} else {
+			gs.save(game.getL2_1());
+			gs.save(game.getL2_2());
+			gs.save(game.getL2_3());
+			gs.save(game.getL2_4());
+			gs.save(game.getL2_5());
+		}
 	}
 
 	private boolean execDeployFunc(LineaDTO enemy, GameDTO game, LineaDTO you, int player, HabilidadDTO hab) {
@@ -224,6 +262,7 @@ public class GameController {
 			break;
 		case "DHC":
 			healAll(player, game, dur);
+			saveAllLines(game, true);
 			break;
 		case "DHA":
 			healAll(player, game, dur);
@@ -271,37 +310,67 @@ public class GameController {
 
 	private void damageAll(int player, GameDTO game, int cant) {
 		if (player == 1) {
-			if (damage(game.getL2_1(), cant)) {
-				game.setL2_1(null);
-			}
-			if (damage(game.getL2_2(), cant)) {
-				game.setL2_2(null);
-			}
-			if (damage(game.getL2_3(), cant)) {
-				game.setL2_3(null);
-			}
-			if (damage(game.getL2_4(), cant)) {
-				game.setL2_4(null);
-			}
-			if (damage(game.getL2_5(), cant)) {
-				game.setL2_5(null);
-			}
+		    if (damage(game.getL2_1(), cant)) {
+		        if (game.getL2_1() != null) {
+		            execDieFunc(game.getL1_1(), game, game.getL2_1(), player, game.getL2_1().getCarta().getHabilidadDTO());
+		        }
+		        game.setL2_1(null);
+		    }
+		    if (damage(game.getL2_2(), cant)) {
+		        if (game.getL2_2() != null) {
+		            execDieFunc(game.getL1_2(), game, game.getL2_2(), player, game.getL2_2().getCarta().getHabilidadDTO());
+		        }
+		        game.setL2_2(null);
+		    }
+		    if (damage(game.getL2_3(), cant)) {
+		        if (game.getL2_3() != null) {
+		            execDieFunc(game.getL1_3(), game, game.getL2_3(), player, game.getL2_3().getCarta().getHabilidadDTO());
+		        }
+		        game.setL2_3(null);
+		    }
+		    if (damage(game.getL2_4(), cant)) {
+		        if (game.getL2_4() != null) {
+		            execDieFunc(game.getL1_4(), game, game.getL2_4(), player, game.getL2_4().getCarta().getHabilidadDTO());
+		        }
+		        game.setL2_4(null);
+		    }
+		    if (damage(game.getL2_5(), cant)) {
+		        if (game.getL2_5() != null) {
+		            execDieFunc(game.getL1_5(), game, game.getL2_5(), player, game.getL2_5().getCarta().getHabilidadDTO());
+		        }
+		        game.setL2_5(null);
+		    }
 		} else {
-			if (damage(game.getL1_1(), cant)) {
-				game.setL1_1(null);
-			}
-			if (damage(game.getL1_2(), cant)) {
-				game.setL1_2(null);
-			}
-			if (damage(game.getL1_3(), cant)) {
-				game.setL1_3(null);
-			}
-			if (damage(game.getL1_4(), cant)) {
-				game.setL1_4(null);
-			}
-			if (damage(game.getL1_5(), cant)) {
-				game.setL1_5(null);
-			}
+		    if (damage(game.getL1_1(), cant)) {
+		        if (game.getL1_1() != null) {
+		            execDieFunc(game.getL2_1(), game, game.getL1_1(), player, game.getL1_1().getCarta().getHabilidadDTO());
+		        }
+		        game.setL1_1(null);
+		    }
+		    if (damage(game.getL1_2(), cant)) {
+		        if (game.getL1_2() != null) {
+		            execDieFunc(game.getL2_2(), game, game.getL1_2(), player, game.getL1_2().getCarta().getHabilidadDTO());
+		        }
+		        game.setL1_2(null);
+		    }
+		    if (damage(game.getL1_3(), cant)) {
+		        if (game.getL1_3() != null) {
+		            execDieFunc(game.getL2_3(), game, game.getL1_3(), player, game.getL1_3().getCarta().getHabilidadDTO());
+		        }
+		        game.setL1_3(null);
+		    }
+		    if (damage(game.getL1_4(), cant)) {
+		        if (game.getL1_4() != null) {
+		            execDieFunc(game.getL2_4(), game, game.getL1_4(), player, game.getL1_4().getCarta().getHabilidadDTO());
+		        }
+		        game.setL1_4(null);
+		    }
+		    if (damage(game.getL1_5(), cant)) {
+		        if (game.getL1_5() != null) {
+		            execDieFunc(game.getL2_5(), game, game.getL1_5(), player, game.getL1_5().getCarta().getHabilidadDTO());
+		        }
+		        game.setL1_5(null);
+		    }
 		}
 
 	}
@@ -324,17 +393,59 @@ public class GameController {
 
 	private void killAll(int player, GameDTO game) {
 		if (player == 1) {
-			game.setL2_1(null);
-			game.setL2_2(null);
-			game.setL2_3(null);
-			game.setL2_4(null);
-			game.setL2_5(null);
+		    if (game.getL2_1() != null && game.getL2_1().getCarta().getHabilidadDTO() != null &&
+		        game.getL2_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL1_1(), game, game.getL2_1(), player, game.getL2_1().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL2_2() != null && game.getL2_2().getCarta().getHabilidadDTO() != null &&
+		        game.getL2_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL1_2(), game, game.getL2_2(), player, game.getL2_2().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL2_3() != null && game.getL2_3().getCarta().getHabilidadDTO() != null &&
+		        game.getL2_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL1_3(), game, game.getL2_3(), player, game.getL2_3().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL2_4() != null && game.getL2_4().getCarta().getHabilidadDTO() != null &&
+		        game.getL2_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL1_4(), game, game.getL2_4(), player, game.getL2_4().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL2_5() != null && game.getL2_5().getCarta().getHabilidadDTO() != null &&
+		        game.getL2_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL1_5(), game, game.getL2_5(), player, game.getL2_5().getCarta().getHabilidadDTO());
+		    }
+
+		    game.setL2_1(null);
+		    game.setL2_2(null);
+		    game.setL2_3(null);
+		    game.setL2_4(null);
+		    game.setL2_5(null);
 		} else {
-			game.setL1_1(null);
-			game.setL1_2(null);
-			game.setL1_3(null);
-			game.setL1_4(null);
-			game.setL1_5(null);
+		    if (game.getL1_1() != null && game.getL1_1().getCarta().getHabilidadDTO() != null &&
+		        game.getL1_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL2_1(), game, game.getL1_1(), player, game.getL1_1().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL1_2() != null && game.getL1_2().getCarta().getHabilidadDTO() != null &&
+		        game.getL1_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL2_2(), game, game.getL1_2(), player, game.getL1_2().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL1_3() != null && game.getL1_3().getCarta().getHabilidadDTO() != null &&
+		        game.getL1_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL2_3(), game, game.getL1_3(), player, game.getL1_3().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL1_4() != null && game.getL1_4().getCarta().getHabilidadDTO() != null &&
+		        game.getL1_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL2_4(), game, game.getL1_4(), player, game.getL1_4().getCarta().getHabilidadDTO());
+		    }
+		    if (game.getL1_5() != null && game.getL1_5().getCarta().getHabilidadDTO() != null &&
+		        game.getL1_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+		        execDieFunc(game.getL2_5(), game, game.getL1_5(), player, game.getL1_5().getCarta().getHabilidadDTO());
+		    }
+
+		    game.setL1_1(null);
+		    game.setL1_2(null);
+		    game.setL1_3(null);
+		    game.setL1_4(null);
+		    game.setL1_5(null);
 		}
 	}
 
@@ -737,51 +848,91 @@ public class GameController {
 					gs.deleteLinea(linea);
 					if (game.getL1_1() != null) {
 						if (game.getL1_1().getId() == linea.getId()) {
+							if (game.getL1_1().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL1_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL2_1(), game, game.getL1_1(), 1, game.getL1_1().getCarta().getHabilidadDTO());
+							}
 							game.setL1_1(null);
 						}
 					}
 					if (game.getL1_2() != null) {
 						if (game.getL1_2().getId() == linea.getId()) {
+							if (game.getL1_2().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL1_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL2_2(), game, game.getL1_2(), 1, game.getL1_2().getCarta().getHabilidadDTO());
+							}
 							game.setL1_2(null);
 						}
 					}
 					if (game.getL1_3() != null) {
 						if (game.getL1_3().getId() == linea.getId()) {
+							if (game.getL1_3().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL1_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL2_3(), game, game.getL1_3(), 1, game.getL1_3().getCarta().getHabilidadDTO());
+							}
 							game.setL1_3(null);
 						}
 					}
 					if (game.getL1_4() != null) {
 						if (game.getL1_4().getId() == linea.getId()) {
+							if (game.getL1_4().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL1_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL2_4(), game, game.getL1_4(), 1, game.getL1_4().getCarta().getHabilidadDTO());
+							}
 							game.setL1_4(null);
 						}
 					}
 					if (game.getL1_5() != null) {
 						if (game.getL1_5().getId() == linea.getId()) {
+							if (game.getL1_5().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL1_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL2_5(), game, game.getL1_5(), 1, game.getL1_5().getCarta().getHabilidadDTO());
+							}
 							game.setL1_5(null);
 						}
 					}
 					if (game.getL2_1() != null) {
 						if (game.getL2_1().getId() == linea.getId()) {
+							if (game.getL2_1().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL2_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL1_1(), game, game.getL2_1(), 2, game.getL2_1().getCarta().getHabilidadDTO());
+							}
 							game.setL2_1(null);
 						}
 					}
 					if (game.getL2_2() != null) {
 						if (game.getL2_2().getId() == linea.getId()) {
+							if (game.getL2_2().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL2_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL1_2(), game, game.getL2_2(), 2, game.getL2_2().getCarta().getHabilidadDTO());
+							}
 							game.setL2_2(null);
 						}
 					}
 					if (game.getL2_3() != null) {
 						if (game.getL2_3().getId() == linea.getId()) {
+							if (game.getL2_3().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL2_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL1_3(), game, game.getL2_3(), 2, game.getL2_3().getCarta().getHabilidadDTO());
+							}
 							game.setL2_3(null);
 						}
 					}
 					if (game.getL2_4() != null) {
 						if (game.getL2_4().getId() == linea.getId()) {
+							if (game.getL2_4().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL2_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL1_4(), game, game.getL2_4(), 2, game.getL2_4().getCarta().getHabilidadDTO());
+							}
 							game.setL2_4(null);
 						}
 					}
 					if (game.getL2_5() != null) {
 						if (game.getL2_5().getId() == linea.getId()) {
+							if (game.getL2_5().getCarta().getHabilidadDTO().getEspecial() != null &&
+								game.getL2_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+								execDieFunc(game.getL1_5(), game, game.getL2_5(), 2, game.getL2_5().getCarta().getHabilidadDTO());
+							}
 							game.setL2_5(null);
 						}
 					}
@@ -1040,24 +1191,64 @@ public class GameController {
 	// Función para eliminar una línea cuando su vida llega a 0
 	private void eliminarLinea(GameDTO game, LineaDTO linea) {
 		if (linea == game.getL1_1()) {
+			if (game.getL1_1().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL1_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL2_1(), game, linea, 1, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL1_1(null);
 		} else if (linea == game.getL1_2()) {
+			if (game.getL1_2().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL1_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL2_2(), game, linea, 1, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL1_2(null);
 		} else if (linea == game.getL1_3()) {
+			if (game.getL1_3().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL1_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL2_3(), game, linea, 1, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL1_3(null);
 		} else if (linea == game.getL1_4()) {
+			if (game.getL1_4().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL1_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL2_4(), game, linea, 1, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL1_4(null);
 		} else if (linea == game.getL1_5()) {
+			if (game.getL1_5().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL1_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL2_5(), game, linea, 1, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL1_5(null);
 		} else if (linea == game.getL2_1()) {
+			if (game.getL2_1().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL2_1().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL1_1(), game, linea, 2, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL2_1(null);
 		} else if (linea == game.getL2_2()) {
+			if (game.getL2_2().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL2_2().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL1_2(), game, linea, 2, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL2_2(null);
 		} else if (linea == game.getL2_3()) {
+			if (game.getL2_3().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL2_3().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL1_3(), game, linea, 2, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL2_3(null);
 		} else if (linea == game.getL2_4()) {
+			if (game.getL2_4().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL2_4().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL1_4(), game, linea, 2, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL2_4(null);
 		} else if (linea == game.getL2_5()) {
+			if (game.getL2_5().getCarta().getHabilidadDTO().getEspecial() != null &&
+				game.getL2_5().getCarta().getHabilidadDTO().getEspecial().charAt(0) == 'T') {
+				execDieFunc(game.getL1_5(), game, linea, 2, linea.getCarta().getHabilidadDTO());
+			}
 			game.setL2_5(null);
 		}
 	}
@@ -1528,16 +1719,18 @@ public class GameController {
 	}
 	private void saveAllLines(GameDTO game, boolean noclean) {
 		if (noclean) {
-			gs.save(game.getL1_1());
-			gs.save(game.getL1_2());
-			gs.save(game.getL1_3());
-			gs.save(game.getL1_4());
-			gs.save(game.getL1_5());
-			gs.save(game.getL2_1());
-			gs.save(game.getL2_2());
-			gs.save(game.getL2_3());
-			gs.save(game.getL2_4());
-			gs.save(game.getL2_5());
+			if (game.getL1_1() != null) {gs.save(game.getL1_1());}
+			if (game.getL1_1() != null) { gs.save(game.getL1_1()); }
+			if (game.getL1_2() != null) { gs.save(game.getL1_2()); }
+			if (game.getL1_3() != null) { gs.save(game.getL1_3()); }
+			if (game.getL1_4() != null) { gs.save(game.getL1_4()); }
+			if (game.getL1_5() != null) { gs.save(game.getL1_5()); }
+
+			if (game.getL2_1() != null) { gs.save(game.getL2_1()); }
+			if (game.getL2_2() != null) { gs.save(game.getL2_2()); }
+			if (game.getL2_3() != null) { gs.save(game.getL2_3()); }
+			if (game.getL2_4() != null) { gs.save(game.getL2_4()); }
+			if (game.getL2_5() != null) { gs.save(game.getL2_5()); }
 		} else {
 			cleanAndSave(game.getL1_1());
 			cleanAndSave(game.getL1_2());
