@@ -443,6 +443,7 @@ public class GameController {
 		    }
 
 		}
+		gs.save(game);
 	}
 
 	private void freezeAll(int player, GameDTO game, int cant, String name) {
