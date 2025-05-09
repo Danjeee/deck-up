@@ -10,6 +10,7 @@
         scale: .9;
     }
     &>div{
+        backdrop-filter: blur(5px);
         margin: 0;
         width: calc(100px + 10vw);
         height: calc(300px + 20vh);
@@ -23,19 +24,20 @@
 }
 #shop{
     color: #173d2e;
-    background-color: #80EF80;
+    background-color: #80EF80BB;
+    backdrop-filter: blur(5px);
 }
 #play_mp{
     color: #a46b04;
-    background-color: #FFFAA0;
+    background-color: #FFFAA0BB;
 }
 #play_solo{
     color: #183a62;
-    background-color: #80CEE1;
+    background-color: #80CEE1BB;
 }
 #collection{
     color: #a20f49;
-    background-color: #ffa2b9;
+    background-color: #ffa2b9BB;
 }
 #pago{
     width: 50vw;
@@ -58,7 +60,7 @@
     color: #000;
 }
 .si{
-    background-color: #FF964F;
+    background-color: #FF964FBB;
     color: #9d2c0f;
 }
 #admin{
