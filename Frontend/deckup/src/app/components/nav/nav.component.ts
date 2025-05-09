@@ -187,7 +187,8 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
 
   back() {
     sessionStorage.setItem("back", 'true')
-    this.router.navigate([LoadComponent.prev[LoadComponent.prev.length - 1]])
+    // this.router.navigate([LoadComponent.prev[LoadComponent.prev.length - 1]])
+    this.router.navigate(["home"])
     //this.router.navigate([this.router.lastSuccessfulNavigation?.extractedUrl])
   }
 
@@ -326,8 +327,11 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   }
 
   gotoChat(friend: any) {
-    this.router.navigate([`chat/${friend.amigo.username}`])
-    this.friendtoggle()
+    this.router.navigate([`home`])
+    setTimeout(() => {
+      this.router.navigate([`chat/${friend.amigo.username}`])
+      this.friendtoggle()
+    }, 1);
   }
 
   acceptreq(friend: any) {

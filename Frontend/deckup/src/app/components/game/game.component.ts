@@ -67,26 +67,26 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
                   this.triggerExplosion(document.getElementById(status[0]) as HTMLElement, status[1] == "heal" ? "#198754" : "#d9534f")
                 } else {
                   let comm = data[status[0]].carta.habilidadDTO.especial + ""
-                    if (comm != null){
-                      comm = comm.replace(/\d+/g, '')
-                      if (comm.startsWith("D")){
-                        this.gameStatus.command = status;
-                        this.renderDeployEffects(comm, this.gameStatus)
-                      }
+                  if (comm != null) {
+                    comm = comm.replace(/\d+/g, '')
+                    if (comm.startsWith("D")) {
+                      this.gameStatus.command = status;
+                      this.renderDeployEffects(comm, this.gameStatus)
                     }
+                  }
                 }
               }
               if ((status[0] + "").startsWith("p")) {
                 const player = document.getElementById(status[0]) as HTMLElement
                 this.triggerPlayer(player, status)
               }
-              if (status[0] == "turndmg"){
+              if (status[0] == "turndmg") {
                 const lines = Array.from(status).splice(1)
                 lines.forEach((line: any) => {
                   Object.keys(this.gameStatus).forEach((key: any) => {
-                    if ((key + "").startsWith("l")){
-                      if (this.gameStatus[key] != null){
-                        if (this.gameStatus[key].id == line){
+                    if ((key + "").startsWith("l")) {
+                      if (this.gameStatus[key] != null) {
+                        if (this.gameStatus[key].id == line) {
                           this.triggerExplosion(document.getElementById(key) as HTMLElement)
                         }
                       }
@@ -94,6 +94,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
                   })
                 });
               }
+              this.renderDeaths(data)
               this.gameStatus = data;
               data.command = status;
               this.renderAll(data)
@@ -105,19 +106,19 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  triggerPlayer(player: any, status: any){
+  triggerPlayer(player: any, status: any) {
     this.triggerExplosion(player, status == "heal" ? "#198754" : "#d9534f")
-                if (status == "heal") {
-                  player.style.backgroundColor = "#198754"
-                  setTimeout(() => {
-                    player.style.backgroundColor = "#fff"
-                  }, 301);
-                } else {
-                  player.style.backgroundColor = "#d33"
-                  setTimeout(() => {
-                    player.style.backgroundColor = "#fff"
-                  }, 301);
-                }
+    if (status == "heal") {
+      player.style.backgroundColor = "#198754"
+      setTimeout(() => {
+        player.style.backgroundColor = "#fff"
+      }, 301);
+    } else {
+      player.style.backgroundColor = "#d33"
+      setTimeout(() => {
+        player.style.backgroundColor = "#fff"
+      }, 301);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -137,10 +138,29 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       })
     }
   }
-
-  async renderAll(data: any){
+  renderDeaths(data: any) {
+    Object.keys(this.gameStatus).forEach((key: any) => {
+      if ((key + "").startsWith("l")) {
+        if (data[key] == null && this.gameStatus[key] != null) {
+          if (this.gameStatus[key].vida > 0) {
+            if (this.gameStatus[key].carta.habilidadDTO.especial != null) {
+              let com
+              if (key.charAt(1) == 1){
+                com = "l2_" + key.charAt(key.length-1)
+              } else {
+                com = "l1_" + key.charAt(key.length-1)
+              }
+              this.gameStatus.command = [com]
+              this.renderDieEffects(this.gameStatus[key].carta.habilidadDTO.especial, this.gameStatus)
+            }
+          }
+        }
+      }
+    })
+  }
+  async renderAll(data: any) {
     this.loaded = await this.rendergame(data);
-    if (data.command != null){
+    if (data.command != null) {
       setTimeout(() => {
         if (data.command[1] == "put") {
           this.animatedrop(data.command[0])
@@ -155,8 +175,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         this.victoria(String(data.status).substring(String(data.status).indexOf(":") + 1))
       }
     }
-      this.gameStatus = data
-    
+    this.gameStatus = data
+
     this.yourlines = this.setLines(data)[0]
     this.oponentlines = this.setLines(data)[1]
     this.oponentcards = this.oponentCards(data)
@@ -204,9 +224,9 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  renderDeployEffects(comm: any, data: any){
+  renderDeployEffects(comm: any, data: any) {
     let enemy = ""
-    switch (comm){
+    switch (comm) {
       case "DD":
       case "DP":
       case "DF":
@@ -215,8 +235,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
         enemy = (enemy == "1") ? "2" : "1"
         let line = (data.command[0] + "").split("_")[1]
-        if (data["l"+enemy+"_"+line] != null){
-          this.triggerExplosion(document.getElementById("l"+enemy+"_"+line) as HTMLElement, "#d9534f")
+        if (data["l" + enemy + "_" + line] != null) {
+          this.triggerExplosion(document.getElementById("l" + enemy + "_" + line) as HTMLElement, "#d9534f")
         }
         break;
       case "DFA":
@@ -226,44 +246,43 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case "DPA":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
         enemy = (enemy == "1") ? "2" : "1"
-        Object.keys(data).forEach((key:any) => {
+        Object.keys(data).forEach((key: any) => {
           key = key + ""
-          if (key.startsWith("l")){
-            if (key.charAt(1) == enemy && data[key] != null){
+          if (key.startsWith("l")) {
+            if (key.charAt(1) == enemy && data[key] != null) {
               this.triggerExplosion(document.getElementById(key) as HTMLElement, "#d9534f")
             }
           }
-        }) 
+        })
         break;
       case "DHA":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
-        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "heal")
-        this.healAll(enemy,data)
+        this.triggerPlayer(document.getElementById("player" + enemy) as HTMLElement, "heal")
+        this.healAll(enemy, data)
         break;
       case "DHC":
-        this.healAll(enemy,data)
+        this.healAll(enemy, data)
         break;
       case "DHP":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
-        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "heal")
+        this.triggerPlayer(document.getElementById("player" + enemy) as HTMLElement, "heal")
         break;
     }
   }
 
-  renderDieEffects(comm: any, data: any){
+  renderDieEffects(comm: any, data: any) {
     let enemy = ""
-    console.log(comm)
-    switch (comm){
+    comm = comm.replace(/\d+/g, '')
+    switch (comm) {
       case "TD":
       case "TP":
       case "TF":
       case "TB":
       case "TK":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
-        enemy = (enemy == "1") ? "2" : "1"
         let line = (data.command[0] + "").split("_")[1]
-        if (data["l"+enemy+"_"+line] != null){
-          this.triggerExplosion(document.getElementById("l"+enemy+"_"+line) as HTMLElement, "#d9534f")
+        if (data["l" + enemy + "_" + line] != null) {
+          this.triggerExplosion(document.getElementById("l" + enemy + "_" + line) as HTMLElement, "#d9534f")
         }
         break;
       case "TFA":
@@ -272,36 +291,34 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       case "TKA":
       case "TPA":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
-        enemy = (enemy == "1") ? "2" : "1"
-        Object.keys(data).forEach((key:any) => {
+        Object.keys(data).forEach((key: any) => {
           key = key + ""
-          if (key.startsWith("l")){
-            if (key.charAt(1) == enemy && data[key] != null){
+          if (key.startsWith("l")) {
+            if (key.charAt(1) == enemy && data[key] != null) {
               this.triggerExplosion(document.getElementById(key) as HTMLElement, "#d9534f")
             }
           }
-        }) 
+        })
         break;
       case "TY":
         enemy = (data.command[0] + "").split("_")[0].charAt(1)
-           enemy = (enemy == "1") ? "2" : "1"
-        this.triggerPlayer(document.getElementById("player"+enemy) as HTMLElement, "dmg")
+        this.triggerPlayer(document.getElementById("player" + enemy) as HTMLElement, "dmg")
         break;
     }
   }
-  healAll(enemy:any, data:any){
+  healAll(enemy: any, data: any) {
     enemy = (data.command[0] + "").split("_")[0].charAt(1)
-        Object.keys(data).forEach((key:any) => {
-          key = key + ""
-          if (key.startsWith("l")){
-            if (key.charAt(1) == enemy && key != data.command[0] && data[key] != null){
-              this.triggerExplosion(document.getElementById(key) as HTMLElement, "#198754")
-            }
-          }
-        }) 
+    Object.keys(data).forEach((key: any) => {
+      key = key + ""
+      if (key.startsWith("l")) {
+        if (key.charAt(1) == enemy && key != data.command[0] && data[key] != null) {
+          this.triggerExplosion(document.getElementById(key) as HTMLElement, "#198754")
+        }
+      }
+    })
   }
 
-  animatedrop(line: any){
+  animatedrop(line: any) {
     const parent = document.getElementById(line) as HTMLElement
     const div = parent.querySelector<HTMLElement>(".troop") as HTMLElement
     this.fallAndSquash(div)
@@ -310,7 +327,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     let pos = -300;
     const target = 0;
     const speed = 10;
-  
+
     function fall() {
       if (pos < target) {
         pos += speed;
@@ -321,16 +338,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         squash();
       }
     }
-  
+
     function squash() {
       div.style.transition = 'transform 0.15s ease-out';
       div.style.transform = 'scaleX(1.2) scaleY(0.8)';
-  
+
       setTimeout(() => {
         rebound();
       }, 150);
     }
-  
+
     function rebound() {
       div.style.transition = 'transform 0.2s ease-out';
       div.style.transform = 'scaleX(1) scaleY(1)';
@@ -338,7 +355,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         div.style.transition = 'scale 0.5s ease-in-out';
       }, 200);
     }
-  
+
     fall();
   }
 
@@ -799,7 +816,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       if (game.player1.carta4 != null) { count.push(0) }
       if (game.player1.carta5 != null) { count.push(0) }
     } else {
-      if (game.player1.carta1 != null) { count.push(0) }
+      if (game.player2.carta1 != null) { count.push(0) }
       if (game.player2.carta2 != null) { count.push(0) }
       if (game.player2.carta3 != null) { count.push(0) }
       if (game.player2.carta4 != null) { count.push(0) }
@@ -872,10 +889,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
   }
 
-  showstatus(line: any, e: MouseEvent){
-    const id = "status" + Math.random()*999
+  showstatus(line: any, e: MouseEvent) {
+    const id = "status" + Math.random() * 999
     const modal = document.createElement('div')
-    modal.className = "modal btn " + (line.carta.rarezaDTO.nombre == "???" ? "idk":line.carta.rarezaDTO.nombre)
+    modal.className = "modal btn " + (line.carta.rarezaDTO.nombre == "???" ? "idk" : line.carta.rarezaDTO.nombre)
     modal.id = id
     Utils.css(modal, {
       width: "auto",
@@ -898,16 +915,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
     const tit = document.createElement('h1')
     tit.innerHTML = line.carta.nombre
-    Utils.css(tit,{
+    Utils.css(tit, {
       color: "#13253e",
       pointerEvents: "none"
     })
     modal.appendChild(tit)
     Object.keys(line).forEach((key) => {
-      if (line[key] != null && line[key] != 0 && key != "game" && key != "willcrit" && key != "id" && key != "carta"){
+      if (line[key] != null && line[key] != 0 && key != "game" && key != "willcrit" && key != "id" && key != "carta") {
         let attr = document.createElement("h3")
         attr.className = "str"
-        Utils.css(attr,{
+        Utils.css(attr, {
           color: "#13253e",
           margin: "0",
           pointerEvents: "none"
@@ -918,43 +935,43 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
     const hab = document.createElement('h1')
     hab.innerHTML = "Habilidad: " + line.carta.habilidadDTO.nombre
-    Utils.css(hab,{
+    Utils.css(hab, {
       color: "#13253e",
       pointerEvents: "none"
     })
     modal.appendChild(hab)
     const habilidad = line.carta.habilidadDTO
     Object.keys(line.carta.habilidadDTO).forEach((key) => {
-      if (habilidad[key] != null && habilidad[key] != 0 && key != "nombre" && key != "id" && key != "descripcion" && key != "especial" && key != "color" && key != "entorno"){
+      if (habilidad[key] != null && habilidad[key] != 0 && key != "nombre" && key != "id" && key != "descripcion" && key != "especial" && key != "color" && key != "entorno") {
         let attr = document.createElement("h3")
         attr.className = "str"
-        Utils.css(attr,{
+        Utils.css(attr, {
           color: "#13253e",
           margin: "0",
           pointerEvents: "none"
         })
         let p = ""
-        if (key.includes("prcnt")){p = "%"}
-        if (key.includes("crit")){p = "%"}
+        if (key.includes("prcnt")) { p = "%" }
+        if (key.includes("crit")) { p = "%" }
         attr.innerHTML = Utils.msg["hab_" + key] + ": " + habilidad[key] + p
         modal.appendChild(attr)
       }
     })
 
     let mousein = false;
-    modal.addEventListener('mouseenter', ()=>{
+    modal.addEventListener('mouseenter', () => {
       mousein = true
     })
-    modal.addEventListener('mouseleave', ()=>{
+    modal.addEventListener('mouseleave', () => {
       mousein = false;
       setTimeout(() => {
-        if (!mousein){
+        if (!mousein) {
           Utils.css(modal, {
             pointerEvents: "none"
           })
           modal.animate([
-            {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"},
-            {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"}
+            { transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center" },
+            { transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center" }
           ], {
             duration: 400,
             easing: "linear"
@@ -965,13 +982,13 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         }
       }, 2000);
     })
-    modal.addEventListener('click', ()=>{
+    modal.addEventListener('click', () => {
       Utils.css(modal, {
         pointerEvents: "none"
       })
       modal.animate([
-        {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"},
-        {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"}
+        { transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center" },
+        { transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center" }
       ], {
         duration: 400,
         easing: "linear"
@@ -982,8 +999,8 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     })
     document.body.appendChild(modal)
     modal.animate([
-      {transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center"},
-      {transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center"}
+      { transform: "translate(-50%, -50%) scale(0)", transformOrigin: "center center" },
+      { transform: "translate(-50%, -50%) scale(1)", transformOrigin: "center center" }
     ], {
       duration: 500,
       easing: "linear"
@@ -1176,16 +1193,16 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       }
     }
     let crit = "false"
-    if (from.willcrit != null){
-      if (from.willcrit == true){
+    if (from.willcrit != null) {
+      if (from.willcrit == true) {
         crit = "#ffffff"
-      } 
+      }
     } else {
       crit = from.carta.habilidadDTO.color
     }
     this.shoot(shooter, line, crit);
-    const playerFrom = playerTarget.charAt(playerTarget.length-1) == "1" ? "2":"1"
-    const lineFinal = "l"+playerFrom+"_"+line.charAt(1)
+    const playerFrom = playerTarget.charAt(playerTarget.length - 1) == "1" ? "2" : "1"
+    const lineFinal = "l" + playerFrom + "_" + line.charAt(1)
     setTimeout(() => {
       if (to) {
         to.vida = this.realizarDmgs(from, to.vida, to.carta.vida, to.carta.habilidadDTO, lineFinal)
@@ -1195,25 +1212,25 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }, 500);
   }
 
-  realizarDmgs(from:any, vida: any, max: any, hab: any = null, line: any = null): number{
-    if (from.carta.habilidadDTO.leth != null && vida > 0){
-      vida -= (max - vida) * from.carta.habilidadDTO.leth/100
+  realizarDmgs(from: any, vida: any, max: any, hab: any = null, line: any = null): number {
+    if (from.carta.habilidadDTO.leth != null && vida > 0) {
+      vida -= (max - vida) * from.carta.habilidadDTO.leth / 100
     }
     vida -= from.carta.habilidadDTO.dmg
-    if (from.carta.habilidadDTO.prcnt != null){
-      vida -= max * from.carta.habilidadDTO.prcnt/100
+    if (from.carta.habilidadDTO.prcnt != null) {
+      vida -= max * from.carta.habilidadDTO.prcnt / 100
     }
-    if (from.willcrit){
-      vida -= (from.carta.habilidadDTO.dmg*from.carta.habilidadDTO.critMult/100);
+    if (from.willcrit) {
+      vida -= (from.carta.habilidadDTO.dmg * from.carta.habilidadDTO.critMult / 100);
     }
-    if (vida < 0){
+    if (vida < 0) {
       vida = 0
     }
-    if (hab != null){
-      if (vida == 0 && hab.especial != null){
-        if ((hab.especial + "").startsWith("T")){
-          const comm = hab.especial.replace(/\d+/g, '')
-          this.gameStatus.command = line
+    if (hab != null) {
+      if (vida == 0 && hab.especial != null) {
+        if ((hab.especial + "").startsWith("T")) {
+          const comm = hab.especial
+          this.gameStatus.command = [line]
           this.renderDieEffects(comm, this.gameStatus)
         }
       }
@@ -1230,24 +1247,24 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     }
   }
 
-  renderAllHeals(){
-    Object.keys(this.gameStatus).forEach((key: any) =>{
-      if ((key + "").startsWith("l")){
-        if (this.gameStatus[key] != null){
+  renderAllHeals() {
+    Object.keys(this.gameStatus).forEach((key: any) => {
+      if ((key + "").startsWith("l")) {
+        if (this.gameStatus[key] != null) {
           if (this.gameStatus[key].vida > 0 && this.gameStatus[key].carta.habilidadDTO.heal != 0 && this.gameStatus[key].carta.habilidadDTO.heal != null
             && (this.gameStatus[key].stun == 0 || this.gameStatus[key].stun == null)
-          ){
+          ) {
             let from = this.gameStatus[key]
-            if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0 && from.vida < from.carta.vida){
+            if (from.carta.habilidadDTO.heal != null && from.carta.habilidadDTO.heal != 0 && from.vida < from.carta.vida) {
               const fromHTML = (document.getElementById(key) as HTMLElement).getBoundingClientRect()
-              ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width/2, fromHTML.y + fromHTML.height/2, "#198754")
+              ParticleComponent.animejs_explosion(fromHTML.x + fromHTML.width / 2, fromHTML.y + fromHTML.height / 2, "#198754")
               from.vida = (from.vida + from.carta.habilidadDTO.heal) > from.carta.vida ? from.carta.vida : (from.vida + from.carta.habilidadDTO.heal)
             }
           }
         }
       }
     })
-    
+
   }
   fightLoop(linea: any, game: any) {
     if (linea != -1) {
@@ -1302,7 +1319,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
       part.style.width = tmn + "px"
       part.style.height = tmn + "px"
       part.style.backdropFilter = "blur(10px);"
-      part.style.backgroundColor = color+"80"
+      part.style.backgroundColor = color + "80"
       shoot.appendChild(part)
       animated.push(part)
     }
