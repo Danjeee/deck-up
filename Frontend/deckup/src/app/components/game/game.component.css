@@ -406,7 +406,7 @@
 }
 
 .frozen::after {
-    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/frozen.png");
+    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/frozen.webp");
     /*background-image: url("http://localhost/Resources/img/misc/frozen.png");*/
 }
 

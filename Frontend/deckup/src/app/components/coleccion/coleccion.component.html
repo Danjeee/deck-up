@@ -13,7 +13,7 @@
             <div class="cards_cont">
                 <div *ngFor="let card of getCartasFromRareza(rareza.nombre)" class="carta"
                     (click)="isUnlocked(card) ? show(card) : notUnlocked($event, card)">
-                    <img src="{{resURL}}/Resources/img/cards/{{isUnlocked(card) ? card.imagen : 'locked.jpg'}}"
+                    <img src="{{resURL}}/Resources/img/cards/{{isUnlocked(card) ? card.imagen : 'locked.webp'}}"
                         alt="{{card.nombre}}">
                     <div class="cant str bg-t btn skew" *ngIf="isUnlocked(card)">
                         <p>Tienes</p>

@@ -63,7 +63,7 @@ export class PackComponent extends environmentsURLs {
 
       const card_back = document.createElement("div")
       const card_img_back = document.createElement("img")
-      card_img_back.src = `${this.resURL}/Resources/img/misc/${card.rarezaDTO.nombre}_back.png`
+      card_img_back.src = `${this.resURL}/Resources/img/misc/${card.rarezaDTO.nombre}_back.webp`
       card_back.className = "card_back"
 
       const card_cont = document.createElement("div")

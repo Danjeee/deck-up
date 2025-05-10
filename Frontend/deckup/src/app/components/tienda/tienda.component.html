@@ -23,7 +23,7 @@
     <div *ngFor="let card of cards" class="card_deckup {{card.rarezaDTO.nombre}} {{user.currency>=card.precio ? 'but' : 'naff_card'}}" (click)="user.currency>=card.precio ? buy(card) : ''">
         <img src="{{resURL}}/Resources/img/cards/{{card.imagen}}" alt="{{card.imagen}}">
         <div class="precio str btn {{user.currency>=card.precio ? 'aff' : 'naff'}}">
-            <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gema">
+            <img src="{{resURL}}/Resources/img/misc/gema.webp" alt="gema">
             <p>{{card.precio}}</p>
         </div>
     </div>
@@ -33,7 +33,7 @@
         <img src="{{resURL}}/Resources/img/packs/{{pack.imagen}}" alt="{{pack.nombre}}">
         <h4 class="str" style="text-align: center;">{{pack.nombre}}</h4>
         <div class="precio str btn {{user.currency>=pack.precio ? 'aff' : 'naff'}}">
-            <img src="{{resURL}}/Resources/img/misc/gema.png" alt="gema">
+            <img src="{{resURL}}/Resources/img/misc/gema.webp" alt="gema">
             <p>{{pack.precio}}</p>
         </div>
     </div>

@@ -1,11 +1,11 @@
-<img src="{{resURL}}/Resources/img/misc/fondo.jpg" alt="fondo" id="bg">
+<img src="{{resURL}}/Resources/img/misc/fondo.webp" alt="fondo" id="bg">
 <div id="player1" class="player btn skew str {{isYou(gameStatus.player1) ? 'you yourself' : 'enemy oponent_a'}}" *ngIf="loaded">
     <div>
         <img src="{{resURL}}/Resources/img/users/{{gameStatus.player1.usuario.pfp}}">
         <h3>{{gameStatus.player1.usuario.username}}</h3>
     </div>
     <div>
-        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.png" alt="vida">
+        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.webp" alt="vida">
         <p class="hp">{{gameStatus.player1.vida}}</p>
     </div>
 </div>
@@ -16,14 +16,14 @@
         <h3>{{gameStatus.player2.usuario.username}}</h3>
     </div>
     <div>
-        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.png" alt="vida">
+        <img class="hpimg" src="{{resURL}}/Resources/img/misc/hp.webp" alt="vida">
         <p class="hp">{{gameStatus.player2.vida}}</p>
     </div>
 </div>
 
 <div id="oponentcards" class="cardcont glass" *ngIf="loaded">
     <div *ngFor="let card of oponentcards">
-        <img src="{{resURL}}/Resources/img/misc/Comun_back.png" alt="carta_oponente">
+        <img src="{{resURL}}/Resources/img/misc/Comun_back.webp" alt="carta_oponente">
     </div>
 </div>
 
@@ -41,11 +41,11 @@
             <img [src]="resURL + '/Resources/img/cards/' + (isYou(gameStatus.player2) ? gameStatus['l1_' + (i+1)].carta.imagen : gameStatus['l2_' + (i+1)].carta.imagen)" alt="">
             <div class="dmg str">
               {{ isYou(gameStatus.player2) ? gameStatus['l1_' + (i+1)].carta.habilidadDTO.dmg : gameStatus['l2_' + (i+1)].carta.habilidadDTO.dmg }}
-              <img [src]="resURL + '/Resources/img/misc/dmg.png'" alt="atk">
+              <img [src]="resURL + '/Resources/img/misc/dmg.webp'" alt="atk">
             </div>
             <div class="vida str">
               {{ isYou(gameStatus.player2) ? gameStatus['l1_' + (i+1)].vida : gameStatus['l2_' + (i+1)].vida }}
-              <img [src]="resURL + '/Resources/img/misc/hp.png'" alt="vida">
+              <img [src]="resURL + '/Resources/img/misc/hp.webp'" alt="vida">
             </div>
           </div>
         </div>
@@ -56,11 +56,11 @@
             <img [src]="resURL + '/Resources/img/cards/' + (isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.imagen : gameStatus['l2_' + (i+1)].carta.imagen)" alt="">
             <div class="dmg str">
               {{ isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].carta.habilidadDTO.dmg : gameStatus['l2_' + (i+1)].carta.habilidadDTO.dmg }}
-              <img [src]="resURL + '/Resources/img/misc/dmg.png'" alt="atk">
+              <img [src]="resURL + '/Resources/img/misc/dmg.webp'" alt="atk">
             </div>
             <div class="vida str">
               {{ isYou(gameStatus.player1) ? gameStatus['l1_' + (i+1)].vida : gameStatus['l2_' + (i+1)].vida }}
-              <img [src]="resURL + '/Resources/img/misc/hp.png'" alt="vida">
+              <img [src]="resURL + '/Resources/img/misc/hp.webp'" alt="vida">
             </div>
           </div>
         </div>

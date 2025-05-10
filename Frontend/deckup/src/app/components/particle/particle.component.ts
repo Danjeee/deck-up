@@ -18,7 +18,7 @@ export class ParticleComponent extends environmentsURLs {
 
   private static mouseCd = false
 
-  private static gemImgURL = ParticleComponent.resURL + "/Resources/img/misc/gema.png"
+  private static gemImgURL = ParticleComponent.resURL + "/Resources/img/misc/gema.webp"
 
   private static totalGems = 0;
 
