@@ -17,7 +17,7 @@ services:
     image: php:8.2-fpm
     container_name: php
     volumes:
-      - ./app-res:/var/www/html
+      - ./app-res:/usr/share/nginx/static
     networks:
       - api_network  
   

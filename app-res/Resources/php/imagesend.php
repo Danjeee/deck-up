@@ -1,5 +1,4 @@
 <?php
-header("Access-Control-Allow-Origin: *"); // Permitir solicitudes desde cualquier origen
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Métodos permitidos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Cabeceras permitidas
 header('Content-Type: application/json');

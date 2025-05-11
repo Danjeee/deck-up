@@ -12,6 +12,8 @@ import { MatchmakingComponent } from './components/matchmaking/matchmaking.compo
 import { GameComponent } from './components/game/game.component';
 import { CrudComponent } from './components/crud/crud.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { TradeComponent } from './components/trade/trade.component';
+import { TraderoomComponent } from './components/traderoom/traderoom.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -28,4 +30,6 @@ export const routes: Routes = [
     {path: 'game', component: GameComponent},
     {path: 'admin', component: AdminComponent},
     {path: 'admin/crud', component: CrudComponent},
+    {path: 'trade', component: TradeComponent},
+    {path: 'trade/:sala', component: TraderoomComponent},
 ];

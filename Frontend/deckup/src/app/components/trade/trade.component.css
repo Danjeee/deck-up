@@ -1,0 +1,28 @@
+#butcont{
+    width: 100dvw;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    justify-content: space-around;
+    &>div{
+        backdrop-filter: blur(5px);
+        width: 30%;
+        height: calc(300px + 20vh);
+        &>*{
+            margin:0 ;
+        }
+        &>h1{
+            font-size: 50px;
+        }
+    }
+}
+#create{
+    color: #a46b04;
+    background-color: #FFFAA0BB;
+}
+#join{
+    color: #183a62;
+    background-color: #80CEE1BB;
+}

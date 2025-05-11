@@ -405,4 +405,26 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }
     })
   }
+  bannedRoutes(type: string = "default"){
+    switch (type){
+      case "default" :
+        if (this.router.url == "/login"){
+          return true
+        }
+        if (this.router.url == "/register"){
+          return true
+        }
+        if (this.router.url == "/"){
+          return true
+        }
+        if (this.router.url == "/verify"){
+          return true
+        }
+        if (this.router.url.startsWith("/trade/")){
+          return true
+        }
+        return false;
+    }
+  return false;
+  }
 }

@@ -500,6 +500,33 @@ CREATE TABLE `deckup`.`player_status` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
     
+    /* Trades */
+    CREATE TABLE `deckup`.`trades` (
+  `id` BIGINT NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
+  `player1` BIGINT NOT NULL,
+  `player2` BIGINT NULL,
+  `player1_cards` VARCHAR(255) NULL,
+  `player2_cards` VARCHAR(255) NULL,
+  `player1_currency` INT NULL DEFAULT 0,
+  `player2_currency` INT NULL DEFAULT 0,
+  `p1c` TINYINT NULL,
+  `p2c` TINYINT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `p1_fk_trades_idx` (`player1` ASC) VISIBLE,
+  INDEX `p2_fk_trades_idx` (`player2` ASC) VISIBLE,
+  CONSTRAINT `p1_fk_trades`
+    FOREIGN KEY (`player1`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `p2_fk_trades`
+    FOREIGN KEY (`player2`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+    
     
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
@@ -528,21 +555,21 @@ INSERT INTO rarezas(nombre, porcentaje) VALUES
 
 INSERT INTO habilidades(nombre, descripcion, dmg, load_atq, freeze, freeze_name, burn, especial) VALUES
 ('Admin', 'Oponente.setVida(0)',  999999, null, null, null, null, "DKA"), # 1
-('Golpe', 'Golpea al rival', 1, null, null, null, null, "TK"), # 2
-('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 2, 'Noqueado', null, "TF2"), # 3
-('Ignicion', 'Quema al rival', 1, null, null, null, 1, "TBA"), # 4
-('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null, "TDA2"); #5
+('Golpe', 'Golpea al rival', 1, null, null, null, null, null), # 2
+('Puntapie', 'Golpea al rival, este pierde un turno', 1, null, 2, 'Noqueado', null, "TFA2"), # 3
+('Ignicion', 'Quema al rival', 1, null, null, null, 1, "TB3"), # 4
+('Explosion de titan', 'Un gran golpe que tiene consecuencias', 5, 1, null, null, null, "TDA3"); #5
 
 INSERT INTO habilidades(nombre, descripcion, dmg, especial) VALUES
-('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 7,"TKA"); #6
+('Destrucción impecable', 'Destruye todo a su alrededor a base de misiles', 7,"DKA"); #6
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, crit, crit_mult) VALUES
 ('Masacre sangrienta', 'Asesinato multiple', 2, 1, 50, 100); #7
 
 INSERT INTO habilidades(nombre, descripcion, dmg, bleed, poisn, load_atq, heal, especial) VALUES
-('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5, "TP4"), #8
-('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1, "TPA2"), #9
-('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3, "DHP2"), #10
+('Maldición del rey', 'Domina a tus rivales', 5, 1, 1,null,5, "DPA2"), #8
+('Mal imparable', 'Travesura tras travesura, no siempre salen bien...', 1, 2, 0,null,1, "DP4"), #9
+('Curación inversa', 'Si es que... hace de todo', 3, null, null,null,3, "DHA2"), #10
 ('Arrebato de ira', 'Nada mal para un principiante', 2, null, null,null,0, "TY3"); #11
 
 INSERT INTO habilidades(nombre, descripcion, dmg, prcnt, heal) VALUES

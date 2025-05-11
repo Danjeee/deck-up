@@ -36,5 +36,7 @@ public interface UsuarioService {
 	void buy(UsuarioDTO user, Integer precio);
 	
 	String findUsername(Long id);
+
+	void changePFP(Long id, String code);
 	
 }

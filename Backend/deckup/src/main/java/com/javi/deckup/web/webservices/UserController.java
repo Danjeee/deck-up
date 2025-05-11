@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.Response;
+import com.javi.deckup.utils.UserAction;
 
 @RestController
 @RequestMapping("/users")
@@ -40,6 +41,15 @@ public class UserController {
 			return Response.builder().status(200).tit("Pago correcto").msg(String.valueOf(amount)).user(UsuarioDTO.builder().nextPayment(user.getNextPayment()).currency(user.getCurrency()).build()).build();
 		}
 		
+	}
+	@PostMapping("/changepfp")
+	public Response changePfp(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return Response.error("Error al cargar el usuario");
+		}
+		us.changePFP(user.getId(), data.getCode());
+		return Response.success("Donete");
 	}
 	
 	@GetMapping("/{id}")

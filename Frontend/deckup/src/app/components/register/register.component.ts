@@ -126,6 +126,10 @@ export class RegisterComponent extends environmentsURLs {
                 this.register()
               })
             } else if (data.status == 200) {
+              this.service.changePFP(data.user.auth, this.fileName).subscribe({
+                // next: (data) => {}
+              })
+              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
               this.alert.success(data.tit, data.msg)
               .then((resp) => {
                 if (resp.isDismissed) {
@@ -134,7 +138,6 @@ export class RegisterComponent extends environmentsURLs {
                   window.location.reload()
                 }
               })
-              UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
               this.router.navigate(['/home'])
             } else {
               var file: FormData = new FormData()

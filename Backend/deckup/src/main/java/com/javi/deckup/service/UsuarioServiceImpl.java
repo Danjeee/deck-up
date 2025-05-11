@@ -206,5 +206,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	public String findUsername(Long id) {
 		return ur.findByUsername(id);
 	}
+
+	@Override
+	public void changePFP(Long id, String code) {
+		ur.changePfp(id, code);
+	}
 	
 }

@@ -41,4 +41,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query(value = "SELECT username FROM usuarios WHERE id = ?1", nativeQuery = true)
 	String findByUsername(Long id);
 
+	@Modifying
+	@Query(value = "UPDATE usuarios SET pfp = ?2 WHERE id = ?1", nativeQuery = true)
+	void changePfp(Long id, String code);
+
 }

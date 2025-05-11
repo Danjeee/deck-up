@@ -96,4 +96,13 @@ export class UserService extends environmentsURLs {
       catchError(err => {throw err})
     )
   }
+  changePFP(auth: any, pfp: any) {
+     const data: FormData = new FormData()
+    data.append("user_auth", auth)
+    data.append("code", pfp)
+    return this.http.post(`${this.apiURL}/users/changepfp`, data).pipe(
+      
+      catchError(err => {throw err})
+    )
+  }
 }

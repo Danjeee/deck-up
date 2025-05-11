@@ -56,6 +56,9 @@ public class UsuarioDTO implements Serializable {
 	// No pongo la lista de codigos y cartas porque es una carga innecesaria de datos en la aplicación
 	
 	public static UsuarioDTO convertToDTO(Usuario input) {
+		if (input == null) {
+			return null;
+		}
 		Boolean logged = false;
 		if (input.getLast_login() != null) {
 			logged = input.getLast_login().after(Timestamp.valueOf(LocalDateTime.now().minusMinutes(10)));
