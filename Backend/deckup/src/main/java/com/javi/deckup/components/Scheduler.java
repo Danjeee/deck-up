@@ -13,6 +13,7 @@ public class Scheduler {
 	TiendaService ts;
 	
 	@Scheduled(cron = "0 0 0 * * *", zone = "Europe/Madrid")
+//	@Scheduled(cron = "0 * * * * *", zone = "Europe/Madrid")
 	public void changeStore() {
 		ts.change();
 	}
