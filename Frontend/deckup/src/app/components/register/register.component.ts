@@ -87,35 +87,12 @@ export class RegisterComponent extends environmentsURLs {
       if (this.auth != null) {
         formdata.append("auth", this.auth_encoded as string)
       }
-      formdata.delete("pfp")
-      const pfpcont = document.getElementById("pfp_inp") as HTMLInputElement
-      if (pfpcont.files == null || pfpcont.files[0] == null) {
-        formdata.append("pfp", "user.png")
-      } else {
-        var file: FormData = new FormData()
-        file.append("pfp", pfpcont.files[0])
-        file.append("opc", "ADD")
-        this.apacheService.uploadUserImg(file).subscribe({
-          next: (data) => {
-            this.fileName = data.name
-            formdata.append("pfp", this.fileName)
-          }
-        })
-      }
       setTimeout(() => {
         this.loading = true
         this.service.register(formdata, this.auth as string).subscribe({
           next: (data) => {
             this.loading = false
             if (data.status == 100) {
-              var file: FormData = new FormData()
-              file.append("name", this.fileName)
-              file.append("opc", "DEL")
-              this.apacheService.uploadUserImg(file).subscribe({
-                next: (data) => {
-                  // console.log(data) lo dejo por si hubiera algun fallo
-                }
-              });
               this.auth_encoded = data.msg
               this.alert.ask("Codigo de verificacion", "Inserta el codigo de verificacion que te hemos mandado al correo: " + formdata.get("email")).then((result) => {
                 var resp: any = result
@@ -126,9 +103,6 @@ export class RegisterComponent extends environmentsURLs {
                 this.register()
               })
             } else if (data.status == 200) {
-              this.service.changePFP(data.user.auth, this.fileName).subscribe({
-                // next: (data) => {}
-              })
               UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
               this.alert.success(data.tit, data.msg)
               .then((resp) => {
@@ -140,14 +114,6 @@ export class RegisterComponent extends environmentsURLs {
               })
               this.router.navigate(['/home'])
             } else {
-              var file: FormData = new FormData()
-              file.append("name", this.fileName)
-              file.append("opc", "DEL")
-              this.apacheService.uploadUserImg(file).subscribe({
-                next: (data) => {
-                  // console.log(data) lo dejo por si hubiera algun fallo
-                }
-              });
               this.alert.error(data.tit, data.msg)
               this.auth = null
             }

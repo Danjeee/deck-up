@@ -155,3 +155,8 @@
         transform: none !important;
     }
 }
+#timer{
+    position: absolute;
+    top: -2.5%;
+    font-size: 24px;
+}

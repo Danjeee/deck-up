@@ -27,6 +27,7 @@
             <p>{{card.precio}}</p>
         </div>
     </div>
+    <div id="timer" class="btn str skew bg-s">La tienda cambia en: {{time_left_h}}h {{time_left_m}}m {{time_left_s}}s</div>
 </div>
 <div id="packcont" class="cont btn" *ngIf="selecteed == 'packs'">
     <div *ngFor="let pack of packs" class="pack {{user.currency>=pack.precio ? 'but' : 'naff_pack'}}" (click)="user.currency>=pack.precio ? buy_pack(pack) : ''">

@@ -16,5 +16,9 @@ public class TiendaServiceImpl implements TiendaService {
 	public TiendaDTO findById(Integer i) {
 		return TiendaDTO.convertToDTO(tr.findById(i).orElse(null));
 	}
+
+	@Override
+	public void change() {
+	}
 	
 }

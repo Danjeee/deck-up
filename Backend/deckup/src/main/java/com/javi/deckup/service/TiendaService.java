@@ -6,4 +6,6 @@ public interface TiendaService {
 
 	TiendaDTO findById(Integer i);
 
+	void change();
+
 }
