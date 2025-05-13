@@ -25,6 +25,7 @@ public class Trade {
 	private Long id;
 	
 	private String code;
+	private String status;
 	
 	@ManyToOne
 	@JoinColumn(name = "player1")

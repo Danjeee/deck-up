@@ -502,8 +502,9 @@ CREATE TABLE `deckup`.`player_status` (
     
     /* Trades */
     CREATE TABLE `deckup`.`trades` (
-  `id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(8) NOT NULL,
+  `status` VARCHAR(20) NOT NULL,
   `player1` BIGINT NOT NULL,
   `player2` BIGINT NULL,
   `player1_cards` VARCHAR(255) NULL,

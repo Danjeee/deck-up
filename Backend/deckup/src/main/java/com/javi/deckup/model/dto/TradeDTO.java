@@ -16,6 +16,7 @@ public class TradeDTO {
 
 private Long id;
 	private String code;
+	private String status;
 	
 	private UsuarioDTO player1;
 	private UsuarioDTO player2;
@@ -32,6 +33,8 @@ private Long id;
 	public static TradeDTO convertToDTO(Trade input) {
 		return TradeDTO.builder()
 					   .id(input.getId())
+					   .code(input.getCode())
+					   .status(input.getStatus())
 					   .player1(UsuarioDTO.convertToDTO(input.getPlayer1()))
 					   .player2(UsuarioDTO.convertToDTO(input.getPlayer2()))
 					   .p1cards(input.getP1cards())
@@ -49,6 +52,8 @@ private Long id;
 		}
 		return Trade.builder()
 					   .id(input.getId())
+					   .code(input.getCode())
+					   .status(input.getStatus())
 					   .player1(Usuario.builder().id(input.getPlayer1().getId()).build())
 					   .player2(user2)
 					   .p1cards(input.getP1cards())

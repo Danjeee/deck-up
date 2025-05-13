@@ -1,10 +1,16 @@
 <div id="butcont">
-    <div id="create" class="btn but skew">
+    <div id="create" class="btn but skew" (click)="create()">
         <h1 class="str">Crear</h1>
         <h1 class="str">Sala</h1>
     </div>
-    <div id="join" class="btn but skew">
+    <div id="join" class="btn but skew" (click)="join()">
         <h1 class="str">Unirse a</h1>
         <h1 class="str">Sala</h1>
     </div>
+</div>
+<div class="loadcont" *ngIf="waiting">
+    <div class="loader"></div>
+    <h1 style="color: #fff;" class="str">Esperando a otros jugadores...</h1>
+    <h1 style="color: #fff;" class="str">Usa el codigo {{code}} para unirte</h1>
+    <div class="bg-r str btn but skew" (click)="back()">Cancelar</div>
 </div>

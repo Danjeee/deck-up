@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.javi.deckup.model.dto.MensajeDTO;
 import com.javi.deckup.model.dto.SolicitudAmistadDTO;
+import com.javi.deckup.model.dto.TradeDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.service.UsuarioService;
 
@@ -38,6 +39,17 @@ public class NotificacionWSC {
 		 messagingTemplate.convertAndSend(
 	                "/game/" + game.getDestinoId(),
 	                game.getContenido());
+	}
+	
+	public void tradeStatusChange(TradeDTO trade, Long id) {
+		 messagingTemplate.convertAndSend(
+	                "/game/" + id,
+	                trade);
+	}
+	public void tradeStatusChange(String trade, Long id) {
+		 messagingTemplate.convertAndSend(
+	                "/game/" + id,
+	                trade);
 	}
 
 }
