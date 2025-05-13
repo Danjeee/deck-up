@@ -11,6 +11,9 @@
 <div class="loadcont" *ngIf="waiting">
     <div class="loader"></div>
     <h1 style="color: #fff;" class="str">Esperando a otros jugadores...</h1>
-    <h1 style="color: #fff;" class="str">Usa el codigo {{code}} para unirte</h1>
+    <h1 style="color: #fff;" class="str">Usa el codigo {{code}} o escanea el qr para unirte</h1>
+    <div *ngIf="qrValue">
+        <qrcode [qrdata]="qrValue" [width]="120" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
     <div class="bg-r str btn but skew" (click)="back()">Cancelar</div>
 </div>

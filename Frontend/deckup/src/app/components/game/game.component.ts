@@ -239,7 +239,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
-        //this.renderStatusEffects()
+        this.renderStatusEffects()
         this.checkStatus()
       }, 200);
     }
@@ -390,7 +390,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     ParticleComponent.animejs_explosion(rect.width / 2 + rect.left, rect.height + rect.top, color);
   }
 
-  renderStatusEffects() {
+  renderStatusEffects() { // fix this
     for (let player = 1; player <= 2; player++) {
       for (let line = 1; line <= 5; line++) {
         let key = `l${player}_${line}`;

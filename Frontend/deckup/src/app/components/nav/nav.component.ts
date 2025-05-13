@@ -414,6 +414,9 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         if (this.router.url == "/register"){
           return true
         }
+        if (this.router.url == "/game"){
+          return true
+        }
         if (this.router.url == "/"){
           return true
         }
