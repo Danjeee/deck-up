@@ -28,7 +28,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
   mana: any
   haschanged: boolean = false;
 
-  constructor(private alert: AlertService, private router: Router, private service: GameService, private translator: Localizer ) {
+  constructor(private alert: AlertService, private router: Router, private service: GameService, private translator: Localizer) {
     super()
   }
 
@@ -125,29 +125,29 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
     this.gameStatus = null
     this.translator.set({
       vida: "Vida",
-       stun: "Aturdido",
-       stun_name: "Tipo de aturdimiento",
-       burn: "Quemado",
-       poisn: "Envenenado",
-       bleed: "Sangrado",
-       prcnt_up: "Mejora de daño",
-       prcnt_dwn: "Debilidad", 
+      stun: "Aturdido",
+      stun_name: "Tipo de aturdimiento",
+      burn: "Quemado",
+      poisn: "Envenenado",
+      bleed: "Sangrado",
+      prcnt_up: "Mejora de daño",
+      prcnt_dwn: "Debilidad",
 
-       hab_freeze: "Aturdimiento",
-       hab_freeze_name: "Tipo de aturdimiento",
-       hab_burn: "Quemado",
-       hab_heal: "Curación",
-       hab_poisn: "Envenenado",
-       hab_bleed: "Sangrado",
-       hab_prcnt_up: "Mejora de daño",
-       hab_prcnt: "Daño de porcentaje",
-       hab_prcnt_dwn: "Debilidad", 
-       hab_crit: "Porcentaje de critico",
-       hab_critMult: "Mejora de daño critico",
-       hab_leth: "Letalidad",
-       hab_esq: "Porcentaje de evasión",
-       hab_load_atq: "wip",
-       hab_dmg: "Daño"
+      hab_freeze: "Aturdimiento",
+      hab_freeze_name: "Tipo de aturdimiento",
+      hab_burn: "Quemado",
+      hab_heal: "Curación",
+      hab_poisn: "Envenenado",
+      hab_bleed: "Sangrado",
+      hab_prcnt_up: "Mejora de daño",
+      hab_prcnt: "Daño de porcentaje",
+      hab_prcnt_dwn: "Debilidad",
+      hab_crit: "Porcentaje de critico",
+      hab_critMult: "Mejora de daño critico",
+      hab_leth: "Letalidad",
+      hab_esq: "Porcentaje de evasión",
+      hab_load_atq: "wip",
+      hab_dmg: "Daño"
     })
     if (sessionStorage.getItem("game") == null || sessionStorage.getItem("game") == "") {
       this.router.navigate(["/home"])
@@ -171,10 +171,10 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           if (this.gameStatus[key].vida > 0) {
             if (this.gameStatus[key].carta.habilidadDTO.especial != null) {
               let com
-              if (key.charAt(1) == 1){
-                com = "l2_" + key.charAt(key.length-1)
+              if (key.charAt(1) == 1) {
+                com = "l2_" + key.charAt(key.length - 1)
               } else {
-                com = "l1_" + key.charAt(key.length-1)
+                com = "l1_" + key.charAt(key.length - 1)
               }
               this.gameStatus.command = [com]
               this.renderDieEffects(this.gameStatus[key].carta.habilidadDTO.especial, this.gameStatus)
@@ -239,8 +239,9 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           this.animatespells_all(document.querySelectorAll('.spell_all'), this.mana)
           this.animatespells_self(document.querySelectorAll('.self_spell'), this.mana)
         }
-        this.renderStatusEffects()
-        this.checkStatus()
+          this.checkStatus()
+          // this.renderStatusEffects()
+        
       }, 200);
     }
     return new Promise((resolve) => {
@@ -979,7 +980,7 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
         let p = ""
         if (key.includes("prcnt")) { p = "%" }
         if (key.includes("crit")) { p = "%" }
-        attr.innerHTML = this.translator.get("hab_"+key) + ": " + habilidad[key] + p
+        attr.innerHTML = this.translator.get("hab_" + key) + ": " + habilidad[key] + p
         modal.appendChild(attr)
       }
     })
@@ -1052,18 +1053,32 @@ export class GameComponent extends environmentsURLs implements AfterViewInit, On
           if (this.gameStatus[key].bleed == null || this.gameStatus[key].bleed == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('bleed');
             count++;
+          } else {
+            (document.getElementById(key) as HTMLElement).classList.add('status');
+            (document.getElementById(key) as HTMLElement).classList.add('bleed');
           }
           if (this.gameStatus[key].poisn == null || this.gameStatus[key].poisn == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('poisn');
             count++
+          } else {
+            (document.getElementById(key) as HTMLElement).classList.add('status');
+            (document.getElementById(key) as HTMLElement).classList.add('poisn');
           }
           if (this.gameStatus[key].burn == null || this.gameStatus[key].burn == 0) {
             (document.getElementById(key) as HTMLElement).classList.remove('burn');
             count++
+          } else {
+            (document.getElementById(key) as HTMLElement).classList.add('status');
+            (document.getElementById(key) as HTMLElement).classList.add('burn');
           }
           if (this.gameStatus[key].stun == null) {
+            (document.getElementById(key) as HTMLElement).classList.remove('frozen');
             count++
+          } else {
+            (document.getElementById(key) as HTMLElement).classList.add('status');
+            (document.getElementById(key) as HTMLElement).classList.add('frozen');
           }
+          console.log(document.getElementById(key) as HTMLElement)
           if (count == 4) {
             (document.getElementById(key) as HTMLElement).classList.remove('status');
           }

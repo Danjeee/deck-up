@@ -396,7 +396,7 @@
     width: 100%;
     background-size: cover;
     background-position: center;
-    transform: translateY(-20%);
+    transform: translateY(0);
     height: 100%;
     opacity: 0.4;
     pointer-events: none;
@@ -406,22 +406,22 @@
 }
 
 .frozen::after {
-    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/frozen.webp");
+    background-image: url("https://deckup.tecnobyte.com:444/Resources/img/misc/frozen.webp");
     /*background-image: url("http://localhost/Resources/img/misc/frozen.png");*/
 }
 
 .bleed::after {
-    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/bleeding.gif");
+    background-image: url("https://deckup.tecnobyte.com:444/Resources/img/misc/bleeding.gif");
     /*background-image: url("http://localhost/Resources/img/misc/bleeding.gif");*/
 }
 
 .poisn::after {
-    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/poisn.gif");
+    background-image: url("https://deckup.tecnobyte.com:444/Resources/img/misc/poisn.gif");
     /*background-image: url("http://localhost/Resources/img/misc/poisn.gif");*/
 }
 
 .burn::after {
-    background-image: url("http://deckup.tecnobyte.com:444/Resources/img/misc/fire.gif");
+    background-image: url("https://deckup.tecnobyte.com:444/Resources/img/misc/fire.gif");
     /*background-image: url("http://localhost/Resources/img/misc/fire.gif");*/
 }
 

@@ -13,6 +13,7 @@ import SockJS from 'sockjs-client';
 export class TradeService extends environmentsURLs {
   websocketURL = `${this.apiURL}/ws`;
   tradeURL = `${this.apiURL}/trades`;
+  cardURL = `${this.apiURL}/cards`;
 
   private stompClient: any;
   private isConnected = false;
@@ -36,6 +37,22 @@ export class TradeService extends environmentsURLs {
     data.append("user_auth", UserSession.getUser().auth)
     data.append("user_id", sessionStorage.getItem("trade") as string)
     return this.http.post(`${this.tradeURL}/leave`,data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  getTrade(id: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.tradeURL}/${id}`,data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  findAllPlayerCards(): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.cardURL}/getByPlayer`, data).pipe(
       catchError(err => {throw err})
     )
   }

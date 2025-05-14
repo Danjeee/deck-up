@@ -1,1 +1,45 @@
-<p>traderoom works!</p>
+<div class="exchange-container" style="display: flex; width: 100vw; height: 100vh; font-family: sans-serif;" *ngIf="loaded">
+  <!-- Tu lado -->
+  <div class="your-side" style="width: 50%; padding: 20px; border-right: 2px solid #ccc;">
+    <div class="profile" style="display: flex; align-items: center; margin-bottom: 20px;">
+      <img src="" alt="Tu perfil" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+      <h2>Tu Nombre</h2>
+    </div>
+
+    <div class="available-section" style="margin-bottom: 20px;">
+      <h3>Cartas Disponibles</h3>
+      <div id="your-cards" class="btn bg-p">
+        <div class="but" *ngFor="let card of yourcards">
+            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="money-section" style="margin-bottom: 20px;">
+      <h3>Tu Dinero: <span id="your-money">500</span></h3>
+    </div>
+
+    <div class="added-items-section">
+      <h3>Tu Oferta</h3>
+      <div id="your-added-cards">
+      </div>
+    </div>
+  </div>
+  <!---->
+  <div class="other-side" style="width: 50%; padding: 20px;">
+    <div class="profile" style="display: flex; align-items: center; margin-bottom: 20px;">
+      <img src="" alt="Perfil del otro jugador" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+      <h2>Nombre del Otro</h2>
+    </div>
+
+    <div class="added-by-other">
+      <h3>Ha Añadido</h3>
+      <p>Dinero: <span id="other-added-money">150</span></p>
+      <ul id="other-added-cards">
+        <li>Carta X (x1)</li>
+        <li>Carta Y (x3)</li>
+      </ul>
+    </div>
+  </div>
+</div>

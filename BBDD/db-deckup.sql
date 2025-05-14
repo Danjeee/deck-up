@@ -507,8 +507,6 @@ CREATE TABLE `deckup`.`player_status` (
   `status` VARCHAR(20) NOT NULL,
   `player1` BIGINT NOT NULL,
   `player2` BIGINT NULL,
-  `player1_cards` VARCHAR(255) NULL,
-  `player2_cards` VARCHAR(255) NULL,
   `player1_currency` INT NULL DEFAULT 0,
   `player2_currency` INT NULL DEFAULT 0,
   `p1c` TINYINT NULL,
@@ -526,6 +524,30 @@ CREATE TABLE `deckup`.`player_status` (
     REFERENCES `deckup`.`usuarios` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+    
+    CREATE TABLE `deckup`.`trades_cartas` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `id_jugador` BIGINT NOT NULL,
+  `id_trade` BIGINT NOT NULL,
+  `id_carta` INT NOT NULL,
+  `cant` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_cartas_tra1_idx` (`id_carta` ASC) VISIBLE,
+  CONSTRAINT `fk_jugadores_tra`
+    FOREIGN KEY (`id_jugador`)
+    REFERENCES `deckup`.`usuarios` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_cartas_tra`
+    FOREIGN KEY (`id_carta`)
+    REFERENCES `deckup`.`cartas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+CONSTRAINT `fk_trade_tra`
+    FOREIGN KEY (`id_trade`)
+    REFERENCES `deckup`.`trades` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
     
     
@@ -625,7 +647,6 @@ INSERT INTO jugadores_cartas(id_jugador, id_carta, cant) VALUES
 (1,11,1),
 (1,12,1),
 (1,13,1),
-(1,14,1),
 (1,14,1),
 (1,15,1),
 (1,16,1),
