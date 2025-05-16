@@ -15,6 +15,10 @@ public class UserAction {
 	
 	private Integer artifact_id;
 	
+	private Long artifact_long;
+	
+	private Integer artifact_aux;
+	
 	private Long user_id;
 	
 	private String code;

@@ -41,14 +41,14 @@ public class NotificacionWSC {
 	                game.getContenido());
 	}
 	
-	public void tradeStatusChange(TradeDTO trade, Long id) {
+	public void tradeStatusChange(TradeDTO trade) {
 		 messagingTemplate.convertAndSend(
-	                "/game/" + id,
+	                "/trade/" + trade.getId(),
 	                trade);
 	}
 	public void tradeStatusChange(String trade, Long id) {
 		 messagingTemplate.convertAndSend(
-	                "/game/" + id,
+	                "/trade/" + id,
 	                trade);
 	}
 

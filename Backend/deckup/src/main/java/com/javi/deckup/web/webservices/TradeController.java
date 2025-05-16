@@ -1,5 +1,7 @@
 package com.javi.deckup.web.webservices;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,8 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javi.deckup.model.dto.PlayerCardsDTO;
+import com.javi.deckup.model.dto.TradeCardsDTO;
 import com.javi.deckup.model.dto.TradeDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
+import com.javi.deckup.service.PlayerCardsService;
 import com.javi.deckup.service.TradeService;
 import com.javi.deckup.service.UsuarioService;
 import com.javi.deckup.utils.CodeGenerator;
@@ -24,6 +29,9 @@ public class TradeController {
 	
 	@Autowired
 	UsuarioService us;
+	
+	@Autowired
+	PlayerCardsService ps;
 	
 	
 	@PostMapping("/{id}")
@@ -42,6 +50,40 @@ public class TradeController {
 		if (trade.getPlayer1().getId() != user.getId() && trade.getPlayer2().getId() != user.getId()) {
 			return null;
 		}
+		System.out.println(trade);
+		return trade;
+	}
+	@PostMapping("/add")
+	public TradeDTO add(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		}
+		TradeDTO trade = ts.findById(data.getArtifact_long());
+		if (trade == null) {
+			return null;
+		}
+		PlayerCardsDTO pc = ps.findByCard(data.getArtifact_aux(), user.getId());
+		if (pc == null) {
+			return null;
+		}
+		if (pc.getCant() < data.getArtifact_id()) {
+			return null;
+		}
+		TradeCardsDTO tc = ts.findCardByTradeAndPlayerAndCard(trade,user,pc.getCarta());
+		if (tc == null) {
+			 tc = TradeCardsDTO.builder().cant(data.getArtifact_id()).carta(pc.getCarta()).trade(trade).usuario(user).build();
+		} else {
+			tc.setCant(tc.getCant() + data.getArtifact_id());
+		}
+		ts.save(tc);
+		List<TradeCardsDTO> allcards = ts.getAllCards(trade);
+		trade.setCartas(allcards);
+		if (user.getId() == trade.getPlayer1().getId()) {
+			ts.sendWsTo(trade, 2);
+		} else {
+;			ts.sendWsTo(trade, 1);
+		}
 		return trade;
 	}
 	@PostMapping("/new")
@@ -51,7 +93,7 @@ public class TradeController {
 			return Response.error("Ha habido un error en tu sesión, intentalo más tarde");
 		}
 		String code = CodeGenerator.generateNewCode(8);
-		TradeDTO trade = TradeDTO.builder().player1(user).code(code).status("activo").build();
+		TradeDTO trade = TradeDTO.builder().player1(user).code(code).status("waiting").build();
 		trade = ts.save(trade);
 		return Response.success(trade.getId() + "/" + trade.getCode());
 	}
@@ -79,9 +121,10 @@ public class TradeController {
 		if (trade == null) {
 			return Response.error("Esta sala de intercambio no existe");
 		}
-		if (!trade.getStatus().equals("activo")) {
+		if (!trade.getStatus().equals("waiting")) {
 			return Response.error("Este intercambio ya ha finalizado");
 		}
+		trade.setStatus("activo");
 		trade.setPlayer2(user);
 		trade = ts.save(trade, "joined");
 		return Response.success(trade.getId() + "/" + trade.getCode());

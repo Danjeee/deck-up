@@ -54,4 +54,10 @@ public class PlayerCardsServiceImpl implements PlayerCardsService{
 		}
 	}
 
+	@Override
+	public PlayerCardsDTO findByCard(Integer artifact_aux, Long idPlayer) {
+		PlayerCards pc = pr.findByCard(artifact_aux, idPlayer).orElse(null);
+		return pc == null ? null : PlayerCardsDTO.convertToDTO(pc);
+	}
+
 }

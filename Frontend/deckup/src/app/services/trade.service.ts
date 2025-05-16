@@ -31,6 +31,16 @@ export class TradeService extends environmentsURLs {
       catchError(err => {throw err})
     )
   }
+  add(id: any, cant: any, trade: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("artifact_aux", id)
+    data.append("artifact_id", cant)
+    data.append("artifact_long", trade)
+    return this.http.post(`${this.tradeURL}/add`,data).pipe(
+      catchError(err => {throw err})
+    )
+  }
 
   cancel(): Observable<any>{
     const data: FormData = new FormData()
@@ -93,7 +103,7 @@ export class TradeService extends environmentsURLs {
       this.stompClient.connect({}, () => {
         this.isConnected = true;
         console.log('WebSocket conectado');
-        this.stompClient.subscribe(`/game/${tradeId}`, (message: any) => {
+        this.stompClient.subscribe(`/trade/${tradeId}`, (message: any) => {
           this.status.next(message.body);
         });
       }, (error: any) => {

@@ -14,9 +14,12 @@ import jakarta.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface TradeRepository extends JpaRepository<Trade, Long>{
+public interface TradeCardsRepository extends JpaRepository<TradeCards, Long>{
 
-	@Query(value = "SELECT * FROM trades WHERE code = ?1 AND status = 'waiting'", nativeQuery = true)
-	Optional<Trade> findByCode(String code);
-	
+	@Query(value = "SELECT * FROM trades_cartas WHERE id_trade = ?1", nativeQuery = true)
+	List<TradeCards> getAllCards(Long id);
+
+	@Query(value = "SELECT * FROM trades_cartas WHERE id_trade = ?1 AND id_jugador = ?2 AND id_carta = ?3", nativeQuery = true)
+	Optional<TradeCards> findCardByTradeAndPlayerAndCard(Long id, Long id2, Integer id3);
+
 }

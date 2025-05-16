@@ -54,3 +54,21 @@ export function css(target: HTMLElement | NodeListOf<HTMLElement>, options: any)
         });
     }
 }
+
+/**
+ * 
+ * @param item 
+ * @returns true if not empty
+ */
+export function va(item: any){
+    if (item == null){
+        return false
+    }
+    if (item == undefined){
+        return false
+    }
+    if ((item+"").replace(" ", "") == ""){
+        return false
+    }
+    return true
+}

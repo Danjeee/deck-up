@@ -2,6 +2,7 @@ package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.javi.deckup.repository.entity.Carta;
 import com.javi.deckup.repository.entity.Trade;
 import com.javi.deckup.repository.entity.TradeCards;
@@ -27,6 +28,7 @@ public class TradeCardsDTO implements Serializable {
 	
 	private CartaDTO carta;
 	
+	@JsonBackReference
 	private TradeDTO trade;
 	
 	public static TradeCardsDTO convertToDTO(TradeCards input) {

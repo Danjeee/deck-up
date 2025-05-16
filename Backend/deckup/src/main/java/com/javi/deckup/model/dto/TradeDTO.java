@@ -1,5 +1,6 @@
 package com.javi.deckup.model.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,9 @@ private Long id;
 	private Boolean p2c;
 	
 	public static TradeDTO convertToDTO(Trade input) {
-		List<TradeCardsDTO> cartas = null;
+		List<TradeCardsDTO> cartas = new ArrayList<>();
 		if (input.getCartas() != null) {
-			input.getCartas().stream().map(c -> TradeCardsDTO.convertToDTO(c)).collect(Collectors.toList());
+			cartas = input.getCartas().stream().map(c -> TradeCardsDTO.convertToDTO(c)).collect(Collectors.toList());
 		}
 		return TradeDTO.builder()
 					   .id(input.getId())
@@ -58,7 +59,7 @@ private Long id;
 		}
 		List<TradeCards> cartas = null;
 		if (input.getCartas() != null) {
-			input.getCartas().stream().map(c -> TradeCardsDTO.convertToEntity(c)).collect(Collectors.toList());
+			cartas = input.getCartas().stream().map(c -> TradeCardsDTO.convertToEntity(c)).collect(Collectors.toList());
 		}
 		return Trade.builder()
 					   .id(input.getId())

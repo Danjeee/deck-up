@@ -11,5 +11,7 @@ public interface PlayerCardsService {
 	List<PlayerCardsDTO> getAllByUser(Long id);
 
 	void giveCard(UsuarioDTO user, CartaDTO carta, Integer cant);
+
+	PlayerCardsDTO findByCard(Integer artifact_aux, Long idUser);
 	
 }

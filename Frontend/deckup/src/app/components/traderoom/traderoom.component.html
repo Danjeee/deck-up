@@ -9,7 +9,7 @@
     <div class="available-section" style="margin-bottom: 20px;">
       <h3>Cartas Disponibles</h3>
       <div id="your-cards" class="btn bg-p">
-        <div class="but" *ngFor="let card of yourcards">
+        <div class="but" *ngFor="let card of yourcards" (click)="ofrecer(card)">
             <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
             <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>
@@ -22,7 +22,11 @@
 
     <div class="added-items-section">
       <h3>Tu Oferta</h3>
-      <div id="your-added-cards">
+      <div id="your-added-cards" class="btn bg-p" *ngIf="youroffer != null">
+        <div class="but" *ngFor="let card of youroffer">
+            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+        </div>
       </div>
     </div>
   </div>
@@ -35,11 +39,13 @@
 
     <div class="added-by-other">
       <h3>Ha Añadido</h3>
+      <div id="other-added-cards" class="btn bg-p">
+        <div class="but" *ngFor="let card of otheroffer">
+            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+        </div>
+      </div>
       <p>Dinero: <span id="other-added-money">150</span></p>
-      <ul id="other-added-cards">
-        <li>Carta X (x1)</li>
-        <li>Carta Y (x3)</li>
-      </ul>
     </div>
   </div>
 </div>
