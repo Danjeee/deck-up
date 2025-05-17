@@ -1,6 +1,7 @@
 package com.javi.deckup.model.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.javi.deckup.repository.entity.Carta;
@@ -66,4 +67,23 @@ public class TradeCardsDTO implements Serializable {
 							  .trade(trade)							  
 							  .build();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TradeCardsDTO other = (TradeCardsDTO) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	
+	
 }

@@ -23,7 +23,7 @@
     <div class="added-items-section">
       <h3>Tu Oferta</h3>
       <div id="your-added-cards" class="btn bg-p" *ngIf="youroffer != null">
-        <div class="but" *ngFor="let card of youroffer">
+        <div class="but" *ngFor="let card of youroffer" (click)="remove(card)">
             <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
             <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>

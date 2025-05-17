@@ -19,10 +19,14 @@ public interface TradeService {
 
 	TradeCardsDTO save(TradeCardsDTO tc);
 
-	void sendWsTo(TradeDTO trade, int i);
+	void sendWsTo(TradeDTO trade);
 
 	List<TradeCardsDTO> getAllCards(TradeDTO trade);
 
 	TradeCardsDTO findCardByTradeAndPlayerAndCard(TradeDTO trade, UsuarioDTO user, CartaDTO carta);
+
+	TradeCardsDTO findTCByCard(Long user_id);
+
+	void removeTC(TradeCardsDTO pc);
 
 }

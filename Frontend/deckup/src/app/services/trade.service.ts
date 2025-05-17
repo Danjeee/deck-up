@@ -42,6 +42,16 @@ export class TradeService extends environmentsURLs {
     )
   }
 
+  remove(id: any, trade: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("user_id", id)
+    data.append("artifact_long", trade)
+    return this.http.post(`${this.tradeURL}/remove`,data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   cancel(): Observable<any>{
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)

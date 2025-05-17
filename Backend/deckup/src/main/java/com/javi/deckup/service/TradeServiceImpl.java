@@ -57,12 +57,8 @@ public class TradeServiceImpl implements TradeService{
 	}
 
 	@Override
-	public void sendWsTo(TradeDTO trade, int i) {
-		if (i == 1) {
-			ws.tradeStatusChange(trade);		
-		} else {
-			ws.tradeStatusChange(trade);
-		}
+	public void sendWsTo(TradeDTO trade) {
+		ws.tradeStatusChange(trade);
 	}
 
 	@Override
@@ -74,5 +70,16 @@ public class TradeServiceImpl implements TradeService{
 	public TradeCardsDTO findCardByTradeAndPlayerAndCard(TradeDTO trade, UsuarioDTO user, CartaDTO carta) {
 		TradeCards tc = tcr.findCardByTradeAndPlayerAndCard(trade.getId(), user.getId(), carta.getId()).orElse(null);
 		return tc == null ? null : TradeCardsDTO.convertToDTO(tc);
+	}
+
+	@Override
+	public TradeCardsDTO findTCByCard(Long user_id) {
+		TradeCards tc = tcr.findById(user_id).orElse(null);
+		return tc == null ? null : TradeCardsDTO.convertToDTO(tc);
+	}
+
+	@Override
+	public void removeTC(TradeCardsDTO pc) {
+		tcr.deleteTC(pc.getId());
 	}
 }

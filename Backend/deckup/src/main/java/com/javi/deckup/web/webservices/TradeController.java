@@ -76,14 +76,43 @@ public class TradeController {
 		} else {
 			tc.setCant(tc.getCant() + data.getArtifact_id());
 		}
-		ts.save(tc);
+
+		List<TradeCardsDTO> allcards = ts.getAllCards(trade);
+		TradeCardsDTO tcaux = ts.save(tc);
+		tc.setId(tcaux.getId());
+		if (allcards.contains(tc)) {
+			allcards.set(allcards.indexOf(tc), tc);
+		} else {
+			allcards.add(tc);
+		}
+		trade.setCartas(allcards);
+		ts.sendWsTo(trade);
+		return trade;
+	}
+	
+	@PostMapping("/remove")
+	public TradeDTO remove(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		}
+		TradeDTO trade = ts.findById(data.getArtifact_long());
+		if (trade == null) {
+			return null;
+		}
+		TradeCardsDTO pc = ts.findTCByCard(data.getUser_id());
+		if (pc == null) {
+			return null;
+		} else {
+			ts.removeTC(pc);
+		}
+
 		List<TradeCardsDTO> allcards = ts.getAllCards(trade);
 		trade.setCartas(allcards);
-		if (user.getId() == trade.getPlayer1().getId()) {
-			ts.sendWsTo(trade, 2);
-		} else {
-;			ts.sendWsTo(trade, 1);
+		if (allcards.contains(pc)) {
+			allcards.remove(pc);
 		}
+		ts.sendWsTo(trade);
 		return trade;
 	}
 	@PostMapping("/new")
