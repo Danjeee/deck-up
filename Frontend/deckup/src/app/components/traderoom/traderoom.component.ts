@@ -56,6 +56,31 @@ export class TraderoomComponent extends environmentsURLs {
     })
   }
 
+  addCurrency(){
+    Swal.fire({
+        icon: "question",
+        title: "Oferta",
+        text: "¿Cuantas gemas quieres ofrecer?",
+        input: "number",
+        inputAttributes: {
+          min: '0',
+          max: this.you.currency,
+          step: '1'
+        },
+        customClass: {
+          popup: "swal-drk btn skew",
+          title: "swal-drk",
+          confirmButton: "btn but str swal-btn"
+        }
+      }).then((res) => {
+        if (!res.isDismissed) {
+          if (va(res.value)) {
+            
+          }
+        }
+      })
+    }
+
   ofrecer(card: any) {
     if (card.cant == 1) {
       this.service.add(card.carta.id, 1, this.trade.id).subscribe({
@@ -152,6 +177,7 @@ export class TraderoomComponent extends environmentsURLs {
   }
 
   ngOnInit(): void {
+    this.you = UserSession.getUser()
     this.joinlistener(sessionStorage.getItem("trade"))
     this.service.getTrade(sessionStorage.getItem("trade")).subscribe({
       next: (data) => {
