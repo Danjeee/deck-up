@@ -149,6 +149,8 @@ public class TradeController {
 			Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		trade.setStatus("finished");
+
+		ts.save(trade);
 		for (TradeCardsDTO tc : trade.getCartas()) {
 			if (tc.getUsuario().getId() == trade.getPlayer1().getId()) {
 				ps.giveCard(trade.getPlayer2(), tc.getCarta(), tc.getCant());
@@ -162,10 +164,10 @@ public class TradeController {
 			trade.setP1curr(0);
 		}
 		if (trade.getP2curr() == null) {
-			trade.setP2curr(0);	
+			trade.setP2curr(0);
 		}
-		ts.save(trade, "finish");
 		us.trademoney(trade.getPlayer1(),trade.getPlayer2(), trade.getP1curr(), trade.getP2curr());
+		ts.sendWsTo(trade, "finish");
 		return Response.success("donete");
 	}
 	
