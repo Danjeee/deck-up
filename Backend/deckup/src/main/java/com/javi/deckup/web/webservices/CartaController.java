@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,12 @@ public class CartaController {
 	@PostMapping("/getByPlayer")
 	public List<PlayerCardsDTO> getByPlayer(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		return ps.getAllByUser(user.getId());
+	}
+	
+	@GetMapping("/getOf/{id}")
+	public List<PlayerCardsDTO> getOf(@PathVariable("id") Long id) {
+		UsuarioDTO user = us.findById(id);
 		return ps.getAllByUser(user.getId());
 	}
 	

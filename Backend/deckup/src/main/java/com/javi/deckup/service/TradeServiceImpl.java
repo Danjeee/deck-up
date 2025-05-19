@@ -82,4 +82,9 @@ public class TradeServiceImpl implements TradeService{
 	public void removeTC(TradeCardsDTO pc) {
 		tcr.deleteTC(pc.getId());
 	}
+
+	@Override
+	public void save(TradeDTO trade, boolean b) {
+		ws.tradeStatusChange(TradeDTO.convertToDTO(tr.save(TradeDTO.convertToEntity(trade))));
+	}
 }

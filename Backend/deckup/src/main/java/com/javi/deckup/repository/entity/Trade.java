@@ -46,9 +46,9 @@ public class Trade {
 	private List<TradeCards> cartas;
 	
 	@Column(name = "player1_currency")
-	private String p1curr;
+	private Integer p1curr;
 	@Column(name = "player2_currency")
-	private String p2curr;
+	private Integer p2curr;
 	
 	private Boolean p1c;
 	private Boolean p2c;

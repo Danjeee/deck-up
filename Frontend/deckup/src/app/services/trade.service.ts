@@ -42,6 +42,16 @@ export class TradeService extends environmentsURLs {
     )
   }
 
+  addcurr(cant: any, trade: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("artifact_id", cant)
+    data.append("artifact_long", trade)
+    return this.http.post(`${this.tradeURL}/addgems`,data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   remove(id: any, trade: any): Observable<any>{
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
@@ -73,6 +83,12 @@ export class TradeService extends environmentsURLs {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     return this.http.post(`${this.cardURL}/getByPlayer`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  findAllOtherPlayerCards(id: any): Observable<any>{
+    return this.http.get(`${this.cardURL}/getOf/${id}`).pipe(
       catchError(err => {throw err})
     )
   }

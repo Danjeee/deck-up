@@ -28,8 +28,8 @@ private Long id;
 	
 	private List<TradeCardsDTO> cartas;
 	
-	private String p1curr;
-	private String p2curr;
+	private Integer p1curr;
+	private Integer p2curr;
 	
 	private Boolean p1c;
 	private Boolean p2c;

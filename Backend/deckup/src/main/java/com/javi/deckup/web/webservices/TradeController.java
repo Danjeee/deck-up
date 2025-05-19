@@ -90,6 +90,28 @@ public class TradeController {
 		return trade;
 	}
 	
+	@PostMapping("/addgems")
+	public TradeDTO addGems(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		}
+		TradeDTO trade = ts.findById(data.getArtifact_long());
+		if (trade == null) {
+			return null;
+		}
+		if (user.getCurrency() < data.getArtifact_id()) {
+			return null;
+		}
+		if (trade.getPlayer1().getId() == user.getId()) {
+			trade.setP1curr(data.getArtifact_id());
+		} else {
+			trade.setP2curr(data.getArtifact_id());
+		}
+		ts.save(trade ,true);
+		return trade;
+	}
+	
 	@PostMapping("/remove")
 	public TradeDTO remove(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());

@@ -21,10 +21,14 @@ export class TraderoomComponent extends environmentsURLs {
 
   trade: any
 
+  mycurr: any = 0
+
   yourcards: any[] = []
   allyourcards: any[] = []
   youroffer: any[] = []
   otheroffer: any[] = []
+  othercards: any[] = []
+  allothercards: any[] = []
 
   constructor(private service: TradeService, private router: Router, private alert: AlertService) {
     super()
@@ -37,8 +41,20 @@ export class TraderoomComponent extends environmentsURLs {
           this.service.disconnect()
           this.router.navigate([`trade`])
         } else {
-          status = JSON.parse(status)
-          this.loadOther(status)
+          if (JSON.parse(status).id != null) {
+            status = JSON.parse(status)
+            if (status.player1.id == UserSession.getId()) {
+              this.mycurr = status.p1curr
+            } else {
+              this.mycurr = status.p2curr
+            }
+            if (this.mycurr == null) {
+              this.mycurr = 0
+            }
+            this.trade.p1curr = status.p1curr
+            this.trade.p2curr = status.p2curr
+            this.loadOther(status)
+          }
         }
       }
     })
@@ -56,30 +72,32 @@ export class TraderoomComponent extends environmentsURLs {
     })
   }
 
-  addCurrency(){
+  addCurrency() {
     Swal.fire({
-        icon: "question",
-        title: "Oferta",
-        text: "¿Cuantas gemas quieres ofrecer?",
-        input: "number",
-        inputAttributes: {
-          min: '0',
-          max: this.you.currency,
-          step: '1'
-        },
-        customClass: {
-          popup: "swal-drk btn skew",
-          title: "swal-drk",
-          confirmButton: "btn but str swal-btn"
+      icon: "question",
+      title: "Oferta",
+      text: "¿Cuantas gemas quieres ofrecer?",
+      input: "number",
+      inputAttributes: {
+        min: '0',
+        max: this.you.currency,
+        step: '1'
+      },
+      customClass: {
+        popup: "swal-drk btn skew",
+        title: "swal-drk",
+        confirmButton: "btn but str swal-btn"
+      }
+    }).then((res) => {
+      if (!res.isDismissed) {
+        if (va(res.value)) {
+          this.service.addcurr(res.value, this.trade.id).subscribe({
+            next: (data) => { }
+          })
         }
-      }).then((res) => {
-        if (!res.isDismissed) {
-          if (va(res.value)) {
-            
-          }
-        }
-      })
-    }
+      }
+    })
+  }
 
   ofrecer(card: any) {
     if (card.cant == 1) {
@@ -138,6 +156,9 @@ export class TraderoomComponent extends environmentsURLs {
     this.youroffer.forEach((card: any) => {
       this.rmv(card)
     })
+    this.otheroffer.forEach((card: any) => {
+      this.rmvother(card)
+    })
   }
 
   rmv(card: any) {
@@ -151,7 +172,20 @@ export class TraderoomComponent extends environmentsURLs {
     })
   }
 
+  rmvother(card: any) {
+    this.othercards.forEach((c: any, i: any) => {
+      if (c.carta.id == card.carta.id) {
+        c.cant -= card.cant
+        if (c.cant <= 0) {
+          this.othercards.splice(i, 1)
+        }
+      }
+    })
+  }
+
   loadOther(trade: any) {
+    this.other()
+    this.othercards = JSON.parse(JSON.stringify(this.allothercards));
     this.otheroffer = []
     if (trade.cartas != null) {
       Array.from(trade.cartas).forEach((pc: any) => {
@@ -189,7 +223,13 @@ export class TraderoomComponent extends environmentsURLs {
               this.allyourcards = resp
               this.yourcards = JSON.parse(JSON.stringify(this.allyourcards));
               this.loadMy(data)
-              this.loaded = true
+              this.service.findAllOtherPlayerCards(this.other().id).subscribe({
+                next: (res) => {
+                  this.allothercards = res
+                  this.othercards = JSON.parse(JSON.stringify(this.allothercards));
+                  this.loaded = true
+                }
+              })
             }
           })
         } else {
@@ -200,7 +240,20 @@ export class TraderoomComponent extends environmentsURLs {
       }
     })
   }
-  other() {
-
+  other(): any {
+    let p
+    let gems
+    if (this.trade.player1.id == this.you.id) {
+      p = this.trade.player2
+      gems = this.trade.p2curr
+    } else {
+      p = this.trade.player1
+      gems = this.trade.p1curr
+    }
+    if (gems == null) {
+      gems = 0
+    }
+    p.gems = gems
+    return p
   }
 }

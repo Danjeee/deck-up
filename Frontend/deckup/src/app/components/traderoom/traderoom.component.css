@@ -32,6 +32,14 @@
     }
 }
 .money-section{
+    position: relative;
     display: flex;
+    flex-direction: row;
     gap: 1em;
+}
+.your-side, .other-side{
+    max-height: 100dvh;
+    overflow-y: auto;
+    
+    scrollbar-color: #5898d8 rgba(0, 0, 0, 0);
 }

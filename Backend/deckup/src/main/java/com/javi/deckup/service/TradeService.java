@@ -29,4 +29,6 @@ public interface TradeService {
 
 	void removeTC(TradeCardsDTO pc);
 
+	void save(TradeDTO trade, boolean b);
+
 }
