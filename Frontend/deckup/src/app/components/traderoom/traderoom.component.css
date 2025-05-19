@@ -1,4 +1,27 @@
-#your-cards, #your-added-cards, #other-added-cards{
+.your-side,
+.other-side {
+    position: relative;
+}
+
+.loadcont {
+    position: fixed;
+    height: 100%;
+    width: 50dvw;
+    top: 0;
+    left: 0;
+}
+.ycard{
+     transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.animar {
+    transform: scale(1.05);
+    filter: brightness(2);
+}
+
+#your-cards,
+#your-added-cards,
+#other-added-cards {
     width: 100%;
     height: 300px;
     overflow-y: auto;
@@ -14,15 +37,18 @@
     gap: 15px;
     margin: 0;
     scrollbar-color: #5898d8 rgba(0, 0, 0, 0);
-    &>div{
+
+    &>div {
         position: relative;
         min-width: 140px;
         width: 10%;
         height: auto;
-        &>img{
+
+        &>img {
             width: 100%;
         }
-        &>h3{
+
+        &>h3 {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -31,15 +57,25 @@
         }
     }
 }
-.money-section{
+
+.money-section {
     position: relative;
     display: flex;
     flex-direction: row;
     gap: 1em;
 }
-.your-side, .other-side{
+
+.your-side,
+.other-side {
     max-height: 100dvh;
     overflow-y: auto;
-    
+
     scrollbar-color: #5898d8 rgba(0, 0, 0, 0);
+}
+
+#acc {
+    position: absolute;
+    right: 1em;
+    padding: 1em;
+    transform: translateY(50%);
 }

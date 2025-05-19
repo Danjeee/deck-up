@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { animate, stagger } from 'animejs';
+import { css } from '../../utils/Utils';
 
 @Component({
   selector: 'app-particle',
@@ -158,25 +159,30 @@ export class ParticleComponent extends environmentsURLs {
     }
   }
 
-  public static popupMsg(msg: string) {
+  public static popupMsg(msg: string, dur: any = 2, big: boolean = false) {
     const cont = document.getElementById("notifications") as HTMLElement
     const notif = document.createElement("div")
     notif.id = "notiff" + this.totalnotif
     this.totalnotif++
-    notif.className = "btn skew bg-p str"
+    notif.className = "btn skew bg-p str popup"
     notif.innerHTML = msg
+    if (big){
+      css(notif,{
+      fontSize: "30px"
+    })
+    }
     cont.appendChild(notif)
     notif.animate([
       { opacity: 1 },
       { opacity: 0 }
     ],
       {
-        duration: 2000,
+        duration: dur*1000,
         easing: 'linear',
       })
     setTimeout(() => {
       cont.removeChild(notif)
-    }, 2001);
+    }, dur*1000 + 1);
   }
 
 

@@ -1,22 +1,40 @@
-<div class="exchange-container" style="display: flex; width: 100vw; height: 100vh; font-family: sans-serif;" *ngIf="loaded">
+<div class="exchange-container" style="display: flex; width: 100vw; height: 100vh; font-family: sans-serif;"
+  *ngIf="loaded">
+  <div style="left: 0;" class="loadcont" *ngIf="youReady()">
+    <div class="loader"></div>
+    <h3 style="color:#fff" class="str">Intercambio aceptado</h3>
+    <h3 style="color: #fff;" class="str">Esperando a {{other().username}}...</h3>
+    <div class="bg-r str btn but skew" *ngIf="!hidebutts" (click)="cancel()">Cancelar</div>
+  </div>
+  <div style="left: 100%; transform: translate(-100%);" class="loadcont" *ngIf="otherReady()">
+    <div class="loader"></div>
+    <h3 style="color:#fff" class="str">Intercambio aceptado</h3>
+    <h3 style="color: #fff;" class="str">Esperando a {{you.username}}...</h3>
+  </div>
   <div class="your-side" style="width: 50%; padding: 20px; border-right: 2px solid #ccc;">
+
+    <div id="acc" class="btn but bg-g str" (click)="accept()">
+      Aceptar intercambio
+    </div>
     <div class="profile" style="display: flex; align-items: center; margin-bottom: 20px;">
-      <img src="{{resURL}}/Resources/img/users/{{you.pfp}}" alt="Tu perfil" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+      <img src="{{resURL}}/Resources/img/users/{{you.pfp}}" alt="Tu perfil"
+        style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
       <h2>{{you.username}}</h2>
     </div>
 
     <div class="available-section" style="margin-bottom: 20px;">
       <h3>Cartas Disponibles</h3>
       <div id="your-cards" class="btn bg-p">
-        <div class="but" *ngFor="let card of yourcards" (click)="ofrecer(card)">
-            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
-            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+        <div *ngFor="let card of yourcards"  class="but ycard" id="{{card.carta.nombre}}" (click)="ofrecer(card)">
+          <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+          <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>
       </div>
     </div>
 
     <div class="money-section btn bg-p" style="margin-bottom: 20px;">
-      <h4 style="position: absolute; left: 0; padding-left: 1em;">Tus gemas: <span id="your-money">{{you.currency}}</span></h4>
+      <h4 style="position: absolute; left: 0; padding-left: 1em;">Tus gemas: <span
+          id="your-money">{{you.currency}}</span></h4>
       <h3>Has añadido: {{mycurr}}</h3>
       <div class="btn but skew bg-g" (click)="addCurrency()">+ Añadir gemas</div>
     </div>
@@ -25,8 +43,8 @@
       <h3>Tu Oferta</h3>
       <div id="your-added-cards" class="btn bg-p" *ngIf="youroffer != null">
         <div class="but" *ngFor="let card of youroffer" (click)="remove(card)">
-            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
-            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+          <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+          <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>
       </div>
     </div>
@@ -34,30 +52,32 @@
   <!---->
   <div class="other-side" style="width: 50%; padding: 20px;">
     <div class="profile" style="display: flex; align-items: center; margin-bottom: 20px;">
-      <img src="{{resURL}}/Resources/img/users/{{other().pfp}}" alt="Perfil del otro jugador" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+      <img src="{{resURL}}/Resources/img/users/{{other().pfp}}" alt="Perfil del otro jugador"
+        style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
       <h2>{{other().username}}</h2>
     </div>
     <div class="available-section" style="margin-bottom: 20px;">
       <h3>Cartas Disponibles</h3>
       <div id="your-cards" class="btn bg-p">
-        <div class="but" *ngFor="let card of othercards">
-            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
-            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+        <div class="but" *ngFor="let card of othercards" (click)="pedircarta(card)">
+          <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+          <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>
       </div>
     </div>
-    
+
     <div class="bg-p btn money-section">
-      <h4 style="position: absolute; left: 0;padding-left: 1em;">Gemas de {{other().username}}: <span id="your-money">{{other().currency}}</span></h4>
+      <h4 style="position: absolute; left: 0;padding-left: 1em;">Gemas de {{other().username}}: <span
+          id="your-money">{{other().currency}}</span></h4>
       <h3>Ha añadido: <span id="other-added-money">{{other().gems}}</span></h3>
-      <div class="btn bg-g skew">Pedir</div>
+      <div class="btn but bg-g skew" (click)="pedirmone()">Pedir</div>
     </div>
     <div class="added-by-other">
       <h3>Ha Añadido</h3>
       <div id="other-added-cards" class="btn bg-p">
         <div class="but" *ngFor="let card of otheroffer">
-            <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
-            <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
+          <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}" alt="">
+          <h3 class="btn bg-t" style="color: black;">{{card.cant}}</h3>
         </div>
       </div>
     </div>

@@ -87,4 +87,9 @@ public class TradeServiceImpl implements TradeService{
 	public void save(TradeDTO trade, boolean b) {
 		ws.tradeStatusChange(TradeDTO.convertToDTO(tr.save(TradeDTO.convertToEntity(trade))));
 	}
+
+	@Override
+	public void sendWsTo(TradeDTO trade, String string) {
+		ws.tradeStatusChange(string, trade.getId());
+	}
 }

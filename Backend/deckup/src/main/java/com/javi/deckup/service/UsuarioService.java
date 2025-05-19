@@ -34,9 +34,15 @@ public interface UsuarioService {
 	void recive(UsuarioDTO user, CartaDTO i);
 
 	void buy(UsuarioDTO user, Integer precio);
+
+	void rmvmoney(UsuarioDTO user, Integer precio);
 	
 	String findUsername(Long id);
 
+	public void pay(UsuarioDTO user, Integer amount, boolean noreset);
+	
 	void changePFP(Long id, String code);
+
+	void trademoney(UsuarioDTO player1, UsuarioDTO player2, Integer p1curr, Integer p2curr);
 	
 }

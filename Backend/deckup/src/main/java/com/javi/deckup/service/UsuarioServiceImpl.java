@@ -129,6 +129,14 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		user_final.setNextPayment(np);
 		ur.save(user_final);
 	}
+	
+	@Override
+	public void pay(UsuarioDTO user, Integer amount, boolean noreset) {
+		Integer total = (user.getCurrency()+amount);
+		Usuario user_final = ur.findById(user.getId()).orElse(null);
+		user_final.setCurrency(total);
+		ur.save(user_final);
+	}
 
 	@Override
 	public UsuarioDTO findById(Long id, boolean wantPass) {
@@ -210,6 +218,25 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 	@Override
 	public void changePFP(Long id, String code) {
 		ur.changePfp(id, code);
+	}
+
+	@Override
+	public void rmvmoney(UsuarioDTO user, Integer precio) {
+		Usuario userr = ur.findById(user.getId()).orElse(null);
+		userr.setCurrency(userr.getCurrency()-precio);
+		ur.save(userr);
+	}
+
+	@Override
+	public void trademoney(UsuarioDTO player1, UsuarioDTO player2, Integer p1curr, Integer p2curr) {
+		Usuario user1 = ur.findById(player1.getId()).orElse(null);
+		Usuario user2 = ur.findById(player2.getId()).orElse(null);
+		user1.setCurrency(user1.getCurrency() + p2curr);
+		user1.setCurrency(user1.getCurrency() - p1curr);
+		user2.setCurrency(user2.getCurrency() + p1curr);
+		user2.setCurrency(user2.getCurrency() - p2curr);
+		ur.savemoney(user1.getId(), user1.getCurrency());
+		ur.savemoney(user2.getId(), user2.getCurrency());
 	}
 	
 }

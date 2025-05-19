@@ -24,89 +24,134 @@ export class TradeService extends environmentsURLs {
     super()
   }
 
-  create(): Observable<any>{
+  sendFinish(trade: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_id", trade)
+    return this.http.post(`${this.tradeURL}/sfinish`, data).pipe(
+      catchError(err => { throw err })
+    ) 
+  }
+
+  finish(trade: any): Observable<any>{
+    const data: FormData = new FormData()
+    data.append("user_id", trade)
+    return this.http.post(`${this.tradeURL}/finish`, data).pipe(
+      catchError(err => { throw err })
+    ) 
+  }
+
+  create(): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
-    return this.http.post(`${this.tradeURL}/new`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/new`, data).pipe(
+      catchError(err => { throw err })
     )
   }
-  add(id: any, cant: any, trade: any): Observable<any>{
+
+  nope(id: any): Observable<any> {
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("user_id", id)
+    return this.http.post(`${this.tradeURL}/unaccept`, data).pipe(
+      catchError(err => { throw err })
+    )
+  }
+
+  accept(id: any): Observable<any> {
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("user_id", id)
+    return this.http.post(`${this.tradeURL}/accept`, data).pipe(
+      catchError(err => { throw err })
+    )
+  }
+  add(id: any, cant: any, trade: any): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("artifact_aux", id)
     data.append("artifact_id", cant)
     data.append("artifact_long", trade)
-    return this.http.post(`${this.tradeURL}/add`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/add`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-  addcurr(cant: any, trade: any): Observable<any>{
+  addcurr(cant: any, trade: any): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("artifact_id", cant)
     data.append("artifact_long", trade)
-    return this.http.post(`${this.tradeURL}/addgems`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/addgems`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-  remove(id: any, trade: any): Observable<any>{
+  remove(id: any, trade: any): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("user_id", id)
     data.append("artifact_long", trade)
-    return this.http.post(`${this.tradeURL}/remove`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/remove`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-  cancel(): Observable<any>{
+  cancel(): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("user_id", sessionStorage.getItem("trade") as string)
-    return this.http.post(`${this.tradeURL}/leave`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/leave`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-  getTrade(id: any): Observable<any>{
+  getTrade(id: any): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
-    return this.http.post(`${this.tradeURL}/${id}`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/${id}`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-  findAllPlayerCards(): Observable<any>{
+  findAllPlayerCards(): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     return this.http.post(`${this.cardURL}/getByPlayer`, data).pipe(
-      catchError(err => {throw err})
+      catchError(err => { throw err })
     )
   }
 
-  findAllOtherPlayerCards(id: any): Observable<any>{
+  findAllOtherPlayerCards(id: any): Observable<any> {
     return this.http.get(`${this.cardURL}/getOf/${id}`).pipe(
-      catchError(err => {throw err})
+      catchError(err => { throw err })
     )
   }
 
-  join(code: any): Observable<any>{
+  pedir(trade: any,carta: any, gemas: any = 0): Observable<any> {
+    const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("artifact_aux", gemas)
+    data.append("artifact_long", carta.id)
+    data.append("user_id", trade)
+    return this.http.post(`${this.tradeURL}/msg`, data).pipe(
+      catchError(err => { throw err })
+    )
+  }
+
+  join(code: any): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("code", code)
-    return this.http.post(`${this.tradeURL}/join`,data).pipe(
-      catchError(err => {throw err})
+    return this.http.post(`${this.tradeURL}/join`, data).pipe(
+      catchError(err => { throw err })
     )
   }
 
-   private initConnectionSocket(): void {
-      const socket = new SockJS(this.websocketURL);
-      this.stompClient = Stomp.over(socket);
-      this.stompClient.debug = () => {};
-    }
+  private initConnectionSocket(): void {
+    const socket = new SockJS(this.websocketURL);
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.debug = () => { };
+  }
 
   private reconnect(): void {
     console.warn('Intentando reconectar WebSocket...');

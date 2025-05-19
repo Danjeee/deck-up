@@ -31,4 +31,6 @@ public interface TradeService {
 
 	void save(TradeDTO trade, boolean b);
 
+	void sendWsTo(TradeDTO trade, String string);
+
 }

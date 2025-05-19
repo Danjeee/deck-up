@@ -7,6 +7,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 import Swal from 'sweetalert2';
 import { va } from '../../utils/Utils';
 import { UserSession } from '../../utils/UserSession';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-traderoom',
@@ -15,13 +16,14 @@ import { UserSession } from '../../utils/UserSession';
   styleUrl: './traderoom.component.css'
 })
 export class TraderoomComponent extends environmentsURLs {
-
   you: any
   loaded: boolean = false
 
   trade: any
 
   mycurr: any = 0
+
+  hidebutts: boolean = false
 
   yourcards: any[] = []
   allyourcards: any[] = []
@@ -37,11 +39,22 @@ export class TraderoomComponent extends environmentsURLs {
     this.service.joinListener(id)
     this.service.getStatus().subscribe((status: any) => {
       if (status != "") {
+        if (status == "p2c") {
+          this.hidebutts = true
+        }
         if (status == "leave") {
           this.service.disconnect()
           this.router.navigate([`trade`])
+        } else if (status == "finish") {
+          this.service.disconnect()
+          this.alert.success("Intercambio completado", "Ves a colección a ver tus recompensas")
+          this.router.navigate([`trade`])
+        } else if (status == "p2c" && UserSession.getId() == this.trade.player1.id) {
+          this.service.finish(this.trade.id).subscribe({
+            next: (data) => {}
+          })
         } else {
-          if (JSON.parse(status).id != null) {
+          if (this.esJSON(status)) {
             status = JSON.parse(status)
             if (status.player1.id == UserSession.getId()) {
               this.mycurr = status.p1curr
@@ -53,34 +66,65 @@ export class TraderoomComponent extends environmentsURLs {
             }
             this.trade.p1curr = status.p1curr
             this.trade.p2curr = status.p2curr
+            this.trade.p2c = status.p2c
+            this.trade.p1c = status.p1c
             this.loadOther(status)
+            if (status.p1c == true && status.p2c == true && UserSession.getId() == this.trade.player2.id) {
+              setTimeout(() => {
+                if (this.trade.p1c == true && this.trade.p2c == true) {
+                  this.service.sendFinish(this.trade.id).subscribe({
+                    next: (data) => { }
+                  })
+                }
+              }, 2000);
+            }
+          } else {
+            if (status != "p2c") {
+              ParticleComponent.popupMsg(status, 5, true)
+              if ((status + "").split(" ")[0] != UserSession.getUser().username) {
+                this.shine((status + "").split(" ")[2])
+              }
+            }
           }
         }
       }
     })
   }
 
-  remove(card: any) {
-    this.service.remove(card.id, this.trade.id).subscribe({
+  shine(wcard: any) {
+    const elem = document.getElementById(wcard) as HTMLElement
+    if (va(elem)) {
+      elem.classList.add('animar');
+
+      setTimeout(() => {
+        elem.classList.remove('animar');
+      }, 600);
+    }
+  }
+
+  esJSON(str: string) {
+    try {
+      const parsed = JSON.parse(str);
+      return typeof parsed === 'object' && parsed !== null;
+    } catch (e) {
+      return false;
+    }
+  }
+  pedircarta(carta: any) {
+    this.service.pedir(this.trade.id, carta).subscribe({
       next: (data) => {
-        if (data != null) {
-          this.loadMy(data)
-        } else {
-          this.alert.error("Error", "Se ha producido un error al eliminar la carta")
-        }
       }
     })
   }
-
-  addCurrency() {
+  pedirmone() {
     Swal.fire({
       icon: "question",
-      title: "Oferta",
-      text: "¿Cuantas gemas quieres ofrecer?",
+      title: "Pedir",
+      text: "¿Cuantas gemas quieres pedir?",
       input: "number",
       inputAttributes: {
         min: '0',
-        max: this.you.currency,
+        max: this.other().currency,
         step: '1'
       },
       customClass: {
@@ -91,34 +135,88 @@ export class TraderoomComponent extends environmentsURLs {
     }).then((res) => {
       if (!res.isDismissed) {
         if (va(res.value)) {
-          this.service.addcurr(res.value, this.trade.id).subscribe({
-            next: (data) => { }
+          this.service.pedir(this.trade.id, { id: -1 }, res.value).subscribe({
+            next: (data) => {
+            }
           })
+        }
+      }
+    })
+
+  }
+
+  accept() {
+    this.service.accept(this.trade.id).subscribe({
+      next: (data) => {
+        if (data.status != 200) {
+          this.alert.error(data.tit, data.msg)
         }
       }
     })
   }
 
-  ofrecer(card: any) {
-    if (card.cant == 1) {
-      this.service.add(card.carta.id, 1, this.trade.id).subscribe({
+  cancel() {
+    this.service.nope(this.trade.id).subscribe({
+      next: (data) => {
+        if (data.status != 200) {
+          this.alert.error(data.tit, data.msg)
+        }
+      }
+    })
+  }
+
+  youReady() {
+    if (this.trade.player1.id == UserSession.getId()) {
+      if (!va(this.trade.p1c)) {
+        this.trade.p1c = false
+      }
+      return this.trade.p1c;
+    } else {
+      if (!va(this.trade.p2c)) {
+        this.trade.p2c = false
+      }
+      return this.trade.p2c;
+    }
+  }
+
+  otherReady() {
+    if (this.trade.player1.id != UserSession.getId()) {
+      if (!va(this.trade.p1c)) {
+        this.trade.p1c = false
+      }
+      return this.trade.p1c;
+    } else {
+      if (!va(this.trade.p2c)) {
+        this.trade.p2c = false
+      }
+      return this.trade.p2c;
+    }
+  }
+
+  remove(card: any) {
+    if (!this.youReady()) {
+      this.service.remove(card.id, this.trade.id).subscribe({
         next: (data) => {
           if (data != null) {
             this.loadMy(data)
           } else {
-            this.alert.error("Error", "Se ha producido un error al añadir la carta")
+            this.alert.error("Error", "Se ha producido un error al eliminar la carta")
           }
         }
       })
-    } else {
+    }
+  }
+
+  addCurrency() {
+    if (!this.youReady()) {
       Swal.fire({
         icon: "question",
         title: "Oferta",
-        text: "¿Cuantos " + card.carta.nombre + " quieres ofrecer?",
+        text: "¿Cuantas gemas quieres ofrecer?",
         input: "number",
         inputAttributes: {
           min: '0',
-          max: card.cant,
+          max: this.you.currency,
           step: '1'
         },
         customClass: {
@@ -129,18 +227,59 @@ export class TraderoomComponent extends environmentsURLs {
       }).then((res) => {
         if (!res.isDismissed) {
           if (va(res.value)) {
-            this.service.add(card.carta.id, Number(res.value), this.trade.id).subscribe({
-              next: (data) => {
-                if (data != null) {
-                  this.loadMy(data)
-                } else {
-                  this.alert.error("Error", "Se ha producido un error al añadir la carta")
-                }
-              }
+            this.service.addcurr(res.value, this.trade.id).subscribe({
+              next: (data) => { }
             })
           }
         }
       })
+    }
+  }
+
+  ofrecer(card: any) {
+    if (!this.youReady()) {
+      if (card.cant == 1) {
+        this.service.add(card.carta.id, 1, this.trade.id).subscribe({
+          next: (data) => {
+            if (data != null) {
+              this.loadMy(data)
+            } else {
+              this.alert.error("Error", "Se ha producido un error al añadir la carta")
+            }
+          }
+        })
+      } else {
+        Swal.fire({
+          icon: "question",
+          title: "Oferta",
+          text: "¿Cuantos " + card.carta.nombre + " quieres ofrecer?",
+          input: "number",
+          inputAttributes: {
+            min: '0',
+            max: card.cant,
+            step: '1'
+          },
+          customClass: {
+            popup: "swal-drk btn skew",
+            title: "swal-drk",
+            confirmButton: "btn but str swal-btn"
+          }
+        }).then((res) => {
+          if (!res.isDismissed) {
+            if (va(res.value)) {
+              this.service.add(card.carta.id, Number(res.value), this.trade.id).subscribe({
+                next: (data) => {
+                  if (data != null) {
+                    this.loadMy(data)
+                  } else {
+                    this.alert.error("Error", "Se ha producido un error al añadir la carta")
+                  }
+                }
+              })
+            }
+          }
+        })
+      }
     }
   }
 

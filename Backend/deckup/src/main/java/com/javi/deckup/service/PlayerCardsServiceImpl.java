@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.javi.deckup.model.dto.CartaDTO;
 import com.javi.deckup.model.dto.PlayerCardsDTO;
+import com.javi.deckup.model.dto.TradeCardsDTO;
 import com.javi.deckup.model.dto.UsuarioDTO;
 import com.javi.deckup.repository.dao.CartaRepository;
 import com.javi.deckup.repository.dao.PlayerCardsRepository;
@@ -58,6 +59,24 @@ public class PlayerCardsServiceImpl implements PlayerCardsService{
 	public PlayerCardsDTO findByCard(Integer artifact_aux, Long idPlayer) {
 		PlayerCards pc = pr.findByCard(artifact_aux, idPlayer).orElse(null);
 		return pc == null ? null : PlayerCardsDTO.convertToDTO(pc);
+	}
+
+	@Override
+	public PlayerCardsDTO findById(Long artifact_long) {
+		PlayerCards pc = pr.findById(artifact_long).orElse(null);
+		return pc == null ? null : PlayerCardsDTO.convertToDTO(pc);
+	}
+
+	@Override
+	public void rmvCard(UsuarioDTO player1, CartaDTO carta, Integer cant) {
+		for (PlayerCards i : pr.findAllByUser(player1.getId())) {
+			if (i.getCarta().getId() == carta.getId()){
+				i.setCant(i.getCant()-cant);
+				if (i.getCant() <= 0) {
+					pr.delete(i);
+				}
+			}
+		}
 	}
 
 }

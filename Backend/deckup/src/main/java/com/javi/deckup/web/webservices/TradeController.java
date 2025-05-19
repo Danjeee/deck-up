@@ -90,6 +90,104 @@ public class TradeController {
 		return trade;
 	}
 	
+	@PostMapping("/accept")
+	public Response accept(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			Response.error("Ha habido un problema al recuperar la sesión");
+		}
+		TradeDTO trade = ts.findById(data.getUser_id());
+		if (trade == null) {
+			Response.error("Ha habido un problema al recuperar el intercambio");
+		}
+		if (trade.getPlayer1().getId() == user.getId()) {
+			trade.setP1c(true);
+		} else {
+			trade.setP2c(true);
+		}
+		ts.save(trade, true);
+		return Response.success("donete");
+	}
+	
+	@PostMapping("/msg")
+	public Response msg(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			Response.error("Ha habido un problema al recuperar la sesión");
+		}
+		TradeDTO trade = ts.findById(data.getUser_id());
+		if (trade == null) {
+			Response.error("Ha habido un problema al recuperar el intercambio");
+		}
+		PlayerCardsDTO pc = ps.findById(data.getArtifact_long());
+		if (pc == null) {
+			ts.sendWsTo(trade, user.getUsername() + " quiere "+data.getArtifact_aux()+" gemas");
+		} else {
+			ts.sendWsTo(trade, user.getUsername() + " quiere "+pc.getCarta().getNombre());
+		}
+		return Response.success("donete");
+	}
+	
+	@PostMapping("/sfinish")
+	public Response sfinish(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			Response.error("Ha habido un problema al recuperar la sesión");
+		}
+		TradeDTO trade = ts.findById(data.getUser_id());
+		if (trade == null) {
+			Response.error("Ha habido un problema al recuperar el intercambio");
+		}
+		ts.sendWsTo(trade, "p2c");
+		return Response.success("donete");
+	}
+	
+	@PostMapping("/finish")
+	public Response finish(@ModelAttribute UserAction data) {
+		TradeDTO trade = ts.findById(data.getUser_id());
+		if (trade == null) {
+			Response.error("Ha habido un problema al recuperar el intercambio");
+		}
+		trade.setStatus("finished");
+		for (TradeCardsDTO tc : trade.getCartas()) {
+			if (tc.getUsuario().getId() == trade.getPlayer1().getId()) {
+				ps.giveCard(trade.getPlayer2(), tc.getCarta(), tc.getCant());
+				ps.rmvCard(trade.getPlayer1(), tc.getCarta(), tc.getCant());
+			} else {
+				ps.giveCard(trade.getPlayer1(), tc.getCarta(), tc.getCant());
+				ps.rmvCard(trade.getPlayer2(), tc.getCarta(), tc.getCant());
+			}
+		}
+		if (trade.getP1curr() == null) {
+			trade.setP1curr(0);
+		}
+		if (trade.getP2curr() == null) {
+			trade.setP2curr(0);	
+		}
+		ts.save(trade, "finish");
+		us.trademoney(trade.getPlayer1(),trade.getPlayer2(), trade.getP1curr(), trade.getP2curr());
+		return Response.success("donete");
+	}
+	
+	@PostMapping("/unaccept")
+	public Response unaccept(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			Response.error("Ha habido un problema al recuperar la sesión");
+		}
+		TradeDTO trade = ts.findById(data.getUser_id());
+		if (trade == null) {
+			Response.error("Ha habido un problema al recuperar el intercambio");
+		}
+		if (trade.getPlayer1().getId() == user.getId()) {
+			trade.setP1c(false);
+		} else {
+			trade.setP2c(false);
+		}
+		ts.save(trade, true);
+		return Response.success("donete");
+	}
+	
 	@PostMapping("/addgems")
 	public TradeDTO addGems(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());

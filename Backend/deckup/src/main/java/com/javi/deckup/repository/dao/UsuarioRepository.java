@@ -45,4 +45,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query(value = "UPDATE usuarios SET pfp = ?2 WHERE id = ?1", nativeQuery = true)
 	void changePfp(Long id, String code);
 
+	@Modifying
+	@Query(value = "UPDATE usuarios SET currency = ?2 WHERE id = ?1", nativeQuery = true)
+	void savemoney(Long id, Integer currency);
+
 }
