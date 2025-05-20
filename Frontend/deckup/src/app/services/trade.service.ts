@@ -96,10 +96,14 @@ export class TradeService extends environmentsURLs {
     )
   }
 
-  cancel(): Observable<any> {
+  cancel(trade: any = null): Observable<any> {
     const data: FormData = new FormData()
     data.append("user_auth", UserSession.getUser().auth)
     data.append("user_id", sessionStorage.getItem("trade") as string)
+    if (trade != null){
+      data.delete("user_id")
+      data.append("user_id", trade)
+    }
     return this.http.post(`${this.tradeURL}/leave`, data).pipe(
       catchError(err => { throw err })
     )

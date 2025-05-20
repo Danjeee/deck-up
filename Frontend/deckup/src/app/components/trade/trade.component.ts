@@ -29,7 +29,7 @@ export class TradeComponent implements OnInit {
   joinlistener(id: any) {
     this.service.joinListener(id)
     this.service.getStatus().subscribe((status: any) => {
-      if (status != "") {
+      if (status != "" && status != "leave") {
         this.service.disconnect()
         this.router.navigate([`trade/${this.code}`])
       }
@@ -101,7 +101,7 @@ export class TradeComponent implements OnInit {
 
   @HostListener('window:beforeunload', ['$event'])
   instantlose($event: BeforeUnloadEvent) {
-    sessionStorage.removeItem("game")
+    sessionStorage.removeItem("trade")
     this.service.cancel().subscribe({
       next: (data) => {
         console.log(data)

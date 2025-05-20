@@ -51,6 +51,15 @@ public class UserController {
 		us.changePFP(user.getId(), data.getCode());
 		return Response.success("Donete");
 	}
+	@PostMapping("/changeusername")
+	public Response changeusername(@ModelAttribute UserAction data) {
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return Response.error("Error al cargar el usuario");
+		}
+		us.changeUsername(user.getId(), data.getCode());
+		return Response.success("Donete");
+	}
 	
 	@GetMapping("/{id}")
 	public UsuarioDTO getById(@PathVariable("id") Long id) {

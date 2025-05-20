@@ -1,0 +1,36 @@
+#cont{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70dvw;
+    height: 70dvh;
+    display: flex;
+    flex-wrap: wrap;
+    &>div:not(#close){
+        width: 350px;
+        height: 350px;
+        gap: 1em;
+        &>img{
+            width: 50%;
+            height: auto;
+        }
+        &>.btn{
+            font-size: 34px;
+        }
+    }
+}
+#close{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 80%;
+    font-size: 50px;
+}
+#tit{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    font-size: 50px;
+}

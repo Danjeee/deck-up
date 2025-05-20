@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TradeService } from '../../services/trade.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
@@ -44,6 +44,7 @@ export class TraderoomComponent extends environmentsURLs {
         }
         if (status == "leave") {
           this.service.disconnect()
+           this.alert.error("Error", "El otro usuario se ha desconectado")
           this.router.navigate([`trade`])
         } else if (status == "finish") {
           this.service.disconnect()
@@ -144,6 +145,14 @@ export class TraderoomComponent extends environmentsURLs {
     })
 
   }
+
+  @HostListener('window:beforeunload', ['$event'])
+    instantlose($event: BeforeUnloadEvent){
+      sessionStorage.removeItem("trade")
+      this.service.cancel(this.trade.id).subscribe({
+        next: (data) => {}
+      })
+    }
 
   accept() {
     this.service.accept(this.trade.id).subscribe({

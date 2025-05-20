@@ -405,6 +405,9 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }
     })
   }
+  goto(where: string){
+    this.router.navigate([where])
+  }
   bannedRoutes(type: string = "default"){
     switch (type){
       case "default" :

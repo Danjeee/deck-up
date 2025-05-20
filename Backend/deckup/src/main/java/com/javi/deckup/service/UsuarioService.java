@@ -44,5 +44,7 @@ public interface UsuarioService {
 	void changePFP(Long id, String code);
 
 	void trademoney(UsuarioDTO player1, UsuarioDTO player2, Integer p1curr, Integer p2curr);
+
+	void changeUsername(Long id, String code);
 	
 }

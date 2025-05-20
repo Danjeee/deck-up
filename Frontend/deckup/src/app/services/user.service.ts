@@ -105,4 +105,13 @@ export class UserService extends environmentsURLs {
       catchError(err => {throw err})
     )
   }
+  changeUsername(newuser: any) {
+     const data: FormData = new FormData()
+    data.append("user_auth", UserSession.getUser().auth)
+    data.append("code", newuser)
+    return this.http.post(`${this.apiURL}/users/changeusername`, data).pipe(
+      
+      catchError(err => {throw err})
+    )
+  }
 }

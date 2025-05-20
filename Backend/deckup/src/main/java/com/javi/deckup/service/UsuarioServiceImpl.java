@@ -238,5 +238,12 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		ur.savemoney(user1.getId(), user1.getCurrency());
 		ur.savemoney(user2.getId(), user2.getCurrency());
 	}
+
+	@Override
+	public void changeUsername(Long id, String code) {
+		Usuario user = ur.findById(id).orElse(null);
+		user.setUsername(code);
+		ur.save(user);
+	}
 	
 }

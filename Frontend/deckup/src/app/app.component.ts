@@ -6,6 +6,7 @@ import { UserSession } from './utils/UserSession';
 import { UserService } from './services/user.service';
 import { User } from './utils/User';
 import { AlertService } from './services/alert.service';
+import { TradeService } from './services/trade.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ import { AlertService } from './services/alert.service';
 export class AppComponent implements OnInit {
   title = 'deckup';
   
-  constructor(private router:Router, private service: UserService, private alert: AlertService){}
+  constructor(private router:Router, private service: UserService, private alert: AlertService, private tservice: TradeService){}
 
   ngOnInit(): void {
       this.router.events.subscribe( e => {
@@ -35,6 +36,9 @@ export class AppComponent implements OnInit {
                 if (data.status == 200) {
                   if (sessionStorage.getItem("game") != null && sessionStorage.getItem("game") != "" && this.router.url != "/game"){
                     this.service.losegame(sessionStorage.getItem("game")).subscribe({next:(data)=>{console.log(this.router.url)}})
+                  }
+                  if (sessionStorage.getItem("trade") != null && sessionStorage.getItem("trade") != "" && !this.router.url.startsWith("/trade")){
+                    this.tservice.cancel(sessionStorage.getItem("trade")).subscribe({next:(data)=>{console.log(this.router.url)}})
                   }
                   UserSession.setUser(new User(data.user.id, data.user.username, data.user.email, data.user.pfp, data.user.currency, data.user.rolesDTO, data.user.nextPayment, data.user.auth))
                 } else {

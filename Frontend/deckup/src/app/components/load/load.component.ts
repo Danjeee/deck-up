@@ -30,6 +30,9 @@ export class LoadComponent implements OnInit {
       case "/home":
         this.toggleAccess(2)
         break;
+      case "/config":
+        this.toggleAccess(2)
+        break;
       case "/chat":
         this.toggleAccess(2)
         break;
