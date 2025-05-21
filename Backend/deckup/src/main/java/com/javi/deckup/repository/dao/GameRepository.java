@@ -1,5 +1,6 @@
 package com.javi.deckup.repository.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,5 +38,8 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 	@Modifying
 	@Query(value = "UPDATE lineas SET vida = ?2 WHERE id = ?1", nativeQuery = true)
 	void healLine(Long id, Integer vida);
+
+	@Query(value = "SELECT g.* FROM games g JOIN player_status p ON g.id = p.game WHERE p.usuario = ?1 AND g.status != 'activo'", nativeQuery = true)
+	List<Game> findPrev(Long id);
 
 }

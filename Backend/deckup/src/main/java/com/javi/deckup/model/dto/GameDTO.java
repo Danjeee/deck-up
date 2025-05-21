@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class GameDTO {
 
 	private Long id;
+	private Long winner;
 	private String status;
 
 	private PlayerStatusDTO player1;
@@ -54,6 +55,7 @@ public class GameDTO {
 					  .l2_5(LineaDTO.convertToDTO(input.getL2_5()))
 					  .p1_c(input.getP1_c())
 					  .p2_c(input.getP2_c())
+					  .winner(input.getWinner())
 					  .build();
 	}
 	
@@ -74,6 +76,7 @@ public class GameDTO {
 					  .L2_3(LineaDTO.convertToEntity(input.getL2_3()))
 					  .L2_4(LineaDTO.convertToEntity(input.getL2_4()))
 					  .L2_5(LineaDTO.convertToEntity(input.getL2_5()))
+					  .winner(input.getWinner())
 					  .p1_c(input.getP1_c())
 					  .p2_c(input.getP2_c())
 					  .build();

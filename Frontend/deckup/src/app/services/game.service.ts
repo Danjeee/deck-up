@@ -29,6 +29,14 @@ export class GameService extends environmentsURLs {
     this.stompClient.debug = () => {};
   }
 
+  getPastGames():Observable<any>{
+    const data: FormData =new FormData();
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.gameURL}/past`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   private reconnect(): void {
     console.warn('Intentando reconectar WebSocket...');
     setTimeout(() => {

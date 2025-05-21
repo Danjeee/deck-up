@@ -35,5 +35,7 @@ public interface GameService {
 	void deleteLineaById(LineaDTO linea);
 
 	void deleteAllLines(Long id);
+
+	List<GameDTO> findPrev(Long id);
 	
 }

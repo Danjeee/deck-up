@@ -6,8 +6,8 @@
 </div>
 <div id="nav" *ngIf="!bannedRoutes()">
     <div class="btn but bg-p skew" id="perfil">
-        <img src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">
-        <p class="str">{{user.username}}</p>
+        <img id="pfp" src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">
+        <p id="name" class="str">{{user.username}}</p>
     </div>
     <div class="btn but bg-p skew" id="friends" (click)="friendtoggle()">
         <div id="cantnotifcount" *ngIf="friendsloaded && msgsload && (requests.length > 0 || unreadedmsgs.length > 0)" class="reqpending str">{{requests.length + unreadedmsgs.length}}</div>
@@ -26,10 +26,10 @@
         <p class="str" id="currency_txt">{{user.currency}}</p>
     </div>
 </div>
-<div id="menuHamb" class="btn skew" *ngIf="!bannedRoutes()">
+<div id="menuHamb" class="btn skew" style="pointer-events: none;" *ngIf="!bannedRoutes()">
     <h1 class="str">Menú</h1>
     <div class="btn but str conf" (click)="goto('config')">Configuración</div>
-    <div class="btn but str conf">Partidas recientes</div>
+    <div class="btn but str conf" (click)="goto('game/recientes')">Partidas recientes</div>
     <div class="btn but str conf">Intercambios recientes</div>
     <div class="btn but str conf">Contactanos</div>
     <div class="btn but str conf" (click)="codeinput()">Codigos</div>

@@ -43,6 +43,15 @@ public class GameController {
 
 	@Autowired
 	NotificationService ns;
+	
+	@PostMapping("/past")
+	public List<GameDTO> past(@ModelAttribute UserAction data){
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		}
+		return gs.findPrev(user.getId());
+	}
 
 	@PostMapping("/matchmaking")
 	public Response joinqueue(@ModelAttribute UsuarioDTO user) {
@@ -1640,7 +1649,10 @@ public class GameController {
 			game.setL2_3(null);
 			game.setL2_4(null);
 			game.setL2_5(null);
+			game.setWinner(game.getPlayer2().getUsuario().getId());
 			gs.save(game);
+			gs.save(game.getPlayer1());
+			gs.save(game.getPlayer2());
 			gs.deleteAllLines(game.getId());
 			ns.win(game.getPlayer2().getUsuario());
 			return game;
@@ -1657,6 +1669,9 @@ public class GameController {
 			game.setL2_3(null);
 			game.setL2_4(null);
 			game.setL2_5(null);
+			game.setWinner(game.getPlayer1().getUsuario().getId());
+			gs.save(game.getPlayer1());
+			gs.save(game.getPlayer2());
 			gs.save(game);
 			gs.deleteAllLines(game.getId());
 			ns.win(game.getPlayer1().getUsuario());

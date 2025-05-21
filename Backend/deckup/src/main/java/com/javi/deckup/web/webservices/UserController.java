@@ -57,8 +57,12 @@ public class UserController {
 		if (user == null) {
 			return Response.error("Error al cargar el usuario");
 		}
+		UsuarioDTO test = us.findByUsername(data.getCode());
+		if (test != null) {
+			return Response.error("El usuario "+ data.getCode() +"ya existe");
+		}
 		us.changeUsername(user.getId(), data.getCode());
-		return Response.success("Donete");
+		return Response.success(data.getCode());
 	}
 	
 	@GetMapping("/{id}")

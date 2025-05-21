@@ -2,12 +2,13 @@
 <h1 id="tit" class="str">Configuración</h1>
 <div id="cont" class="bg-p btn">
     <div id="chg_pfp" class="bg-s btn">
-        <img src="{{resURL}}/Resources/img/users/{{user.pfp}}">
-        <div class="bg-g btn but str">Cambiar</div>
+        <img id="pfp_aux" src="{{resURL}}/Resources/img/users/{{user.pfp}}">
+        <input type="file" id="pfp_input" accept="image/*" style="display: none;" (change)="upload()"/>
+        <div class="bg-g btn but str" (click)="upload_p1()">Cambiar</div>
     </div>
     <div id="chg_username" class="bg-s btn">
         <h2 class="str">{{user.username}}</h2>
-        <div class="bg-g btn but str">Cambiar</div>
+        <div class="bg-g btn but str" (click)="chguser()">Cambiar</div>
     </div>
     <div id="close" class="bg-r btn but str">
         Cerrar cuenta

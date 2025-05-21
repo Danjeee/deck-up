@@ -1,6 +1,7 @@
 package com.javi.deckup.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,6 +171,11 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public void deleteAllLines(Long id) {
 		gr.deleteAllLines(id);
+	}
+
+	@Override
+	public List<GameDTO> findPrev(Long id) {
+		return gr.findPrev(id).stream().map(g -> GameDTO.convertToDTO(g)).collect(Collectors.toList());
 	}
 	
 

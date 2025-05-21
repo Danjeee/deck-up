@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http"
 import { UserService } from "../services/user.service"
 import { User } from "./User"
+import { environmentsURLs } from "./environmentsURls";
 
 export class UserSession {
     
@@ -8,8 +9,17 @@ export class UserSession {
 
     constructor(service: UserService) { }
 
-    public static setUser(user: any) {
+    public static setUser(user: any, force: boolean = false) {
         localStorage.setItem("user", JSON.stringify(user))
+        if (force){
+            (document.getElementById("name") as HTMLElement).innerHTML = user.username;
+            (document.getElementById("pfp") as HTMLImageElement).src = environmentsURLs.presURL + "/Resources/img/users/" + user.pfp;
+        }
+    }
+
+    public static generateImgRoute(): string{
+        let user = UserSession.getUser()
+        return environmentsURLs.presURL + "/Resources/img/users/" + user.pfp
     }
     public static getUser() {
         var sessionuser = localStorage.getItem("user")

@@ -381,6 +381,7 @@ CREATE TABLE `deckup`.`games` (
   `player1` BIGINT NULL,
   `player2` BIGINT NULL,
   `turno` INT NULL,
+  `winner` BIGINT NULL,
   `L1_1` BIGINT NULL,
   `L1_2` BIGINT NULL,
   `L1_3` BIGINT NULL,
@@ -554,7 +555,7 @@ CONSTRAINT `fk_trade_tra`
 /*INSERCION DE DATOS*/
 /*Usuarios y roles*/
 INSERT INTO usuarios(username, email, password, pfp, currency, next_payment, estado, auth)VALUES 
-('admin', 'a@a.com', '$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'admin.png', 999999999 ,now(), 1, '$2a$13$Y4MLieJRdenDKvQp9a5sae4lBqmoYovsaWGEkrlICZu8z2go0IOLW'),  # 1
+('admin', 'a@a.com', '$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'admin.gif', 999999999 ,now(), 1, '$2a$13$Y4MLieJRdenDKvQp9a5sae4lBqmoYovsaWGEkrlICZu8z2go0IOLW'),  # 1
 ('javisores', 'javisores@gmail.com','$2a$10$VVB7Xs4/w439uoJz5CSj/.Jasq7XsHwn9TQBngkD7YSiLHJ.B7yCm', 'javi.jpg', 500 , now(), 1, null); # 2
 
 INSERT INTO roles(nombre, id_user)VALUES 

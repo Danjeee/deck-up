@@ -1,1 +1,20 @@
-<p>prev-games works!</p>
+<div id="cont" class="bg-p btn" *ngIf="loaded">
+    <div *ngFor="let game of games" class="btn game {{won(game) ? 'bg-g' : 'bg-r'}}">
+        <div>
+            <img src="{{resURL}}/Resources/img/users/{{game.player1.usuario.pfp}}" alt="">
+            <h4 class="str">{{game.player1.usuario.username}}</h4>
+            <p class="str">{{game.player1.vida}}</p>
+        </div>
+        <div>
+            <h2 class="str">Ganador: {{getWinner(game)}}</h2>
+        </div>
+        <div>
+            <img src="{{resURL}}/Resources/img/users/{{game.player2.usuario.pfp}}" alt="">
+            <h4 class="str">{{game.player2.usuario.username}}</h4>
+            <p class="str">{{game.player2.vida}}</p>
+        </div>
+    </div>
+    <div class="bg-r btn str" *ngIf="games.length == 0">
+        No hay partidas recientes
+    </div>
+</div>

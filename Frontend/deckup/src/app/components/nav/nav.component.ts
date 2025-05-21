@@ -246,8 +246,10 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       this.cd = true
       if (!this.open) {
         mh.style.display = "flex"
+        mh.style.pointerEvents = "all"
         shadow.style.display = "flex"
       } else {
+        mh.style.pointerEvents = "none"
         mh.animate(this.closeanim, this.close)
         if (!this.openFriendList && this.open) {
           shadow.animate(this.shadowvanish, this.close)
@@ -407,6 +409,7 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
   }
   goto(where: string){
     this.router.navigate([where])
+    this.toggle()
   }
   bannedRoutes(type: string = "default"){
     switch (type){

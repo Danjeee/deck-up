@@ -33,6 +33,8 @@ public class Game {
     private Boolean p1_c;
     private Boolean p2_c;
     
+    private Long winner;
+    
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "player1")
     private PlayerStatus player1;
