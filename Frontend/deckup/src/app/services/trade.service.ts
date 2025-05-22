@@ -24,9 +24,18 @@ export class TradeService extends environmentsURLs {
     super()
   }
 
+  getPastTrades():Observable<any>{
+    const data: FormData =new FormData();
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.tradeURL}/past`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   sendFinish(trade: any): Observable<any>{
     const data: FormData = new FormData()
     data.append("user_id", trade)
+    data.append("user_auth", UserSession.getUser().auth)
     return this.http.post(`${this.tradeURL}/sfinish`, data).pipe(
       catchError(err => { throw err })
     ) 

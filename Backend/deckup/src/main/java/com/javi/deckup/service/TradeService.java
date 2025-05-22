@@ -33,4 +33,6 @@ public interface TradeService {
 
 	void sendWsTo(TradeDTO trade, String string);
 
+	List<TradeDTO> getPast(Long id);
+
 }

@@ -18,5 +18,8 @@ public interface TradeRepository extends JpaRepository<Trade, Long>{
 
 	@Query(value = "SELECT * FROM trades WHERE code = ?1 AND status = 'waiting'", nativeQuery = true)
 	Optional<Trade> findByCode(String code);
+
+	@Query(value = "SELECT * FROM trades WHERE player1 = ?1 OR player2 = ?1 AND status != 'activo'", nativeQuery = true)
+	List<Trade> getPast(Long id);
 	
 }

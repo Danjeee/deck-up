@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javi.deckup.model.dto.CartaDTO;
+import com.javi.deckup.model.dto.MazoDTO;
 import com.javi.deckup.model.dto.PlayerCardsDTO;
 import com.javi.deckup.model.dto.TradeCardsDTO;
 import com.javi.deckup.model.dto.TradeDTO;
@@ -70,35 +72,48 @@ public class TradeController {
 		if (pc.getCant() < data.getArtifact_id()) {
 			return null;
 		}
+		int cant = 0;
 		TradeCardsDTO tc = ts.findCardByTradeAndPlayerAndCard(trade,user,pc.getCarta());
-		if (tc == null) {
-			 tc = TradeCardsDTO.builder().cant(data.getArtifact_id()).carta(pc.getCarta()).trade(trade).usuario(user).build();
-		} else {
-			tc.setCant(tc.getCant() + data.getArtifact_id());
+		if (tc != null) {
+			cant = tc.getCant();
 		}
+		//pa despue
+		if ((pc.getCant()+cant - data.getArtifact_id() > 1) || ((pc.getCant()+cant - data.getArtifact_id() > 0) && !cartaEnMazo(pc.getCarta(), user))) {
+			if (tc == null) {
+				 tc = TradeCardsDTO.builder().cant(data.getArtifact_id()).carta(pc.getCarta()).trade(trade).usuario(user).build();
+			} else {
+				tc.setCant(tc.getCant() + data.getArtifact_id());
+			}
 
-		List<TradeCardsDTO> allcards = ts.getAllCards(trade);
-		TradeCardsDTO tcaux = ts.save(tc);
-		tc.setId(tcaux.getId());
-		if (allcards.contains(tc)) {
-			allcards.set(allcards.indexOf(tc), tc);
+			List<TradeCardsDTO> allcards = ts.getAllCards(trade);
+			TradeCardsDTO tcaux = ts.save(tc);
+			tc.setId(tcaux.getId());
+			if (allcards.contains(tc)) {
+				allcards.set(allcards.indexOf(tc), tc);
+			} else {
+				allcards.add(tc);
+			}
+			trade.setCartas(allcards);
+			ts.sendWsTo(trade);
+			return trade;
 		} else {
-			allcards.add(tc);
+			return null;
 		}
-		trade.setCartas(allcards);
-		ts.sendWsTo(trade);
-		return trade;
+	}
+	
+	private Boolean cartaEnMazo(CartaDTO carta, UsuarioDTO user) {
+		return us.usertienecartaenmazo(carta.getId(), user.getId()) != null;
 	}
 	
 	@PostMapping("/accept")
 	public Response accept(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
 		if (user == null) {
-			Response.error("Ha habido un problema al recuperar la sesión");
+			return Response.error("Ha habido un problema al recuperar la sesión");
 		}
 		TradeDTO trade = ts.findById(data.getUser_id());
 		if (trade == null) {
-			Response.error("Ha habido un problema al recuperar el intercambio");
+			return Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		if (trade.getPlayer1().getId() == user.getId()) {
 			trade.setP1c(true);
@@ -113,11 +128,11 @@ public class TradeController {
 	public Response msg(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
 		if (user == null) {
-			Response.error("Ha habido un problema al recuperar la sesión");
+			return Response.error("Ha habido un problema al recuperar la sesión");
 		}
 		TradeDTO trade = ts.findById(data.getUser_id());
 		if (trade == null) {
-			Response.error("Ha habido un problema al recuperar el intercambio");
+			return Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		PlayerCardsDTO pc = ps.findById(data.getArtifact_long());
 		if (pc == null) {
@@ -128,15 +143,25 @@ public class TradeController {
 		return Response.success("donete");
 	}
 	
+	@PostMapping("/past")
+	public List<TradeDTO> past(@ModelAttribute UserAction data){
+		UsuarioDTO user = us.findByToken(data.getUser_auth());
+		if (user == null) {
+			return null;
+		}
+		return ts.getPast(user.getId());
+		
+	}
+	
 	@PostMapping("/sfinish")
 	public Response sfinish(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
 		if (user == null) {
-			Response.error("Ha habido un problema al recuperar la sesión");
+			return Response.error("Ha habido un problema al recuperar la sesión");
 		}
 		TradeDTO trade = ts.findById(data.getUser_id());
 		if (trade == null) {
-			Response.error("Ha habido un problema al recuperar el intercambio");
+			return Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		ts.sendWsTo(trade, "p2c");
 		return Response.success("donete");
@@ -146,7 +171,7 @@ public class TradeController {
 	public Response finish(@ModelAttribute UserAction data) {
 		TradeDTO trade = ts.findById(data.getUser_id());
 		if (trade == null) {
-			Response.error("Ha habido un problema al recuperar el intercambio");
+			return Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		trade.setStatus("finished");
 
@@ -175,11 +200,11 @@ public class TradeController {
 	public Response unaccept(@ModelAttribute UserAction data) {
 		UsuarioDTO user = us.findByToken(data.getUser_auth());
 		if (user == null) {
-			Response.error("Ha habido un problema al recuperar la sesión");
+			return Response.error("Ha habido un problema al recuperar la sesión");
 		}
 		TradeDTO trade = ts.findById(data.getUser_id());
 		if (trade == null) {
-			Response.error("Ha habido un problema al recuperar el intercambio");
+			return Response.error("Ha habido un problema al recuperar el intercambio");
 		}
 		if (trade.getPlayer1().getId() == user.getId()) {
 			trade.setP1c(false);
@@ -258,8 +283,10 @@ public class TradeController {
 		if (trade == null) {
 			return Response.error("El intercambio no existe");
 		}
-		trade.setStatus("cancelado");
-		ts.save(trade, "leave");
+		if (trade.getStatus().equals("activo")) {
+			trade.setStatus("cancelado");
+			ts.save(trade, "leave");
+		}
 		return Response.success("donete");
 	}
 	@PostMapping("/join")

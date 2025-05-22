@@ -1,1 +1,30 @@
-<p>prev-trades works!</p>
+<div id="cont" class="bg-p btn" *ngIf="loaded">
+    <div *ngFor="let trade of trades" class="btn game {{trade.status == 'finished' ? 'bg-g' : 'bg-r'}}">
+        <div class="btn bg-w cardcont">
+            <div *ngFor="let card of getCards(trade, 1)">
+                <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}">
+                <p class="btn bg-t">{{card.cant}}</p>
+            </div>
+        </div>
+        <div>
+            <img src="{{resURL}}/Resources/img/users/{{trade.player1.pfp}}" alt="">
+            <h4 class="str">{{trade.player1.username}}</h4>
+            <p>{{calcGems(trade,1) > 0 ? "+":""}}{{calcGems(trade,1)}}</p>
+        </div>
+        <h1 class="str">{{translator.get(trade.status)}}</h1>
+        <div>
+            <img src="{{resURL}}/Resources/img/users/{{trade.player2.pfp}}" alt="">
+            <h4 class="str">{{trade.player2.username}}</h4>
+            <p>{{calcGems(trade,2) > 0 ? "+":""}}{{calcGems(trade,2)}}</p>
+        </div>
+        <div class="btn bg-w cardcont">
+             <div *ngFor="let card of getCards(trade, 2)">
+                <img src="{{resURL}}/Resources/img/cards/{{card.carta.imagen}}">
+                <p class="btn bg-t">{{card.cant}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="bg-r btn str" *ngIf="trades.length == 0">
+        No hay intercambios recientes
+    </div>
+</div>

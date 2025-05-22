@@ -46,5 +46,7 @@ public interface UsuarioService {
 	void trademoney(UsuarioDTO player1, UsuarioDTO player2, Integer p1curr, Integer p2curr);
 
 	void changeUsername(Long id, String code);
+
+	CartaDTO usertienecartaenmazo(Integer id, Long id2);
 	
 }

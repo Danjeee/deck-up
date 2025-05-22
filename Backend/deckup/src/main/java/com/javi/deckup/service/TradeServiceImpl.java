@@ -92,4 +92,9 @@ public class TradeServiceImpl implements TradeService{
 	public void sendWsTo(TradeDTO trade, String string) {
 		ws.tradeStatusChange(string, trade.getId());
 	}
+
+	@Override
+	public List<TradeDTO> getPast(Long id) {
+		return tr.getPast(id).stream().map(t -> TradeDTO.convertToDTO(t)).collect(Collectors.toList());
+	}
 }

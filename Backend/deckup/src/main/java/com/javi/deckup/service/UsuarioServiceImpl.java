@@ -245,5 +245,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		user.setUsername(code);
 		ur.save(user);
 	}
+
+	@Override
+	public CartaDTO usertienecartaenmazo(Integer idcarta, Long id) {
+		Carta carta = cr.findOnAnyDeck(idcarta, id).orElse(null);
+		return carta == null ? null : CartaDTO.convertToDTO(carta);
+	}
 	
 }
