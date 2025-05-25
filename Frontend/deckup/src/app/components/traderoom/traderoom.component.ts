@@ -253,7 +253,7 @@ export class TraderoomComponent extends environmentsURLs {
             if (data != null) {
               this.loadMy(data)
             } else {
-              this.alert.error("Error", "Se ha producido un error al añadir la carta")
+              this.alert.error("Error", "No puedes qedarte sin una carta que usas en un mazo")
             }
           }
         })
@@ -281,7 +281,7 @@ export class TraderoomComponent extends environmentsURLs {
                   if (data != null) {
                     this.loadMy(data)
                   } else {
-                    this.alert.error("Error", "Se ha producido un error al añadir la carta")
+                    this.alert.error("Error", "No puedes qedarte sin una carta que usas en un mazo")
                   }
                 }
               })

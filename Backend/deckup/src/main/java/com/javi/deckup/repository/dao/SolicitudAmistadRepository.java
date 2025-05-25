@@ -26,4 +26,7 @@ public interface SolicitudAmistadRepository extends JpaRepository<SolicitudAmist
 	@Query(value = "SELECT * FROM amigos WHERE usuario = ?1 AND amigo = ?2", nativeQuery = true)
 	Optional<SolicitudAmistad> findByUserAndFriend(Long id, Long id2);
 
+	@Query(value = "SELECT count(*) FROM amigos WHERE usuario = ?1 AND accepted = 1", nativeQuery = true)
+	Integer countAllAccepted(Long id);
+
 }

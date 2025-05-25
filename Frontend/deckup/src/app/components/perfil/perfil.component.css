@@ -1,0 +1,70 @@
+    .perfil {
+      padding: 30px;
+      text-align: center;
+      /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+      width: 50%;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      &>*{
+        position: relative;
+      }
+    }
+    .status{
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .isl{
+        background-color: #45a049;
+    }
+    .isnl{
+        background-color: #5a5a5a;
+    }
+    .perfil img {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: #000 1px solid;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    .perfil h2 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    .stats {
+      margin: 20px 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+    .stats p {
+      font-size: 24px;
+      margin: 6px 0;
+    }
+    .add-friend-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .add-friend-btn:hover {
+      background-color: #45a049;
+    }

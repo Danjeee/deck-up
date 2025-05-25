@@ -1,0 +1,20 @@
+<div class="perfil btn bg-p" *ngIf="loaded">
+    <div>
+        <img src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="Foto de perfil">
+        <h2 class="str">{{user.username}}</h2>
+        <div class="status {{user.currently_logged ? 'isl' : 'isnl'}}">
+
+        </div>
+        <div class="lastlogin">
+            {{playerStatus()}}
+        </div>
+    </div>
+    <div class="stats">
+      <p class="str"><strong>Amigos:</strong> {{user.friends}}</p>
+      <p class="str"><strong>Batallas ganadas:</strong> {{user.gamesw}}</p>
+      <p class="str"><strong>Batallas perdidas:</strong> {{user.gamesl}}</p>
+      <p class="str"><strong>Intercambios exitosos:</strong> {{user.trades}}</p>
+      <p class="str"><strong>Cartas distintas:</strong> {{user.cartas}}</p>
+      <p class="str"><strong>Cartas exclusivas:</strong> {{user.cartas_ex}}</p>
+    </div>
+  </div>

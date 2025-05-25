@@ -25,6 +25,30 @@ export class UserService extends environmentsURLs {
     )
   }
 
+  findCards(id: any): Observable<any> {
+    return this.http.get(`${this.userApiURL}getcartas/${id}`).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  findGames(id: any): Observable<any> {
+    return this.http.get(`${this.userApiURL}getgames/${id}`).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  findFriends(id: any): Observable<any> {
+    return this.http.get(`${this.userApiURL}getfriends/${id}`).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
+  findTrades(id: any): Observable<any> {
+    return this.http.get(`${this.userApiURL}gettrades/${id}`).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   logout() : Observable<any>{
     return this.http.post(`${this.authApiURL}logout`, null).pipe(
       catchError(err => {throw err})

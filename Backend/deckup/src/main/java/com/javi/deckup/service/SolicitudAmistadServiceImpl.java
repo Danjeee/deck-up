@@ -118,4 +118,9 @@ public class SolicitudAmistadServiceImpl implements SolicitudAmistadService{
 		return true;
 	}
 
+	@Override
+	public Integer findAllAccepted(Long id) {
+		return sr.countAllAccepted(id);
+	}
+
 }

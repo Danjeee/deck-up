@@ -3,7 +3,6 @@
         (click)="section == 'cards' ? '' : goto('cards')">Colección</div>
     <div  class="btn str skew {{section == 'decks' ? 'bg-s z' : (playerCards.length > 8) ? 'bg-p but' : 'bg-p'}}"
         (click)="(section == 'decks' || playerCards.length < 8) ? (playerCards.length < 8) ? notenoughcards($event) : '' : goto('decks')">Mazos</div>
-    <div class="btn but skew bg-p str" *ngIf="section == 'cards'">filtros</div>
 </div>
 <div *ngIf="loaded" id="maincollection" class="bg-p btn">
     <div id="cards" *ngIf="section == 'cards'">

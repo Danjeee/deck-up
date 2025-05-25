@@ -17,6 +17,7 @@ import { TraderoomComponent } from './components/traderoom/traderoom.component';
 import { ConfigComponent } from './components/config/config.component';
 import { PrevGamesComponent } from './components/prev-games/prev-games.component';
 import { PrevTradesComponent } from './components/prev-trades/prev-trades.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -38,4 +39,5 @@ export const routes: Routes = [
     {path: 'config', component: ConfigComponent},
     {path: 'game/recientes', component: PrevGamesComponent},
     {path: 'trades/recientes', component: PrevTradesComponent},
+    {path: 'perfil/:id', component: PerfilComponent},
 ];

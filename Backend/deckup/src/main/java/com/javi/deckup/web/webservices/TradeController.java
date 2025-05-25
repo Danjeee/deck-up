@@ -77,8 +77,10 @@ public class TradeController {
 		if (tc != null) {
 			cant = tc.getCant();
 		}
-		//pa despue
-		if ((pc.getCant()+cant - data.getArtifact_id() > 1) || ((pc.getCant()+cant - data.getArtifact_id() > 0) && !cartaEnMazo(pc.getCarta(), user))) {
+		System.out.println(cant);
+		System.out.println(pc.getCant());
+		System.out.println(data.getArtifact_id());
+		if (!(pc.getCant()-cant - data.getArtifact_id() <= 0 && cartaEnMazo(pc.getCarta(), user))) {
 			if (tc == null) {
 				 tc = TradeCardsDTO.builder().cant(data.getArtifact_id()).carta(pc.getCarta()).trade(trade).usuario(user).build();
 			} else {

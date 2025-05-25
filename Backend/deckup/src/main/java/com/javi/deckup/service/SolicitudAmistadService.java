@@ -6,6 +6,8 @@ import com.javi.deckup.model.dto.SolicitudAmistadDTO;
 
 public interface SolicitudAmistadService {
 
+	Integer findAllAccepted(Long id);
+
 	List<SolicitudAmistadDTO> findAllAccepted(String token);
 	
 	List<SolicitudAmistadDTO> findAllUnaccepted(String token);

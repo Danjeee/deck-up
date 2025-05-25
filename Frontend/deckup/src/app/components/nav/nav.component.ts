@@ -407,9 +407,11 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
       }
     })
   }
-  goto(where: string){
+  goto(where: string, toggle: boolean = true){
     this.router.navigate([where])
-    this.toggle()
+    if (toggle){
+      this.toggle()
+    }
   }
   bannedRoutes(type: string = "default"){
     switch (type){
