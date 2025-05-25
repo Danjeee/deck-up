@@ -50,7 +50,10 @@ public class MazoController {
 				mazo.setNombre("Mazo "+ms.count(user.getId()));
 			}
 			mazo.setUsuario(user);
-			ms.save(mazo);
+			mazo = ms.save(mazo);
+			if (user.getMazo() == null) {
+				us.setMazo(user.getId(),mazo.getId());
+			}
 			return Response.success("Mazo guardado correctamente");
 		}
 		return Response.error("Ha habido un error en la sesión, intentalo de nuevo");

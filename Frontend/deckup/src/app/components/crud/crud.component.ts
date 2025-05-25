@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CrudService } from '../../services/crud.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crud',
@@ -17,9 +18,11 @@ export class CrudComponent {
   editingItem: any = null;
   searchTerm: string = '';
 
-  constructor(private crudService: CrudService) { }
+  constructor(private crudService: CrudService, private router: Router) { }
 
   ngOnInit() {
+    let mod = this.router.url.split("/")[this.router.url.split("/").length-1]
+    this.crudService.setModule(mod)
     this.crudService.getItems().subscribe(data => {
       this.items = data;
       this.filteredItems = [...this.items];

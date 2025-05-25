@@ -8,11 +8,18 @@ import { environmentsURLs } from '../utils/environmentsURls';
 })
 export class CrudService extends environmentsURLs {
 
+  module: any
+
   constructor(private http: HttpClient) {
     super()
   }
+
+  setModule(mod: any){
+    this.module = mod;
+  }
+
   getItems(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiURL + '/cards/all');
+    return this.http.get<any[]>(this.apiURL + `/${this.module}/all`);
   }
   saveItem(data: FormData): Observable<any> {
     const formDataObject: any = {};
@@ -25,10 +32,10 @@ export class CrudService extends environmentsURLs {
 
     const final = new FormData();
     final.append("data", formDataString)
-    return this.http.post<any>(this.apiURL + '/cards/save', final);
+    return this.http.post<any>(this.apiURL + `/${this.module}/save`, final);
   }
 
   deleteItem(id: number): Observable<any> {
-    return this.http.delete(`${this.apiURL}/cartas/delete/${id}`);
+    return this.http.delete(`${this.apiURL}/${this.module}/delete/${id}`);
   }
 }

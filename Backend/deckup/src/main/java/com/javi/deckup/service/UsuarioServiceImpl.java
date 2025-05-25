@@ -251,5 +251,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService{
 		Carta carta = cr.findOnAnyDeck(idcarta, id).orElse(null);
 		return carta == null ? null : CartaDTO.convertToDTO(carta);
 	}
+
+	@Override
+	public void setMazo(Long userid, Long mazoid) {
+		ur.setMazo(userid, mazoid);
+	}
 	
 }

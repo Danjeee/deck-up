@@ -27,8 +27,8 @@ public class MazoServiceImpl implements MazoService{
 	}
 
 	@Override
-	public void save(MazoDTO mazo) {
-		mr.save(MazoDTO.convertToEntity(mazo));
+	public MazoDTO save(MazoDTO mazo) {
+		return MazoDTO.convertToDTO(mr.save(MazoDTO.convertToEntity(mazo)));
 		
 	}
 

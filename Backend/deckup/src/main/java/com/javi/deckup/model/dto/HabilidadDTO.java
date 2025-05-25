@@ -44,7 +44,7 @@ public class HabilidadDTO implements Serializable {
     
 	private Integer prcnt;
     
-	private EntornoDTO entorno;
+	//private EntornoDTO entorno;
     
 	private Integer loadAtq;
     
@@ -81,7 +81,7 @@ public class HabilidadDTO implements Serializable {
 		        .bleed(input.getBleed())
 		        .prcnt(input.getPrcnt())
 		        .color(input.getColor())
-		        .entorno(EntornoDTO.convertToDTO(input.getEntorno()))
+		        //.entorno(EntornoDTO.convertToDTO(input.getEntorno()))
 		        .loadAtq(input.getLoadAtq())
 		        .crit(input.getCrit())
 		        .critMult(input.getCritMult())
@@ -108,7 +108,7 @@ public class HabilidadDTO implements Serializable {
 	        .bleed(input.getBleed())
 	        .color(input.getColor())
 	        .prcnt(input.getPrcnt())
-	        .entorno(EntornoDTO.convertToEntity(input.getEntorno()))
+	        //.entorno(EntornoDTO.convertToEntity(input.getEntorno()))
 	        .loadAtq(input.getLoadAtq())
 	        .crit(input.getCrit())
 	        .critMult(input.getCritMult())

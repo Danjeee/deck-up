@@ -48,5 +48,7 @@ public interface UsuarioService {
 	void changeUsername(Long id, String code);
 
 	CartaDTO usertienecartaenmazo(Integer id, Long id2);
+
+	void setMazo(Long id, Long id2);
 	
 }

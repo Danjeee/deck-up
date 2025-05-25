@@ -33,7 +33,7 @@ export const routes: Routes = [
     {path: 'matchmaking', component: MatchmakingComponent},
     {path: 'game', component: GameComponent},
     {path: 'admin', component: AdminComponent},
-    {path: 'admin/crud', component: CrudComponent},
+    {path: 'admin/crud/:module', component: CrudComponent},
     {path: 'trade', component: TradeComponent},
     {path: 'trade/:sala', component: TraderoomComponent},
     {path: 'config', component: ConfigComponent},

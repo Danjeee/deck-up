@@ -114,6 +114,18 @@ public class TiendaController {
     }
     
 
+    @PostMapping("/change")
+    public Response change(@ModelAttribute UserAction data) {
+        UsuarioDTO user = us.findByToken(data.getUser_auth(), true);
+        if (user == null) {
+        	return Response.error("Ha habido un error con tu sesión");
+        }
+        if (!user.getRolesDTO().get(0).getNombre().equals("ADMIN")) {
+        	return Response.error("Solo un administrador puede cambiar la tienda");
+        }
+        ts.change();
+        return Response.success("Tienda cambiada con exito");
+    }
 	
 	
 	

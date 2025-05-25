@@ -8,7 +8,7 @@ public interface MazoService {
 
 	List<MazoDTO> findAllByUser(Long id);
 	
-	void save(MazoDTO mazo);
+	MazoDTO save(MazoDTO mazo);
 
 	Long count();
 

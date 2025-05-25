@@ -16,6 +16,14 @@ export class TiendaService extends environmentsURLs{
     super()
    }
 
+  change(): Observable<any>{
+    const data: FormData = new FormData();
+    data.append("user_auth", UserSession.getUser().auth)
+    return this.http.post(`${this.tiendaURL}/change`, data).pipe(
+      catchError(err => {throw err})
+    )
+  }
+
   get() : Observable<any>{
     return this.http.get(`${this.tiendaURL}/get`).pipe(
       catchError(err => {throw err})
