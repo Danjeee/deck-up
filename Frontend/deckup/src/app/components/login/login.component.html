@@ -1,7 +1,7 @@
 <div class="container">
     <div class="login-container">
         <h2 class="tit">Iniciar Sesión</h2>
-        <form [formGroup]="form" id="form" (submit)="login(); $event.preventDefault()" method=post>
+        <form [formGroup]="form" id="form" (submit)="login(); $event.preventDefault()" method=post class="btn bg-s">
             <div class="input-group">
                 <input type="text" name="email" placeholder="Email" id="email" formControlName="email" required>
                 <i class="bi bi-envelope-at-fill"></i>
@@ -17,6 +17,9 @@
         <div style="align-self: center; padding: 5px; margin-top: 10px; flex-direction: row;" class="but btn bg-s">
             <input type="checkbox" value="savesession" id="savesession" style="accent-color: rgba(0,0,0,0);">
             <label for="savesession" class="str" style="font-size: 15px; cursor: pointer;">Recordar</label>
+        </div>
+        <div class="btn but bg-s str" style="margin-top: 2em; font-size: 28px;" (click)="register()">
+            Registrarse
         </div>
         <div id="errors">
             <div *ngIf="errors('email') && touched('email')" class="btn str">

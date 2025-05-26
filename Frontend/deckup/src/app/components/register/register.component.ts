@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../services/alert.service';
@@ -8,6 +8,9 @@ import { UserSession } from '../../utils/UserSession';
 import { User } from '../../utils/User';
 import { ApacheService } from '../../services/apache.service';
 import { environmentsURLs } from '../../utils/environmentsURls';
+import { ColeccionComponent } from '../coleccion/coleccion.component';
+import { ColeccionService } from '../../services/coleccion.service';
+import { ParticleComponent } from '../particle/particle.component';
 
 @Component({
   selector: 'app-register',
@@ -15,10 +18,21 @@ import { environmentsURLs } from '../../utils/environmentsURls';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent extends environmentsURLs {
-  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router, private apacheService: ApacheService) {
+export class RegisterComponent extends environmentsURLs implements OnInit {
+  constructor(private formBuilder: FormBuilder, private service: UserService, private alert: AlertService, private router: Router, private apacheService: ApacheService, private cs: ColeccionService) {
     super()
    }
+  ngOnInit(): void {
+    this.cs.findAllCards().subscribe({
+      next: (data) => {
+        ParticleComponent.generateDragons(data)
+      }
+    })
+  }
+
+  login(){
+    this.router.navigate(["login"])
+  }
 
   auth: string | null = null
 

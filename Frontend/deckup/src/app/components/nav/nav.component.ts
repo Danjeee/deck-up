@@ -166,10 +166,6 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
     })
     setTimeout(() => {
       if (this.router.url == "/login" || this.router.url == "/register" || this.router.url == "/") {
-        const nav = document.getElementById('nav-element-login') as HTMLElement
-        const cont = document.getElementById('nav-login') as HTMLElement
-        cont.style.zIndex = "-1"
-        nav.animate(this.router.url == "/login" ? this.registanim : this.loginanim, this.start)
         window.removeEventListener("keydown", e => {
           if (e.key == "Escape" || e.key == "Tab") {
             this.toggle()

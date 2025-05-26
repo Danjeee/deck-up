@@ -1,9 +1,3 @@
-<div id="nav-login" *ngIf="this.router.url == '/login' || this.router.url == '/register'" >
-    <div id="nav-element-login" class="bg-p" (click)="togglelogin()">
-        <div id="regbut" class="">Registro</div>
-        <div id="logbut" class="">Login</div>
-    </div>
-</div>
 <div id="nav" *ngIf="!bannedRoutes()">
     <div class="btn but bg-p skew" id="perfil" (click)="goto('perfil/'+user.id, false)">
         <img id="pfp" src="{{resURL}}/Resources/img/users/{{user.pfp}}" alt="">

@@ -635,3 +635,12 @@ img {
 .bg-g{
     background-color: #198754;
 }
+.cardflip{
+    &>div{
+       transition: transform 0.8s;
+       transform-style: preserve-3d; 
+    }
+    &:hover>div{
+       transform: rotateY(180deg);
+    }
+}

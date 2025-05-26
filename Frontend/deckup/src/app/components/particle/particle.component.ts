@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { animate, stagger } from 'animejs';
 import { css } from '../../utils/Utils';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-particle',
@@ -16,6 +17,8 @@ export class ParticleComponent extends environmentsURLs {
   constructor() {
     super()
   }
+
+  private static isSpawning: boolean = false
 
   private static mouseCd = false
 
@@ -166,10 +169,10 @@ export class ParticleComponent extends environmentsURLs {
     this.totalnotif++
     notif.className = "btn skew bg-p str popup"
     notif.innerHTML = msg
-    if (big){
-      css(notif,{
-      fontSize: "30px"
-    })
+    if (big) {
+      css(notif, {
+        fontSize: "30px"
+      })
     }
     cont.appendChild(notif)
     notif.animate([
@@ -177,12 +180,12 @@ export class ParticleComponent extends environmentsURLs {
       { opacity: 0 }
     ],
       {
-        duration: dur*1000,
+        duration: dur * 1000,
         easing: 'linear',
       })
     setTimeout(() => {
       cont.removeChild(notif)
-    }, dur*1000 + 1);
+    }, dur * 1000 + 1);
   }
 
 
@@ -190,7 +193,7 @@ export class ParticleComponent extends environmentsURLs {
     const cont = document.createElement('div')
     cont.id = Math.floor(Math.random() * 9999) + "expcont"
     cont.style.position = "fixed"
-    
+
     cont.style.zIndex = "5"
     cont.style.display = "flex"
     cont.style.flexWrap = "wrap"
@@ -201,19 +204,19 @@ export class ParticleComponent extends environmentsURLs {
       part.className = "exp_part"
       part.style.width = "40px"
       part.style.height = "40px"
-      part.style.backdropFilter = "blur(10px);"    
-      part.style.backgroundColor = color+"80"  
+      part.style.backdropFilter = "blur(10px);"
+      part.style.backgroundColor = color + "80"
       cont.appendChild(part)
       animated.push(part)
     }
     document.body.appendChild(cont)
     cont.style.left = x - 100 + "px"
-    cont.style.top = y - cont.getBoundingClientRect().height/1.5 + "px"
+    cont.style.top = y - cont.getBoundingClientRect().height / 1.5 + "px"
     this.animateGrid(animated, cont)
 
   }
 
-  private static animateGrid($squares: any,cont: any) {
+  private static animateGrid($squares: any, cont: any) {
     animate($squares, {
       scale: [
         { to: [0, 1.25] },
@@ -227,9 +230,86 @@ export class ParticleComponent extends environmentsURLs {
         grid: [5, 5],
         from: 'center'
       }),
-    }).then(()=>{
+    }).then(() => {
       document.body.removeChild(cont)
     })
+  }
+
+  public static generateDragons(cards: any[], ignore: boolean = false) {
+    if (ParticleComponent.isSpawning == false || ignore) {
+      ParticleComponent.isSpawning = true
+      const card = cards[Math.round(Math.random() * cards.length - 1)]
+      let pos = Math.random() * 100
+      let posY = Math.random() * 100
+      let time = Math.random() * 15
+      time += 5
+      if (pos > 50) {
+        pos = 100
+      } else {
+        pos = 0
+      }
+      const div = document.createElement("div")
+      div.className = "cardflip"
+      css(div, {
+        position: "fixed",
+        top: posY + "%",
+        left: "calc(" + pos + "dvw " + (pos == 0 ? "- 165px" : "") + ")",
+        width: "165px",
+        height: "250px",
+        transition: "left " + time + "s linear",
+        zIndex: "-1"
+      })
+      setTimeout(() => {
+        if (pos == 0) {
+          css(div, {
+            left: "100dvw"
+          })
+        } else {
+          css(div, {
+            left: "-165px"
+          })
+        }
+      }, 10);
+      const img = document.createElement("img")
+      img.src = this.resURL + "/Resources/img/cards/" + card.imagen;
+      img.className = "inner"
+      const cont = document.createElement("div")
+      css(cont, {
+        width: "100%",
+        height: "100%",
+        position: "relative"
+      })
+      css(img, {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        transform: "rotateY(180deg)",
+        backfaceVisibility: "hidden"
+      })
+      const back = document.createElement("img")
+      back.src = this.resURL + "/Resources/img/misc/" + (card.rarezaDTO.nombre == "???" ? "idk" : card.rarezaDTO.nombre) + "_back.webp";
+      back.className = "back"
+      css(back, {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        backfaceVisibility: "hidden"
+      })
+      cont.appendChild(img)
+      cont.appendChild(back)
+      div.appendChild(cont)
+      document.body.appendChild(div)
+      setTimeout(() => {
+        if ((window.location.href + "").includes("/login") || (window.location.href + "").includes("/register")) {
+          this.generateDragons(cards, true)
+        }
+      }, Math.random() * 7000 + 5000);
+      setTimeout(() => {
+        div.remove()
+      }, time * 1000 + 100);
+    }
   }
 }
 

@@ -6,8 +6,9 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    right: 30%;
-    top: 10%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
 }
 .reg-container>p, .reg-container>h2{
     align-self: start;
@@ -44,19 +45,21 @@ img{
     gap: 20px;
     align-items: end;
     width: auto;
-    transform: skew(30deg, 0deg);
     border: #13253e 2px solid;
     border-radius: 7px;
 }
 #form>*:not(.pfp){
-    transform: skew(-30deg, 0deg);
     font-size: 20px;
 }
 input:not([type="submit"]){
+    color: white;
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     border-bottom: #13253e 2px solid;
     font-size: 18px;
+    &::placeholder{
+        color: #ffffff40;
+    }
 }
 input[type='submit']{
     align-self: center;
@@ -64,19 +67,18 @@ input[type='submit']{
 }
 #errors{
     position: fixed;
-    bottom: 10%;
-    right: 10%;
+    bottom: 0;
+    left: -70%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     gap: 20px;
     align-items: start;
     width: auto;
-    transform: skew(30deg, 0deg);
     border-radius: 7px;
 }
 #errors>div{
-    transform: skew(-37deg, 0deg);
     flex-direction: row;
     padding: 10px;
     font-size: 20px;

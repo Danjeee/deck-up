@@ -5,7 +5,7 @@
 <div class="container">
     <div class="reg-container">
         <h2 class="tit">Crear cuenta</h2>
-        <form [formGroup]="form" id="form" (submit)="register(); $event.preventDefault()" method=post>
+        <form [formGroup]="form" id="form" (submit)="register(); $event.preventDefault()" method=post class="bg-s btn">
             <div class="input-group">
                 <input type="text" name="username" placeholder="Username" id="username" formControlName="username" required>
                 <i class="bi bi-person-fill"></i>
@@ -24,6 +24,9 @@
             </div>
             <input type="submit" class="but btn bg-p str" value="Crear cuenta"/>
         </form>
+        <div class="bg-s btn but str" style="font-size: 28px; margin-top: 1em;" (click)="login()">
+            Iniciar sesión
+        </div>
         <div id="errors">
             <div *ngIf="errors('email') && touched('email')" class="btn str">
                 <i class="bi bi-exclamation-circle"></i>

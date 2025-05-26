@@ -565,9 +565,9 @@ INSERT INTO roles(nombre, id_user)VALUES
 /*Habilidades, rarezas, paquetes y cartas*/
 
 INSERT INTO paquetes(nombre, descripcion, imagen, precio, cant) VALUES
-('Básico', 'Paquete normal', 'paquete1.png', 500, 6), # 1
-('Avanzado', 'Paquete avanzado', 'paquete2.png', 1500, 6), # 1
-('Mágico', 'Paquete mágico', 'paquete3.png', 2500, 8); # 1
+('Básico', 'Paquete normal', 'basico.webp', 500, 6), # 1
+('Avanzado', 'Paquete avanzado', 'paquete2.webp', 1500, 6), # 1
+('Brainrot', 'Paquete limitado', 'brainrot.webp', 2500, 8); # 1
 
 INSERT INTO rarezas(nombre, porcentaje) VALUES
 ('Comun', 40), # 1
@@ -607,18 +607,18 @@ INSERT INTO habilidades(nombre, descripcion, dmg, freeze, freeze_name, heal, esp
 
 
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, vida, mana) VALUES
-('AdminCard', 'Carta para los admins', 'admincard.png', 0, 6, null, 1, 1, 999, 0), # 1
-('Minion', 'La unidad por defecto', 'minion.jpeg', 200, 1, 1, 2, 0, 1, 1), # 2
-('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.jpeg', 2000,3 ,1, 5, 0, 5, 5), # 3
-('Eventio', 'Te damos la bienvenida', 'eventio.jpeg', 0,3 ,null, 3, 1, 4, 2), # 4
-('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.jpg', 500,2 ,1, 4, 0, 4, 3), # 5
-('X-7P', 'El peor enemigo del rey titán', 'x7p.jpeg', 4000,4 ,1, 6, 0, 7, 6), # 6
-('Sheen', 'El fugaz asesino más brutal de los ultimos tiempos', 'sheen.jpeg', 2000,3 ,1,7, 0, 3, 3), # 7
-('Skano', 'El rey demonio, una fiera sin igual', 'skano.jpeg', 10000,5 ,1, 8, 0, 5, 4), # 8
-('Sekum', 'El menor de los dos, un principe demonio que no le teme a nada', 'sekum.jpeg', 4000,4 ,1, 9, 0, 4, 4), # 9
-('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.jpeg', 4000,4 ,1, 10, 0, 4, 4), # 10
-('Haruki', 'Un samurai recién iniciado', 'haruki.jpeg', 500,2 ,1, 11, 0, 3, 4), # 11
-('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.jpeg', 10000,5 ,1, 12, 0, 5, 5); # 12
+('AdminCard', 'Carta para los admins', 'admincard.webp', 0, 6, null, 1, 1, 999, 0), # 1
+('Minion', 'La unidad por defecto', 'minion.webp', 200, 1, 1, 2, 0, 1, 1), # 2
+('Titan', 'Una enorme unidad con un gran poder pero muy poco veloz', 'titan.webp', 2000,3 ,1, 5, 0, 5, 5), # 3
+('Eventio', 'Te damos la bienvenida', 'eventio.webp', 0,3 ,null, 3, 1, 4, 2), # 4
+('Roboto', 'Alguna vez habias visto un robot tan... Singular?', 'roboto.webp', 500,2 ,1, 4, 0, 4, 3), # 5
+('X-7P', 'El peor enemigo del rey titán', 'x7p.webp', 4000,4 ,1, 6, 0, 7, 6), # 6
+('Sheen', 'El fugaz asesino más brutal de los ultimos tiempos', 'sheen.webp', 2000,3 ,1,7, 0, 3, 3), # 7
+('Skano', 'El rey demonio, una fiera sin igual', 'skano.webp', 10000,5 ,1, 8, 0, 5, 4), # 8
+('Sekum', 'El menor de los dos, un principe demonio que no le teme a nada', 'sekum.webp', 4000,4 ,1, 9, 0, 4, 4), # 9
+('Dallow', 'Que no te engañe su amigable aspecto, este ser es capaz de destruir planetas, pero... ¿A que es mono?', 'dallow.webp', 4000,4 ,1, 10, 0, 4, 4), # 10
+('Haruki', 'Un samurai recién iniciado', 'haruki.webp', 500,2 ,1, 11, 0, 3, 4), # 11
+('Dram', 'Este ser intergalactico es la preciosura mñas hermosa que un humano puede presenciar', 'dram.webp', 10000,5 ,1, 12, 0, 5, 5); # 12
 
 /* Hechizos */
 INSERT INTO cartas(nombre, descripcion, imagen, precio, rareza, paquete, habilidad, exclusive, mana, tipo) VALUES
@@ -668,10 +668,10 @@ INSERT INTO tienda VALUES(1,2,5,11,6,3,1,2,3);
 
 /* Gemas */
 INSERT INTO catalogo_gemas(precio, cant, nombre, imagen) VALUES
-(0.99, 500, "Bolsa de gemas", "bolsa_gem.png"),
-(2.99, 2000, "Caja de gemas", "caja_gem.png"),
-(5.99, 5000, "Baul de gemas", "baul_gem.png"),
-(9.99, 10000, "Cofre de gemas", "cofre_gem.png");
+(0.99, 500, "Bolsa de gemas", "bolsa_gem.webp"),
+(2.99, 2000, "Caja de gemas", "caja_gem.webp"),
+(5.99, 5000, "Baul de gemas", "baul_gem.webp"),
+(9.99, 10000, "Cofre de gemas", "cofre_gem.webp");
 
 /* Amigos */
 INSERT INTO amigos(usuario, amigo, accepted) VALUES
