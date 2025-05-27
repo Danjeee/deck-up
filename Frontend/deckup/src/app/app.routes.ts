@@ -18,6 +18,7 @@ import { ConfigComponent } from './components/config/config.component';
 import { PrevGamesComponent } from './components/prev-games/prev-games.component';
 import { PrevTradesComponent } from './components/prev-trades/prev-trades.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
+import { DefaultComponent } from './components/default/default.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -40,4 +41,5 @@ export const routes: Routes = [
     {path: 'game/recientes', component: PrevGamesComponent},
     {path: 'trades/recientes', component: PrevTradesComponent},
     {path: 'perfil/:id', component: PerfilComponent},
+    {path: '', component: DefaultComponent},
 ];

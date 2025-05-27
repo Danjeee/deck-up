@@ -40,7 +40,8 @@ body {
     padding: 0;
     overflow-x: hidden;
     overflow-y: hidden;
-    background-image: url('http://deckup.tecnobyte.com:444/Resources/img/misc/background.webp');
+    background-image: url('http://localhost/Resources/img/misc/background.webp');
+    /* background-image: url('http://deckup.tecnobyte.com:444/Resources/img/misc/background.webp'); */
     background-repeat: repeat;
     animation: bckganim 40s linear infinite;
 }
