@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environmentsURLs } from '../../utils/environmentsURls';
 import { Router } from '@angular/router';
-import { generateHeader, $$, DOM, Localizer } from '../../utils/Utils';
+import { generateHeader } from '../../utils/Utils';
 
 @Component({
   selector: 'app-default',
