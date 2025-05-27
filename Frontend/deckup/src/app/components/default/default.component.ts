@@ -22,16 +22,5 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
       title:"DeckUp",
       customClass: "str",
     })
-    const l: Localizer = new Localizer()
-    l.set({
-      hola: "Hola"
-    })
-    l.addLngs({
-      BR: "Brasil"
-    })
-    l.add({
-      gracias: "Obrigado"
-    }, "BR")
-    console.log(l.get("graCias", "BR", "test"))
   }
 }
