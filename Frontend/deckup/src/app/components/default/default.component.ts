@@ -21,6 +21,8 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
       background: "#13253e",
       title:"DeckUp",
       customClass: "str",
+      textColor: "#5898d8",
+      logo: `${this.resURL}/Resources/img/misc/deckuplogo_png.webp`
     })
   }
 }

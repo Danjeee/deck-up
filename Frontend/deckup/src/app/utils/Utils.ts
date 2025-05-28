@@ -182,6 +182,8 @@ interface HeaderBasicConfig {
     background?: string;
     title?: string;
     logo?: string;
+    logoSize?: "big" | "medium" | "small"
+    logoPosition?: "left" | "center" | "right"
     position?: "fixed" | "relative" | "absolute";
     textColor?: string;
     font?: string;
@@ -212,6 +214,8 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         background: "#ffffff",
         title: "",
         logo: "",
+        logoSize: "big",
+        logoPosition: "left",
         position: "fixed",
         textColor: "#000",
         font: "",
@@ -245,8 +249,17 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         const tit = DOM.new("h1", "title", "#header")
         css(tit, {
             margin: "0",
-            padding: "0"
+            padding: "0",
+            color: b.textColor
         })
         tit.innerHTML = b.title
+    }
+    if (va(b.logo)){
+        const logo = DOM.new("img","logo","#header")
+        logo.src = b.logo
+        css(logo, {
+            height: "90%",
+            width: "auto"
+        })
     }
 }
