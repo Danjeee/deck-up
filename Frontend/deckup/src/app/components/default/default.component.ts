@@ -22,7 +22,21 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
       title:"DeckUp",
       customClass: "str",
       textColor: "#5898d8",
-      logo: `${this.resURL}/Resources/img/misc/deckuplogo_png.webp`
+      logo: `${this.resURL}/Resources/img/misc/deckuplogo_png.webp`,
+      logoPosition: "left",
+      titlePosition: "center"
+    },{
+      logoHref: "https://deckup.tecnobyte.com",
+      logoTarget: "current",
+      headerActiveRoutes: ["/"]
+    },{
+      login: {
+        text: "<i class='bi bi-person-fill'></i> Log in",
+        action: ()=>{
+          this.router.navigate(["login"])
+        },
+        class: "btn but bg-s"
+      }
     })
   }
 }

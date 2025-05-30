@@ -48,7 +48,7 @@ export class Localizer {
                         })
                         aux[k.toLowerCase()] = aux[k]
                     } else {
-                        aux[k.toLowerCase()] = aux[k] 
+                        aux[k.toLowerCase()] = aux[k]
                     }
                 })
                 key = key.toLowerCase();
@@ -125,31 +125,47 @@ export function css(target: HTMLElement | NodeListOf<HTMLElement>, options: any)
  */
 export function va(item: any) {
     if (item == null) {
-        return false
+        return false;
     }
-    if (item == undefined) {
-        return false
+
+    if (typeof item === "object") {
+        if (Object.getPrototypeOf(item) === Object.prototype && Object.entries(item).length === 0) {
+            return false;
+        }
+        if (Array.isArray(item) && item.length === 0) {
+            return false;
+        }
     }
-    if ((item + "").replace(" ", "") == "") {
-        return false
+
+    if (typeof item === "string" && item.trim() === "") {
+        return false;
     }
-    return true
+
+    return true;
 }
 
 export class DOM {
-    public static new<K extends keyof HTMLElementTagNameMap>(tag: K, id: string | null = null, parent: string | null = null): HTMLElementTagNameMap[K] {
+    public static new<K extends keyof HTMLElementTagNameMap>(tag: K, id: string | null = null, parent: string | null | HTMLElement | NodeListOf<HTMLElement> = null): HTMLElementTagNameMap[K] {
         const elem = document.createElement(tag);
         if (va(id)) {
             elem.id = id as string
         }
         if (va(parent)) {
-            const parentElem = DOM.g(parent as string)
-            if (parentElem instanceof NodeList) {
-                parentElem.forEach((e: any) => {
+            if (parent instanceof HTMLElement) {
+                parent.appendChild(elem)
+            } else if (parent instanceof NodeList) {
+                parent.forEach((e: any) => {
                     (e as HTMLElement).appendChild(elem)
                 })
             } else {
-                (parentElem as HTMLElement).appendChild(elem)
+                const parentElem = DOM.g(parent as string)
+                if (parentElem instanceof NodeList) {
+                    parentElem.forEach((e: any) => {
+                        (e as HTMLElement).appendChild(elem)
+                    })
+                } else {
+                    (parentElem as HTMLElement).appendChild(elem)
+                }
             }
         }
         return elem;
@@ -181,6 +197,7 @@ interface HeaderBasicConfig {
     secondaryColor?: string;
     background?: string;
     title?: string;
+    titlePosition?: "left" | "center" | "right",
     logo?: string;
     logoSize?: "big" | "medium" | "small"
     logoPosition?: "left" | "center" | "right"
@@ -192,9 +209,29 @@ interface HeaderBasicConfig {
     justify?: "left" | "center" | "right" | "around" | "between";
     display?: "flex" | "grid"
 }
+interface HeaderAdvancedConfig {
+    logoHref?: string;
+    logoTarget?: "new" | "current";
+    headerActiveRoutes?: [string] | null
+}
+interface HeaderButton {
+    text?: string;
+    action?: () => void;
+    id?: string
+    class?: string
+    position?: "left" | "center" | "right"
+}
 
-export function generateHeader(basic: HeaderBasicConfig = {}) {
+/**
+ * Creates a simple but fully customisable header structure and adds it to the DOM
+ * @param basic Basic options @see HeaderBasicConfig
+ * @param advanced Advanced options @see HeaderAdvancedConfig
+ * @returns HTMLElement of header
+ * @author DanjeDev <danjedev@gmail.com>
+ */
+export function generateHeader(basic: HeaderBasicConfig = {}, advanced: HeaderAdvancedConfig = {}, buttons: { [key: string]: HeaderButton } = {}) {
     const t: Localizer = new Localizer();
+    let logo
     t.set({
         B: {
             left: "start",
@@ -202,9 +239,17 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
             around: "space-around",
             between: "space-between",
             bottom: "end",
+        },
+        L: {
+            left: "0",
+            right: "100%",
+            center: "50%",
+            new: "_blank",
+            current: "_self",
         }
     }, {
-        B: "basic"
+        B: "basic",
+        L: "logo"
     })
     const def: Required<HeaderBasicConfig> = {
         customClass: "",
@@ -213,6 +258,7 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         secondaryColor: "#F8F8F8",
         background: "#ffffff",
         title: "",
+        titlePosition: "center",
         logo: "",
         logoSize: "big",
         logoPosition: "left",
@@ -224,8 +270,17 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         justify: "center",
         display: "flex"
     }
+    const adv: Required<HeaderAdvancedConfig> = {
+        logoHref: "",
+        logoTarget: "current",
+        headerActiveRoutes: null
+    }
+    const a = { ...adv, ...advanced }
     const b = { ...def, ...basic }
     const header = DOM.new("header", "header", "body")
+    /**
+     *      BASIC CONFIGURATION
+     */
     header.className = b.customClass;
     css(header, {
         width: "100dvw",
@@ -236,17 +291,79 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         color: b.textColor,
         font: b.font,
         fontSize: b.fontSize,
-        display: b.display,
-        alignItems: t.get(b.alignment, "B", b.alignment),
-        justifyContent: t.get(b.justify, "B", b.justify)
+        display: "flex",
+        zIndex: "100",
+        alignItems: "center",
+        justifyContent: "space-around",
+        flexDirection: "row"
     });
+
+    const left = DOM.new("div", "header_left", header)
+    const center = DOM.new("div", "header_center", header)
+    const right = DOM.new("div", "header_right", header)
+
+    const pos = $$('[id^="header_"]') as NodeListOf<HTMLElement>
+
+    css(pos, {
+        position: "relative",
+        width: "30%",
+        height: "100%",
+        alignItems: t.get(b.alignment, "B", b.alignment),
+        justifyContent: t.get(b.justify, "B", b.justify),
+        display: b.display,
+        flexDirection: "row"
+    })
+
     if (b.background?.startsWith("#")) {
         css(header, {
             backgroundColor: b.background,
         })
+    } else {
+        css(header, {
+            backgroundImage: `url(${b.background})`,
+            backgroundPosition: "center",
+            backgroundSize: "cover"
+        })
+    }
+    if (va(b.logo)) {
+        logo = DOM.new("div", "logo", `#header_${b.logoPosition}`)
+        const logoimg = DOM.new(b.logo.includes(".") ? "img" : "h1", "logo_img", logo)
+        if (logoimg instanceof HTMLImageElement) {
+            logoimg.src = b.logo
+            css(logoimg, {
+                display: "block",
+            })
+        } else {
+            logoimg.textContent = b.logo
+            css(logoimg, {
+                margin: "0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            })
+        }
+        css(logo, {
+            height: "90%",
+            display: "inline-block",
+            left: t.get(b.logoPosition, "L", "0")
+        })
+        css(logoimg, {
+            height: "100%",
+            width: "auto",
+        })
+        if (b.logoPosition != b.justify) {
+            css(logo, {
+                position: "absolute"
+            })
+            if (b.logoPosition != "left") {
+                css(logo, {
+                    transform: "translateX(-100%)"
+                })
+            }
+        }
     }
     if (va(b.title)) {
-        const tit = DOM.new("h1", "title", "#header")
+        const tit = DOM.new("h1", "title", `#header_${b.titlePosition}`)
         css(tit, {
             margin: "0",
             padding: "0",
@@ -254,12 +371,77 @@ export function generateHeader(basic: HeaderBasicConfig = {}) {
         })
         tit.innerHTML = b.title
     }
-    if (va(b.logo)){
-        const logo = DOM.new("img","logo","#header")
-        logo.src = b.logo
-        css(logo, {
-            height: "90%",
-            width: "auto"
+
+    /**
+     *      ADVANCED CONFIGURATION
+     */
+
+    if (va(a.logoHref) && va(b.logo)) {
+        const logohref = DOM.new("a", null, logo)
+        logohref.href = a.logoHref
+        css(logohref, {
+            display: "block",
+            width: "100%",
+            height: "100%",
+            transform: "translateY(-100%)"
         })
+        logohref.target = t.get(a.logoTarget, "L", "_self")
+    }
+    if (va(buttons)) {
+        Object.keys(buttons).forEach((b: string) => {
+            generateHeaderButton(buttons[b])
+        })
+    }
+    if (va(a.headerActiveRoutes)) {
+        const event = () => {
+            let active: boolean = false
+            a.headerActiveRoutes?.forEach(route => {
+                if (window.location.href.includes(route)) {
+                    active = true
+                }
+            });
+            if (!active) {
+                header.remove()
+                window.removeEventListener('popstate', event)
+            }
+        }
+        //hacer evento perso en router
+        window.addEventListener('popstate', event);
+    }
+    return header
+}
+function generateHeaderButton(but: HeaderButton) {
+    const basic: Required<HeaderButton> = {
+        text: "",
+        action: () => { },
+        id: "",
+        class: "",
+        position: "right"
+    }
+    const c = { ...basic, ...but }
+    const parent = `#header_${c.position}`
+    const b = DOM.new("div", null, parent)
+    b.className = "headerButton"
+    css(b, {
+        padding: "1em",
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "0",
+        cursor: "pointer",
+        flexDirection: "row"
+    })
+    if (va(c.id)) {
+        b.id = c.id
+    }
+    if (va(c.class)) {
+        b.className = c.class
+    }
+    if (va(c.text)) {
+        b.innerHTML = c.text
+    }
+    if (va(c.action)) {
+        b.addEventListener('click', c.action)
     }
 }
