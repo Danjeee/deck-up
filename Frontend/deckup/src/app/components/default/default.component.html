@@ -1,1 +1,68 @@
+<div id="asd" class="bg-p">
+  <div id="news">
+    <i id="newsicon" class="bi bi-megaphone-fill"></i>
+    <h2 class="str">Lanzamiento oficial, para celebrarlo os regalamos los códigos: </h2>
+    <h2 class="b str">GR4NDO0PENING y F1RST3V3NTCARD</h2>
+  </div>
+  <div class="slider">
+    <div class="slide-track">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/curacion_inesperada.webp" alt="curacion_inesperada">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/dallow.webp" alt="dallow">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/dram.webp" alt="dram">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/evaporacion.webp" alt="evaporacion">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/eventio.webp" alt="eventio">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/haruki.webp" alt="haruki">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/minion.webp" alt="minion">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/misil_magico.webp" alt="misil_magico">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/punto_cero.webp" alt="punto_cero">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/roboto.webp" alt="roboto">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/sekum.webp" alt="sekum">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/sheen.webp" alt="sheen">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/skano.webp" alt="skano">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/titan.webp" alt="titan">
+      <img class="slide bg-t" src="{{resURL}}/Resources/img/cards/x7p.webp" alt="x7p">
+    </div>
+  </div>
+  <div id="important">
+    <div class="but btn bg-s str">
+      <h2>Discord</h2>
+      <img src="{{resURL}}/Resources/img/misc/discord.webp">
+      <p>¡Unete a nuestro Discord!</p>
+    </div>
+    <div class="but btn bg-s str">
+      <h2>Instagram</h2>
+       <img src="{{resURL}}/Resources/img/misc/instagram.webp">
+      <p>¡Siguenos en Instagram!</p>
+    </div>
+    <div class="but btn bg-s str">
+      <h2>X</h2>
+       <img src="{{resURL}}/Resources/img/misc/x.webp">
+      <p>¡Siguenos en X!</p>
+    </div>
+    <div class="but btn bg-s str">
+      <h2>Tutorial</h2>
+       <img src="{{resURL}}/Resources/img/misc/target.webp">
+      <p>Haz click para ver el tutorial</p>
+    </div>
+  </div>
+  
+  <div class="cont bg-p">
+    <section class="hero">
+      <h1 class="str">Bienvenido a Deckup</h1>
+      <p class="str">Una aplicación poderosa para gestionar tus recursos mágicos, personajes y más.</p>
+    </section>
 
+    <section id="features" class="features" *ngIf="shuffled">
+      <div *ngFor="let b of shuffled" class="feature">
+        <h2>{{b.t}}</h2>
+        <p>{{b.c}}</p>
+      </div>
+    </section>
+
+    <h2 class="str">Creado y Desarrollado por Javier Soriano</h2>
+
+    <footer class="str">
+      &copy; 2025 DeckUp. Todos los derechos reservados.
+    </footer>
+  </div>
+</div>

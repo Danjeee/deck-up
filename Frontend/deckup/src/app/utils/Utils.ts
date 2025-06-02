@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
+
+/**
+ * Translator class
+ */
 export class Localizer {
 
     private msg: any;
@@ -144,7 +148,80 @@ export function va(item: any) {
     return true;
 }
 
+/**
+ * 
+ * Applies a pop up effect to all elements on the DOM that are not visible, customizable
+ * 
+ * NOTE: use either transition all or transition transform, opacity for better results when using default
+ * 
+ * @param selector query selector to apply
+ * @param style class added when an element is shown (empty for default popup)
+ * @param once true if effect disappears after shown
+ * 
+ * @author DanjeDev <danjedev@gmail.com>
+ */
+export function popUpOnScroll(selector: string, style: string = "", once: boolean = false) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { // is cisible
+                if (va(style)) {
+                    entry.target.className = entry.target.className + " " + style;
+                } else {
+                    css(entry.target as HTMLElement,{
+                        transform: "translateY(0)",
+                        scale: "1",
+                        opacity: "1"
+                    })
+                }
+                if (once) {
+                    observer.unobserve(entry.target);
+                }
+            } else { // isn't visible
+                if (!va(style)){
+                    css(entry.target as HTMLElement,{
+                        transform: "translateY(30px)",
+                        opacity: "0",
+                        scale: ".5"
+                    })
+                }
+            }
+        });
+    });
+
+    ($$(selector) as NodeListOf<HTMLElement>).forEach(el => observer.observe(el));
+}
+
+/**
+ * 
+ * Randomizes an array
+ * 
+ * @param arr array
+ * @returns array
+ * 
+ * @author DanjeDev <danjedev@gmail.com>
+ */
+export function shuffleArray(arr: any[]) {
+    let array = [...arr]
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+/**
+ * Class made to shorten document. functions
+ */
 export class DOM {
+    /**
+     * 
+     * Create a new element
+     * 
+     * @param tag HTML Tag
+     * @param id (Optional) id of the element created
+     * @param parent (Optional) parent to append element
+     * @returns HTMLElement
+     */
     public static new<K extends keyof HTMLElementTagNameMap>(tag: K, id: string | null = null, parent: string | null | HTMLElement | NodeListOf<HTMLElement> = null): HTMLElementTagNameMap[K] {
         const elem = document.createElement(tag);
         if (va(id)) {
@@ -170,14 +247,109 @@ export class DOM {
         }
         return elem;
     }
+    /**
+     * @see $$
+     */
     public static g(selector: string) {
-        return document.querySelectorAll(selector)
+        return $$(selector)
     }
+
+    /**
+     * @see $$
+     */
     public static get(selector: string) {
-        return document.querySelectorAll(selector)
+        return $$(selector)
     }
 }
 
+/**
+ * Class made to manage events with ease
+ */
+export class DaEvent {
+    private static events: { name: string, event: EventListener }[] = []
+
+    /**
+     * 
+     * Gets all custom events
+     * 
+     * @returns List of all events as {name: string, event: EventListener} 
+     */
+    public static getAllCustomEvents() {
+        return DaEvent.events
+    }
+
+    /**
+     * 
+     * Create a new listener
+     * 
+     * @param eventName name
+     * @param callback function to execute
+     * @param remove remove after use (optional)
+     */
+    public static listen(eventName: string, callback: () => void, remove: boolean = false) {
+        if (remove) {
+            const ev = () => {
+                callback;
+                window.removeEventListener(eventName, ev)
+            }
+            window.addEventListener(eventName, ev)
+            DaEvent.events.push({
+                name: eventName,
+                event: ev
+            })
+        } else {
+            window.addEventListener(eventName, callback);
+            DaEvent.events.push({
+                name: eventName,
+                event: callback
+            })
+        }
+    }
+
+    /**
+     * 
+     * Throws a new event, all listeners to that name will trigger
+     * 
+     * @param eventName name
+     * @param detail (optional) detail
+     */
+    public static shoot(eventName: string, detail?: any) {
+        const event = new CustomEvent(eventName, { detail });
+        window.dispatchEvent(event);
+    }
+
+    /**
+     * stops listening
+     * @param eventName name
+     */
+    public static stop(eventName: string) {
+        for (let i = DaEvent.events.length - 1; i >= 0; i--) {
+            if (DaEvent.events[i].name === eventName) {
+                window.removeEventListener(DaEvent.events[i].name, DaEvent.events[i].event);
+                DaEvent.events.splice(i, 1);
+            }
+        }
+    }
+
+    /**
+     * Stops all current listeners
+     */
+    public static stopAll() {
+        DaEvent.events.forEach(event => {
+            window.removeEventListener(event.name, event.event);
+        });
+        DaEvent.events.splice(0, DaEvent.events.length);
+    }
+}
+
+
+/**
+ * 
+ * Shortends query selector all, returns only one element if able, returns null if nothing found
+ * 
+ * @param selector (query selector)
+ * @returns HTMLElement | NodeListOf<HTMLElement> | null
+ */
 export function $$(selector: string) {
     const elems = document.querySelectorAll(selector)
     switch (elems.length) {
@@ -189,6 +361,10 @@ export function $$(selector: string) {
             return elems;
     }
 }
+
+/**
+ * Basic configuration for the header
+ */
 
 interface HeaderBasicConfig {
     customClass?: string;
@@ -209,11 +385,19 @@ interface HeaderBasicConfig {
     justify?: "left" | "center" | "right" | "around" | "between";
     display?: "flex" | "grid"
 }
+
+/**
+ * Advanced configuration for the header
+ */
 interface HeaderAdvancedConfig {
     logoHref?: string;
     logoTarget?: "new" | "current";
     headerActiveRoutes?: [string] | null
 }
+
+/**
+ * Buttons for the header
+ */
 interface HeaderButton {
     text?: string;
     action?: () => void;
@@ -226,6 +410,7 @@ interface HeaderButton {
  * Creates a simple but fully customisable header structure and adds it to the DOM
  * @param basic Basic options @see HeaderBasicConfig
  * @param advanced Advanced options @see HeaderAdvancedConfig
+ * @param buttons Buttons @see HeaderButton
  * @returns HTMLElement of header
  * @author DanjeDev <danjedev@gmail.com>
  */
@@ -297,6 +482,9 @@ export function generateHeader(basic: HeaderBasicConfig = {}, advanced: HeaderAd
         justifyContent: "space-around",
         flexDirection: "row"
     });
+    css(document.body, {
+        marginTop: b.height
+    })
 
     const left = DOM.new("div", "header_left", header)
     const center = DOM.new("div", "header_center", header)
@@ -396,16 +584,27 @@ export function generateHeader(basic: HeaderBasicConfig = {}, advanced: HeaderAd
         const event = () => {
             let active: boolean = false
             a.headerActiveRoutes?.forEach(route => {
-                if (window.location.href.includes(route)) {
-                    active = true
+                if (route == "/") {
+                    if (window.location.href == "/") {
+                        active = true
+                    }
+                } else {
+                    if (window.location.href.includes(route)) {
+                        active = true
+                    }
                 }
             });
             if (!active) {
                 header.remove()
                 window.removeEventListener('popstate', event)
+                DaEvent.stop('newlocation')
+                const body = $$("body") as HTMLElement
+                css(body, {
+                    marginTop: "0"
+                })
             }
         }
-        //hacer evento perso en router
+        DaEvent.listen('newlocation', event)
         window.addEventListener('popstate', event);
     }
     return header
