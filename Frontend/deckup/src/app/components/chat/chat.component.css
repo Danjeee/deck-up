@@ -22,10 +22,8 @@
   }
   
   .top_menu {
-    background-color: #fff;
     width: 100%;
     padding: 20px 0 15px;
-    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
   }
   
   .top_menu .buttons {
@@ -58,7 +56,7 @@
   
   .top_menu .title {
     text-align: center;
-    color: #000;
+    color: #fff;
     font-size: 20px;
     display: flex;
     flex-direction: row;
@@ -181,7 +179,6 @@
   .bottom_wrapper {
     position: relative;
     width: 100%;
-    background-color: #fff;
     padding: 20px 20px;
     position: absolute;
     bottom: 0;
@@ -194,6 +191,7 @@
     border: 1px solid #bcbdc0;
     width: calc(100% - 160px);
     position: relative;
+    background-color: #fff;
     padding: 0 20px;
   }
   
@@ -214,7 +212,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 7px;
-    background-color: #a3d063;
     color: #fff;
     cursor: pointer;
     transition: all 0.2s linear;

@@ -104,18 +104,8 @@
     }
 }
 #sh1{
-    top: 35.5%;
-    transform: translateY(-50%) skew(7deg, 0deg);
-    &>*>*{
-        transform: skew(-7deg, 0deg);
-    }
-}
-#sh2{
-    top: 75%;
-    transform: translateY(-50%) skew(-7deg, 0deg);
-    &>*>*{
-        transform: skew(7deg, 0deg);
-    }
+    top: 50%;
+    transform: translateY(-50%);
 }
 .selected{
     scale: 1.1;

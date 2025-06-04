@@ -1,3 +1,6 @@
+img{
+    object-fit: cover;
+}
 #maincollection {
     width: 70dvw;
     height: 80dvh;

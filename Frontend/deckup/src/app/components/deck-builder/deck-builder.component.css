@@ -1,3 +1,6 @@
+img{
+    object-fit: cover;
+}
 .deckbuilder{
     display: flex;
     width: 60dvw;

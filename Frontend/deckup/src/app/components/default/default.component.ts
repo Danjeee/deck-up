@@ -3,6 +3,7 @@ import { environmentsURLs } from '../../utils/environmentsURls';
 import { Router } from '@angular/router';
 import { $$, css, DOM, generateHeader, popUpOnScroll, shuffleArray } from '../../utils/Utils';
 import { CommonModule } from '@angular/common';
+import { UserSession } from '../../utils/UserSession';
 
 @Component({
   selector: 'app-default',
@@ -54,6 +55,25 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
   }
 
   ngOnInit(): void {
+    let but = {}
+    if (UserSession.getUser() == "Guest"){
+      but = {
+        text: "<i class='bi bi-person-fill'></i> Log in",
+        action: () => {
+          this.router.navigate(["login"])
+        },
+        class: "btn but bg-s"
+      }
+    } else {
+      but = {
+        text: "<i class='bi bi-house-fill'></i> Home",
+        action: () => {
+          this.router.navigate(["home"])
+        },
+        class: "btn but bg-s"
+      }
+    }
+
     generateHeader({
       height: "12dvh",
       background: "#13253e",
@@ -68,13 +88,7 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
       logoTarget: "current",
       headerActiveRoutes: ["/"]
     }, {
-      login: {
-        text: "<i class='bi bi-person-fill'></i> Log in",
-        action: () => {
-          this.router.navigate(["login"])
-        },
-        class: "btn but bg-s"
-      }
+      login: but
     })
     document.body.style.overflowY = "auto"
 

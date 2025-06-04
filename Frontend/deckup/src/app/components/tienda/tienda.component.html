@@ -7,13 +7,6 @@
         <i class="bi bi-pack_deckup" style="background-color: #fff;"></i>
         <h1>Packs</h1>
     </div>
-</div>
-<div class="shopmenu" id="sh2">
-    
-    <div class="btn but {{isselected('offers')}}" (click)="toggle('offers')">
-        <i class="bi bi-tags-fill"></i>
-        <h1>Ofertas</h1>
-    </div>
     <div class="btn but {{isselected('gems')}}" (click)="toggle('gems')">
         <i class="bi bi-gem"></i>
         <h1>Gemas</h1>
@@ -38,9 +31,6 @@
             <p>{{pack.precio}}</p>
         </div>
     </div>
-</div>
-<div id="offercont" class="btn" *ngIf="selecteed == 'offers'">
-    <h1 class="str" style="margin-top: 10dvw; margin-bottom: 10dvw; font-size: 250px;">WIP</h1>
 </div>
 <div id="gemcont" class="btn" *ngIf="selecteed == 'gems'">
     <div *ngFor="let gem of gems" class="gem_offer btn but" (click)="buygems(gem)">
