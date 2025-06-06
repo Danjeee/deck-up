@@ -152,6 +152,7 @@
     min-height: 50px;
     font-size: .9vw;
     &>img{
+        object-fit: cover;
         width: 65%;
         height: 65%;
         border-radius: 50%;
