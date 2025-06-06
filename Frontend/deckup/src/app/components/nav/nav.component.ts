@@ -424,6 +424,9 @@ export class NavComponent extends environmentsURLs implements AfterViewInit {
         if (this.router.url == "/"){
           return true
         }
+        if (this.router.url == "/tutorial"){
+          return true
+        }
         if (this.router.url == "/verify"){
           return true
         }

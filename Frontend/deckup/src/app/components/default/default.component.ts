@@ -45,6 +45,10 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
     }, 10);
   }
 
+  goto(url: string){
+    this.router.navigate([url])
+  }
+
   generarBloquesPt2(){
     const clases = ["Comun", "Rara", "Epica", "Legendaria", "idk"];
     ($$(".feature") as NodeListOf<HTMLElement>).forEach((e: HTMLElement) => {
@@ -86,7 +90,7 @@ export class DefaultComponent extends environmentsURLs implements OnInit {
     }, {
       logoHref: "https://deckup.tecnobyte.com",
       logoTarget: "current",
-      headerActiveRoutes: ["/"]
+      headerActiveRoutes: ["/", "tutorial"]
     }, {
       login: but
     })

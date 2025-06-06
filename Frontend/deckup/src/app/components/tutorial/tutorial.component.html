@@ -1,0 +1,342 @@
+<div id="bckg" class="bg-t"></div>
+<h1 class="tit str">{{pages[actual].tit}}</h1>
+<div class="cont str" *ngIf="actual == 1">
+    <div class="item btn bg-p">
+        <h3>Perfil de Usuario</h3>
+        <div>
+            <p>
+                En la esquina superior izquierda de la pantalla se encuentra el botón del perfil. Esta zona
+                probablemente permite al jugador acceder a su información
+                personal, como estadísticas. Es
+                el punto de partida para todo lo relacionado con la identidad del usuario dentro del juego.
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_1.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Sección de Amigos</h3>
+        <div>
+            <p>
+                Justo al lado del perfil está el botón "Amigos", que ofrece acceso a una lista de contactos
+                dentro del juego. A través de esta sección, los usuarios pueden ver qué amigos están en línea, o
+                comunicarse por chat . Es una herramienta esencial para fomentar la interacción social.
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_2.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Botones</h3>
+        <div>
+            <p>
+                En el centro del menú están los botones para acceder al resto del juego
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_3.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Recompensas</h3>
+        <div>
+            <p>
+                Justo debajo de los botones está el botón de recompensa, este regala una cantidad aleatoria entre 100 y
+                500 gemas cada 4h
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_4.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Menú y Gemas</h3>
+        <div>
+            <p>
+                En la esquina superior izquierda se pueden ver las gemas con las que cuentas además de un botón para el
+                acceso al menú desplegable
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_5.png">
+        </div>
+    </div>
+</div>
+<div class="cont str" *ngIf="actual == 2">
+    <div class="item btn bg-p">
+        <div>
+            <p>
+                En esta sección podremos gastar las gemas para conseguir cartas nuevas o repetidas, además de poder
+                comprar gemas
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_1.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Cartas</h3>
+        <div>
+            <p>
+                Aqui podremos comprar una selección de cartas las cuales varían cada dia a las 00:00h (CET)
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Packs</h3>
+        <div>
+            <p>
+                En esta sección podremos obtener paquetes de cartas los cuales contienen una cantidad expecifica de
+                estas, eso si, las cartas aparecen aleatoriamente asi que suerte
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Gemas</h3>
+        <div>
+            <p>
+                Aqui se pueden comprar gemas desde 0.99€ a 9.99€ mediante PayPal
+            </p>
+        </div>
+    </div>
+</div>
+<div class="cont str" *ngIf="actual == 3">
+    <div class="item btn bg-p">
+        <h3>Colección</h3>
+        <div>
+            <p>
+                Aquí podemos ver que cartas tenemos, cuantas y cuales nos faltan por desbloquear, además se puede
+                visualizar una vista específica de la carta en cuestión que nos dejará apreciar sus habilidades y arte
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_1.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Vista de cartas</h3>
+        <div>
+            <p>
+                Se puede elegir una carta para ver detalles especificos de esta, además de poder pulsar su arte y
+                moverlo con el ratón
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_2.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Creación y edición de mazos</h3>
+        <div>
+            <p>
+                Puedes crear y/o editar tus mazos en esta pantalla, solo tienes que seleccionar que cartas quieres
+                añadir o cambiar
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_3.png">
+        </div>
+    </div>
+</div>
+<div class="cont str" *ngIf="actual == 4">
+    <div class="item btn bg-p">
+        <h3>Selección</h3>
+        <div>
+            <p>
+                Una vez aquí, puedes elegir si quieres crear o unirte a una sala de intercambios puedes crearla y
+                generar tanto un código y un código qr o unirte mediante el escaneo de un qr o la inserción del código
+                proporcionado
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_1.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Sala de intercambio</h3>
+        <div>
+            <p>
+                Aquí te encuentras junto con otro jugador, ambos podeis comunicaros mediante clicks para indicar que se
+                quiere, además puedes añadir cuantas cartas y/o gemas quieras
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_2.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Intercambios recientes</h3>
+        <div>
+            <p>
+                En este apartado puedes ver los últimos intercambios que has realizado, así como que se ha intercambiado
+                y con quien
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_3.png">
+        </div>
+    </div>
+</div>
+<div class="cont str" *ngIf="actual == 5">
+    <div class="item btn bg-p">
+        <h3>Matchmaking</h3>
+        <div>
+            <p>
+                Al hacer click en el botón de jugar, previamente se tendrá que encontrar una partida, aquí estarás en
+                búsqueda de una
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_1.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Partida</h3>
+        <div>
+            <p>
+                Una vez dentro, te enfrentarás a otro jugador en un sistema de turnos que funciona de la siguiente
+                manera:
+                <br>· Turno del jugador 1
+                <br>· Turno del jugador 2
+                <br>· Batalla entre las Cartas
+                <br>· Repetir
+                <br>
+                Tras batallar, robas una carta siempre y cuando no tengas 5/5 y obtienes +1 de maná
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_2.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Cartas</h3>
+        <div>
+            <p>
+                Hay 3 tipos de cartas:
+                <br> · Tropas: Puedes desplegarlas en la arena
+                <br> · Hechizos: Puedes lanzarlos a una tropa enemiga o al heroe enemigo
+                <br> · Hechizos propios: Puedes lanzarlos a una tropa aliada o a tu heroe
+                <br> · Hechizos para tropas: Solo pueden ser lanzados a tropas enemigas
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Fin</h3>
+        <div>
+            <p>
+                Una vez cualquiera de los dos heroes llegué a 0 de vida o uno de los jugadores abandone la partida, esta
+                terminará. Si ganas la partida, obtendrás 300 gemas
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_3.png">
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Partidas recientes</h3>
+        <div>
+            <p>
+                Aquí se pueden ver las partidas recientes, así como contra quien has luchado y el resultado final
+            </p>
+            <img src="{{resURL}}/Resources/img/misc/tut{{actual}}_4.png">
+        </div>
+    </div>
+</div>
+<div class="cont str" *ngIf="actual == 6">
+    <div class="item btn bg-p">
+        <div>
+            <h2>
+                En esta sección se explican conceptos de las partidas algo avanzados
+            </h2>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Daño</h3>
+        <div>
+            <p>
+                Puntos de vida que resta una carta al atacar o ser lanzada (hechizos)
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Vida</h3>
+        <div>
+            <p>
+                Puntos de vida que tiene una carta o un heroe, al llegar a 0, muere
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Mana</h3>
+        <div>
+            <p>
+                Puntos de maná que cuesta una carta, se recargan cada turno
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Congelación</h3>
+        <div>
+            <p>
+                Turnos que está una carta sin atacar
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Curación</h3>
+        <div>
+            <p>
+                Puntos de vida que se suman a una carta al final del turno (o al instante si es un hechizo)
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Quemado</h3>
+        <div>
+            <p>
+                Inflinge 1 de daño por turno x número de turnos
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Veneno</h3>
+        <div>
+            <p>
+                Inflinge 1 de daño por turno x número de turnos, no puede matar a la carta infectada
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Sangrado</h3>
+        <div>
+            <p>
+                Inflinge x de daño por turno hasta la muerte de la carta
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Daño porcentual</h3>
+        <div>
+            <p>
+                Inflinge daño en base a la vida máxima del objetivo golpeado
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Crítico</h3>
+        <div>
+            <p>
+                Porcentaje para efectuar un golpe crítico
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Daño crítico</h3>
+        <div>
+            <p>
+                Aumento del daño al acertar un golpe crítico
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Letalidad</h3>
+        <div>
+            <p>
+                Inflinge daño extra en base a la vida faltante del objetivo golpeado
+            </p>
+        </div>
+    </div>
+    <div class="item btn bg-p">
+        <h3>Especial</h3>
+        <div>
+            <p>
+                Habilidades especiales como por ejemplo, quemar al rival al morir o desplegar una carta, asesinar a todo, matar de un golpe, etc...
+            </p>
+        </div>
+    </div>
+</div>
+<div id="tree">
+    <div *ngFor="let p of pages" class="{{p.id == ' ' ? 'n' : 'btn but bg-s str'}}{{p.id.substring(0,1) == (actual + '') ? ' selected' : ''}}" (click)="gotoPage(p.id)">
+        {{p.id}} {{p.tit}}
+    </div>
+</div>
+<div id="next" class="btn but bg-s str" *ngIf="actual<(pages.length-1)" (click)="next()">
+    Siguiente ->
+</div>
+<div id="prev" class="btn but bg-s str" *ngIf="actual>1" (click)="prev()">
+    <- Anterior </div>
+        <footer class="str">
+            &copy; 2025 DeckUp. Todos los derechos reservados.
+        </footer>

@@ -392,7 +392,7 @@ interface HeaderBasicConfig {
 interface HeaderAdvancedConfig {
     logoHref?: string;
     logoTarget?: "new" | "current";
-    headerActiveRoutes?: [string] | null
+    headerActiveRoutes?: string[] | null
 }
 
 /**

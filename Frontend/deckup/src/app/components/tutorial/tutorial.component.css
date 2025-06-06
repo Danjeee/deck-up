@@ -1,0 +1,98 @@
+#bckg {
+    position: fixed;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+.cont {
+    width: 100dvw;
+    text-align: center;
+    justify-content: start;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-bottom: 5em;
+
+    &>h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 80px;
+    }
+}
+
+.item {
+    width: 40%;
+    transition: all .5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+
+    &>div {
+        padding: 0;
+        gap: 1em;
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        &>img {
+            border-radius: 1em;
+            width: 50%;
+            height: auto;
+        }
+    }
+}
+
+#next {
+    position: fixed;
+    right: 10%;
+    bottom: 15%;
+    font-size: 40px;
+}
+#tree{
+    position: fixed;
+    top: 50%;
+    left: 3em;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    transition: scale .5s, filter .5s;
+    gap: 1em;
+    &>div{
+        font-size: 30px;
+    }
+}
+.selected{
+    scale: 1.1;
+    filter: drop-shadow(0px 0px 10px #000);
+    pointer-events: none;
+}
+.n{
+    display: none;
+}
+#prev {
+    position: fixed;
+    left: 10%;
+    bottom: 15%;
+    font-size: 40px;
+}
+.tit{
+    font-size: 80px;
+    text-align: center;
+}
+
+footer {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    background: #2a2a2a;
+    color: #ccc;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
